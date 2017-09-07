@@ -98,7 +98,7 @@ $ cd <component>
 If you are going to be issuing pull requests to the upstream repository from which you forked, we suggest configuring Git such that you can easily rebase your code to the upstream repository's master branch. There are various strategies for doing this, but the [most common](https://help.github.com/articles/fork-a-repo/) is to add an `upstream` remote:
 
 ```
-$ git remote add upstream https://github.com/deis/<component>.git
+$ git remote add upstream https://github.com/deisthree/<component>.git
 ```
 
 For the sake of simplicity, you may want to point an environment variable to your Deis code - the directory containing one or more Deis components:
@@ -237,7 +237,7 @@ Satisfied with your changes?  Share them!
 Please read [Submitting a Pull Request](submitting-a-pull-request.md). It contains a checklist of
 things you should do when proposing a change to any Deis component.
 
-[router]: https://github.com/deis/router
+[router]: https://github.com/deisthree/router
 [easy-fix]: https://github.com/issues?q=user%3Adeis+label%3Aeasy-fix+is%3Aopen
 [git]: https://git-scm.com/
 [glide]: https://github.com/Masterminds/glide
@@ -245,7 +245,7 @@ things you should do when proposing a change to any Deis component.
 [shellcheck]: https://github.com/koalaman/shellcheck
 [docker]: https://www.docker.com/
 [machine]: http://docs.docker.com/machine/install-machine/
-[controller]: https://github.com/deis/controller
+[controller]: https://github.com/deisthree/controller
 [vbox]: https://www.virtualbox.org/
 [testing]: testing.md
 [k8s]: http://kubernetes.io/

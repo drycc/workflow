@@ -1,5 +1,5 @@
 name: workflow
-home: https://github.com/deis/workflow
+home: https://github.com/deisthree/workflow
 version: <Will be populated by the ci before publishing the chart>
 description: Deis Workflow
 maintainers:

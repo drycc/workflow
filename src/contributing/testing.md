@@ -45,7 +45,7 @@ To execute integration tests, refer to [deis/workflow-e2e][workflow-e2e] documen
 [unit tests]: http://en.wikipedia.org/wiki/Unit_testing
 [functional tests]: http://en.wikipedia.org/wiki/Functional_testing
 [integration tests]: http://en.wikipedia.org/wiki/Integration_testing
-[workflow-e2e]: https://github.com/deis/workflow-e2e
+[workflow-e2e]: https://github.com/deisthree/workflow-e2e
 [travis]: https://travis-ci.org/deis
 [continuous integration]: http://en.wikipedia.org/wiki/Continuous_integration
 [dev-environment]: development-environment.md

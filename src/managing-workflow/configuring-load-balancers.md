@@ -43,7 +43,7 @@ Prepare for a short downtime until both the ELB and the router have converged to
 
 ## Manually configuring a load balancer
 
-If using a Kubernetes distribution or underlying infrastructure that does not support the automated provisioning of a front-facing load balancer, operators will wish to manually configure a load balancer (or use other tricks) to route inbound traffic from beyond the cluster into the cluster to the Deis router(s).  There are many ways to accomplish this.  This documentation will focus on the most common method.  Readers interested in other options may refer to [the router component's own documentation](https://github.com/deis/router#front-facing-load-balancer) for further details.
+If using a Kubernetes distribution or underlying infrastructure that does not support the automated provisioning of a front-facing load balancer, operators will wish to manually configure a load balancer (or use other tricks) to route inbound traffic from beyond the cluster into the cluster to the Deis router(s).  There are many ways to accomplish this.  This documentation will focus on the most common method.  Readers interested in other options may refer to [the router component's own documentation](https://github.com/deisthree/router#front-facing-load-balancer) for further details.
 
 Begin by determining the "node ports" for the `deis-router` service:
 

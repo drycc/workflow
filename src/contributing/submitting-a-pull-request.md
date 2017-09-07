@@ -30,7 +30,7 @@ Changes to any Deis Workflow component that could affect a user's experience als
 
 If a pull request is part of a larger piece of work involving one or more additional commits in other Workflow repositories, these commits can be referenced in the last PR to be submitted.  The downstream [e2e test job](https://ci.deis.io/job/workflow-test-pr/) will then supply every referenced commit (derived from PR issue number supplied) to the test runner so it can source the necessary Docker images for inclusion in the generated Workflow chart to be tested.
 
-For example, consider paired commits in [deis/controller](https://github.com/deis/controller) and [deis/workflow-e2e](https://github.com/deis/workflow-e2e).  The commit body for the first PR in `deis/workflow-e2e` would look like:
+For example, consider paired commits in [deis/controller](https://github.com/deisthree/controller) and [deis/workflow-e2e](https://github.com/deisthree/workflow-e2e).  The commit body for the first PR in `deis/workflow-e2e` would look like:
 
 ```
 feat(foo_test): add e2e test for feature foo
@@ -120,5 +120,5 @@ An exception to this is when an errant commit needs to be reverted urgently. If 
 [pep8]: http://www.python.org/dev/peps/pep-0008/
 [python]: http://www.python.org/
 [zen]: http://www.python.org/dev/peps/pep-0020/
-[workflow]: https://github.com/deis/workflow
-[workflow-e2e]: https://github.com/deis/workflow-e2e
+[workflow]: https://github.com/deisthree/workflow
+[workflow-e2e]: https://github.com/deisthree/workflow-e2e

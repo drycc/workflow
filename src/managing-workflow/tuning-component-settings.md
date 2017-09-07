@@ -129,7 +129,7 @@ output.disable_deis | false | Disable the Deis output plugin
 boot.install_build_tools | false | Install the build tools package. This is useful when using custom plugins
 daemon_environment | | Takes key-value pairs and turns them into environment variables.
 
-For more information about the various environment variables that can be set please see the [README](https://github.com/deis/fluentd/blob/master/README.md)
+For more information about the various environment variables that can be set please see the [README](https://github.com/deisthree/fluentd/blob/master/README.md)
 
 ## Customizing the Logger
 
@@ -151,24 +151,24 @@ user   | "admin" | The first user created in the database (this user has admin p
 password | "admin" | Password for the first user.
 allow_sign_up | "true" | Allows users to sign up for an account.
 
-For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/deis/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
+For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/deisthree/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
 
 ### [Telegraf](https://docs.influxdata.com/telegraf)
-For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/deis/monitor/blob/master/telegraf/rootfs/config.toml.tpl).
+For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/deisthree/monitor/blob/master/telegraf/rootfs/config.toml.tpl).
 
 ### [InfluxDB](https://docs.influxdata.com/influxdb)
-You can find a list of values that can be set using environment variables [here](https://github.com/deis/monitor/blob/master/influxdb/rootfs/home/influxdb/config.toml.tpl).
+You can find a list of values that can be set using environment variables [here](https://github.com/deisthree/monitor/blob/master/influxdb/rootfs/home/influxdb/config.toml.tpl).
 
 ## Customizing the Registry
 
 The [Registry][] component can be tuned by following the
-[deis/distribution config doc](https://github.com/deis/distribution/blob/master/docs/configuration.md).
+[deis/distribution config doc](https://github.com/deisthree/distribution/blob/master/docs/configuration.md).
 
 ## Customizing the Router
 
 The majority of router settings are tunable through annotations, which allows the router to be
 re-configured with zero downtime post-installation. You can find the list of annotations to tune
-[here](https://github.com/deis/router#annotations).
+[here](https://github.com/deisthree/router#annotations).
 
 The following environment variables are tunable for the [Router][] component:
 

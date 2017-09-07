@@ -87,6 +87,6 @@ curl -sSL http://deis.io/deis-cli/install-v2.sh | bash && sudo mv deis $(which d
 ```
 
 
-[minio]: https://github.com/deis/minio
+[minio]: https://github.com/deisthree/minio
 [Configuring Object Storage]: ../installing-workflow/configuring-object-storage.md
-[Workflow-Migration]: https://github.com/deis/workflow-migration/blob/master/README.md
+[Workflow-Migration]: https://github.com/deisthree/workflow-migration/blob/master/README.md

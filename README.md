@@ -10,7 +10,7 @@
 
 **Deis Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
 
-Deis Workflow is the second major release (v2) of the Deis PaaS. If you are looking for the CoreOS-based PaaS visit [https://github.com/deis/deis](https://github.com/deis/deis).
+Deis Workflow is the second major release (v2) of the Deis PaaS. If you are looking for the CoreOS-based PaaS visit [https://github.com/deisthree/deis](https://github.com/deisthree/deis).
 
 To **get started** with **Deis Workflow** please read the [Quick Start Guide](https://deis.com/docs/workflow/quickstart/).
 
@@ -20,22 +20,22 @@ This repository contains the source code for Deis Workflow documentation. If you
 
 Please see below for links and descriptions of each component:
 
-- [controller](https://github.com/deis/controller) - Workflow API server
-- [builder](https://github.com/deis/builder) - Git server and source-to-image component
-- [dockerbuilder](https://github.com/deis/dockerbuilder) - The builder for [Docker](https://www.docker.com/) based applications
-- [slugbuilder](https://github.com/deis/slugbuilder) - The builder for [slug/buildpack](https://devcenter.heroku.com/articles/slug-compiler) based applications
-- [slugrunner](https://github.com/deis/slugrunner) - The runner for slug/buildpack based applications
-- [fluentd](https://github.com/deis/fluentd) - Backend log shipping mechanism for `deis logs`
-- [postgres](https://github.com/deis/postgres) - The central database
-- [registry](https://github.com/deis/registry) - The Docker registry
-- [logger](https://github.com/deis/logger) - The (in-memory) log buffer for `deis logs`
-- [monitor](https://github.com/deis/monitor) - The platform monitoring components
-- [router](https://github.com/deis/router) - The HTTP/s edge router
-- [minio](https://github.com/deis/minio) - The in-cluster, ephemeral, development-only object storage system
-- [nsq](https://github.com/deis/nsq) - Realtime distributed messaging platform
-- [workflow-cli](https://github.com/deis/workflow-cli) - Workflow CLI `deis`
-- [workflow-e2e](https://github.com/deis/workflow-e2e) - End-to-end tests for the entire platform
-- [workflow-manager](https://github.com/deis/workflow-manager) - Manage, inspect, and debug a Workflow cluster
+- [controller](https://github.com/deisthree/controller) - Workflow API server
+- [builder](https://github.com/deisthree/builder) - Git server and source-to-image component
+- [dockerbuilder](https://github.com/deisthree/dockerbuilder) - The builder for [Docker](https://www.docker.com/) based applications
+- [slugbuilder](https://github.com/deisthree/slugbuilder) - The builder for [slug/buildpack](https://devcenter.heroku.com/articles/slug-compiler) based applications
+- [slugrunner](https://github.com/deisthree/slugrunner) - The runner for slug/buildpack based applications
+- [fluentd](https://github.com/deisthree/fluentd) - Backend log shipping mechanism for `deis logs`
+- [postgres](https://github.com/deisthree/postgres) - The central database
+- [registry](https://github.com/deisthree/registry) - The Docker registry
+- [logger](https://github.com/deisthree/logger) - The (in-memory) log buffer for `deis logs`
+- [monitor](https://github.com/deisthree/monitor) - The platform monitoring components
+- [router](https://github.com/deisthree/router) - The HTTP/s edge router
+- [minio](https://github.com/deisthree/minio) - The in-cluster, ephemeral, development-only object storage system
+- [nsq](https://github.com/deisthree/nsq) - Realtime distributed messaging platform
+- [workflow-cli](https://github.com/deisthree/workflow-cli) - Workflow CLI `deis`
+- [workflow-e2e](https://github.com/deisthree/workflow-e2e) - End-to-end tests for the entire platform
+- [workflow-manager](https://github.com/deisthree/workflow-manager) - Manage, inspect, and debug a Workflow cluster
 
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Working on Documentation" section below and [submit a pull request][prs].
 
@@ -77,6 +77,6 @@ Then view the documentation on [http://localhost:8000](http://localhost:8000) or
 [k8s-home]: http://kubernetes.io
 [install-k8s]: http://kubernetes.io/gettingstarted/
 [mkdocs]: http://www.mkdocs.org/
-[issues]: https://github.com/deis/workflow/issues
-[prs]: https://github.com/deis/workflow/pulls
-[v2.18]: https://github.com/deis/workflow/releases/tag/v2.18.0
+[issues]: https://github.com/deisthree/workflow/issues
+[prs]: https://github.com/deisthree/workflow/pulls
+[v2.18]: https://github.com/deisthree/workflow/releases/tag/v2.18.0

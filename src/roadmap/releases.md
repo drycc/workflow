@@ -86,7 +86,7 @@ Creating changelog for controller with tag v2.8.1 through commit 943a49267eeb285
 
 #### Fixes
 
-- [`615b834`](https://github.com/deis/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
+- [`615b834`](https://github.com/deisthree/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
 ```
 
 Based on the changelog content, determine whether the component deserves a minor or patch
@@ -103,7 +103,7 @@ Creating changelog for controller with tag v2.8.1 through commit 943a49267eeb285
 
 #### Fixes
 
-- [`615b834`](https://github.com/deis/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
+- [`615b834`](https://github.com/deisthree/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
 
 
 Please review the above changelog contents and ensure:
@@ -111,21 +111,21 @@ Please review the above changelog contents and ensure:
   2. The changes agree with the semver release tag (major, minor, or patch)
 
 Create release for Deis Controller v2.8.2? [y/n]: y
-New release is available at https://github.com/deis/controller/releases/tag/v2.8.2
+New release is available at https://github.com/deisthree/controller/releases/tag/v2.8.2
 ```
 
 ### Step 2: Verify the Component is Available
 
 Tagging the component (see [Step 1](/roadmap/releases/#step-1-update-code-and-run-the-release-tool))
 starts a CI job that eventually results in an artifact being made available for public download.
-Please see the [CI flow diagrams](https://github.com/deis/jenkins-jobs/#flow) for details.
+Please see the [CI flow diagrams](https://github.com/deisthree/jenkins-jobs/#flow) for details.
 
 Double-check that the artifact is available, either by a `docker pull` command or by running the
 appropriate installer script.
 
 If the artifact can't be downloaded, ensure that its CI release jobs are still in progress, or
 fix whatever issue arose in the pipeline. For example, the
-[master merge pipeline](https://github.com/deis/jenkins-jobs/#when-a-component-pr-is-merged-to-master)
+[master merge pipeline](https://github.com/deisthree/jenkins-jobs/#when-a-component-pr-is-merged-to-master)
 may have failed to promote the `:git-abc1d23` candidate image and needs to be restarted with
 that component and commit.
 
@@ -204,7 +204,7 @@ it if it has not done so already.
 Each component already updated its release notes on GitHub with CHANGELOG content. We'll now
 generate the master changelog for the Workflow chart, consisting of all component and auxilliary repo changes.
 
-We'll employ the `requirements.lock` file from the `WORKFLOW_PREV_RELEASE` chart, as well as a repo-to-chart-name [mapping file](https://github.com/deis/deisrel/blob/master/map.json), this time invoking `deisrel changelog global` to get all component changes between
+We'll employ the `requirements.lock` file from the `WORKFLOW_PREV_RELEASE` chart, as well as a repo-to-chart-name [mapping file](https://github.com/deisthree/deisrel/blob/master/map.json), this time invoking `deisrel changelog global` to get all component changes between
 the chart versions existing in the `WORKFLOW_PREV_RELEASE` chart and the _most recent_ releases existing in GitHub.
 (Therefore, if there are any unreleased commits in a component repo, they will not appear here):
 
@@ -236,7 +236,7 @@ overall Workflow version number.
 
 ### Step 8: Close GitHub Milestones
 
-Create a pull request at [seed-repo](https://github.com/deis/seed-repo) to close the release
+Create a pull request at [seed-repo](https://github.com/deisthree/seed-repo) to close the release
 milestone and create the next one. When changes are merged to seed-repo, milestones on all
 relevant projects will be updated. If there are open issues attached to the milestone, move them
 to the next upcoming milestone before merging the pull request.
@@ -272,9 +272,9 @@ You're done with the release. Nice job!
 
 [component release]: /roadmap/releases/#how-to-release-a-component
 [continuous delivery]: https://en.wikipedia.org/wiki/Continuous_delivery
-[deis/workflow]: https://github.com/deis/workflow
-[deis/workflow-cli]: https://github.com/deis/workflow-cli
-[deis/workflow-e2e]: https://github.com/deis/workflow-e2e
-[deisrel]: https://github.com/deis/deisrel
+[deis/workflow]: https://github.com/deisthree/workflow
+[deis/workflow-cli]: https://github.com/deisthree/workflow-cli
+[deis/workflow-e2e]: https://github.com/deisthree/workflow-e2e
+[deisrel]: https://github.com/deisthree/deisrel
 [Kubernetes Helm]: https://github.com/kubernetes/helm
 [semantic version]: http://semver.org
