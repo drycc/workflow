@@ -41,7 +41,7 @@ Are we missing something? Please open a [documentation pull request][] to add it
 [deis-workflow-aws]: https://github.com/rimusz/deis-workflow-aws
 [deis-workflow-gke]: https://github.com/rimusz/deis-workflow-gke
 [deis-workflow-ruby]: https://github.com/thomas0087/deis-workflow-ruby
-[documentation pull request]: https://github.com/deisthree/workflow/pulls
+[documentation pull request]: https://github.com/teamhephy/workflow/pulls
 [Google Container Engine]: https://cloud.google.com/container-engine/
 [Helm]: https://github.com/kubernetes/helm
 [heroku-to-deis]: https://github.com/emartech/heroku-to-deis

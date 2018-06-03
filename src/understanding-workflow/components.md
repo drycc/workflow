@@ -12,7 +12,7 @@ the functionality in your own project we invite you to give it a shot!
 
 ## Controller
 
-**Project Location:** [deis/controller](https://github.com/deisthree/controller)
+**Project Location:** [teamhephy/controller](https://github.com/teamhephy/controller)
 
 The controller component is an HTTP API server which serves as the endpoint for
 the `deis` CLI. The controller provides all of the platform functionality as
@@ -21,7 +21,7 @@ of its data to the database component.
 
 ## Database
 
-**Project Location:** [deis/postgres](https://github.com/deisthree/postgres)
+**Project Location:** [teamhephy/postgres](https://github.com/teamhephy/postgres)
 
 The database component is a managed instance of [PostgreSQL][] which holds a
 majority of the platforms state. Backups and WAL files are pushed to object
@@ -30,7 +30,7 @@ replayed from object storage so no data is lost.
 
 ## Builder
 
-**Project Location:** [deis/builder](https://github.com/deisthree/builder)
+**Project Location:** [teamhephy/builder](https://github.com/teamhephy/builder)
 
 
 The builder component is responsible for accepting code pushes via [Git][] and
@@ -44,7 +44,7 @@ managing the build process of your [Application][]. The builder process is:
 
 Builder currently supports both buildpack and Dockerfile based builds.
 
-**Project Location:** [deis/slugbuilder](https://github.com/deisthree/slugbuilder)
+**Project Location:** [teamhephy/slugbuilder](https://github.com/teamhephy/slugbuilder)
 
 For Buildpack-based deploys, the builder component will launch a one-shot Pod
 in the `deis` namespace. This pod runs `slugbuilder` component which handles
@@ -54,7 +54,7 @@ its dependencies as determined by the buildpack. The slug is pushed to the
 cluster-configured object storage for later execution. For more information
 about buildpacks see [using buildpacks][using-buildpacks].
 
-**Project Location:** [deis/dockerbuilder](https://github.com/deisthree/dockerbuilder)
+**Project Location:** [teamhephy/dockerbuilder](https://github.com/teamhephy/dockerbuilder)
 
 For Applications which contain a `Dockerfile` in the root of the repository,
 `builder` will instead launch the `dockerbuilder` to package your application.
@@ -64,7 +64,7 @@ Docker registry on cluster. For more information see [using Dockerfiles][using-d
 
 ## Slugrunner
 
-**Project Location:** [deis/slugrunner](https://github.com/deisthree/slugrunner)
+**Project Location:** [teamhephy/slugrunner](https://github.com/teamhephy/slugrunner)
 
 Slugrunner is the component responsible for executing buildpack-based
 Applications. Slugrunner receives slug information from the controller and
@@ -73,7 +73,7 @@ processes.
 
 ## Object Storage
 
-**Project Location:** [deis/minio](https://github.com/deisthree/minio)
+**Project Location:** [teamhephy/minio](https://github.com/teamhephy/minio)
 
 All of the Workflow components that need to persist data will ship them to the
 object storage that was configured for the cluster.For example, database ships
@@ -90,7 +90,7 @@ configure minio to use persistent storage available in your environment.
 
 ## Registry
 
-**Project Location:** [deis/registry](https://github.com/deisthree/registry)
+**Project Location:** [teamhephy/registry](https://github.com/teamhephy/registry)
 
 The registry component is a managed docker registry which holds application
 images generated from the builder component. Registry persists the Docker image
@@ -99,7 +99,7 @@ configured for the cluster.
 
 ## Router
 
-**Project Location:** [deis/router](https://github.com/deisthree/router)
+**Project Location:** [teamhephy/router](https://github.com/teamhephy/router)
 
 The router component is based on [Nginx][] and is responsible for routing
 inbound HTTP(S) traffic to your applications. The default workflow charts
@@ -117,14 +117,14 @@ The logging subsystem consists of two components. Fluentd handles log shipping
 and logger maintains a ring-buffer of application logs.
 
 
-**Project Location:** [deis/fluentd](https://github.com/deisthree/fluentd)
+**Project Location:** [teamhephy/fluentd](https://github.com/teamhephy/fluentd)
 
 Fluentd is deployed to your Kubernetes cluster via Daemon Sets. Fluentd
 subscribes to all container logs, decorates the output with Kubernetes metadata
 and can be configured to drain logs to multiple destinations. By default,
 fluentd ships logs to the logger component, which powers `deis logs`.
 
-**Project Location:** [deis/logger](https://github.com/deisthree/logger)
+**Project Location:** [teamhephy/logger](https://github.com/teamhephy/logger)
 
 The `logger` component receives log streams from `fluentd`, collating by
 Application name. Logger does not persist logs to disk, instead maintaining an
@@ -133,7 +133,7 @@ documentation][logger-documentation].
 
 ## Monitor
 
-**Project Location:** [deis/monitor](https://github.com/deisthree/monitor)
+**Project Location:** [teamhephy/monitor](https://github.com/teamhephy/monitor)
 
 The monitoring subsystem consists of three components: Telegraf, InfluxDB and Grafana.
 
@@ -152,7 +152,7 @@ as a starting point for creating more custom dashboards to suit a user's needs.
 
 ## Workflow Manager
 
-**Project Location:** [deis/workflow-manager](https://github.com/deisthree/workflow-manager)
+**Project Location:** [teamhephy/workflow-manager](https://github.com/teamhephy/workflow-manager)
 
 `Workflow Manager` will regularly check your cluster against the latest stable
 components. If components are missing due to failure or are simply out of date,
@@ -175,9 +175,9 @@ Workflow Manager's Deployment.
 [architecture]: architecture.md
 [concepts]: concepts.md
 [configure-objectstorage]: ../installing-workflow/configuring-object-storage.md
-[logger-documentation]: https://github.com/deisthree/logger
+[logger-documentation]: https://github.com/teamhephy/logger
 [release]: ../reference-guide/terms.md#release
-[router-documentation]: https://github.com/deisthree/router
+[router-documentation]: https://github.com/teamhephy/router
 [router]: #router
 [using-buildpacks]: ../applications/using-buildpacks.md
 [using-dockerfiles]: ../applications/using-dockerfiles.md

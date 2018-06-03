@@ -31,7 +31,7 @@ First, find the name of the release helm gave to your deployment with `helm ls`,
 
 ```
 $ helm repo update
-$ helm upgrade <release-name> deis/workflow
+$ helm upgrade <release-name> hephy/workflow
 ```
 
 
@@ -39,7 +39,7 @@ $ helm upgrade <release-name> deis/workflow
 
 ```
 $ B64_KEY_JSON="$(cat ~/path/to/key.json | base64 -w 0)"
-$ helm upgrade <release_name> deis/workflow -f values.yaml --set gcs.key_json="${B64_KEY_JSON}",registry-token-refresher.gcr.key_json="${B64_KEY_JSON}"
+$ helm upgrade <release_name> hephy/workflow -f values.yaml --set gcs.key_json="${B64_KEY_JSON}",registry-token-refresher.gcr.key_json="${B64_KEY_JSON}"
 ```
 
 Alternatively, simply replace the appropriate values in values.yaml and do without the `--set`
@@ -87,6 +87,6 @@ curl -sSL http://deis.io/deis-cli/install-v2.sh | bash && sudo mv deis $(which d
 ```
 
 
-[minio]: https://github.com/deisthree/minio
+[minio]: https://github.com/teamhephy/minio
 [Configuring Object Storage]: ../installing-workflow/configuring-object-storage.md
-[Workflow-Migration]: https://github.com/deisthree/workflow-migration/blob/master/README.md
+[Workflow-Migration]: https://github.com/teamhephy/workflow-migration/blob/master/README.md

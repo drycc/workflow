@@ -14,12 +14,12 @@ their application environment.
 
 Related issues:
 
-* <https://github.com/deisthree/workflow-cli/issues/98>
-* <https://github.com/deisthree/deis/issues/117>
+* <https://github.com/teamhephy/workflow-cli/issues/28>
+* <https://github.com/deis/deis/issues/117>
 
 ## Log Streaming
 
-Stream application logs via `deis logs -f` <https://github.com/deisthree/deis/issues/465>
+Stream application logs via `deis logs -f` <https://github.com/deis/deis/issues/465>
 
 ## Teams and Permissions
 
@@ -30,21 +30,21 @@ reconciled for Deis Workflow before we begin implementation.
 
 Related issues:
 
-* Deploy Keys: <https://github.com/deisthree/deis/issues/3875>
-* Teams: <https://github.com/deisthree/deis/issues/4173>
-* Fine grained permissions: <https://github.com/deisthree/deis/issues/4150>
-* Admins create apps only: <https://github.com/deisthree/deis/issues/4052>
-* Admin Certificate Permissions: <https://github.com/deisthree/deis/issues/4576#issuecomment-170987223>
+* Deploy Keys: <https://github.com/deis/deis/issues/3875>
+* Teams: <https://github.com/deis/deis/issues/4173>
+* Fine grained permissions: <https://github.com/deis/deis/issues/4150>
+* Admins create apps only: <https://github.com/deis/deis/issues/4052>
+* Admin Certificate Permissions: <https://github.com/deis/deis/issues/4576#issuecomment-170987223>
 
 ## Monitoring
 
-* [ ] Define and deliver alerts with Kapacitor: <https://github.com/deisthree/monitor/issues/44>
+* [ ] Define and deliver alerts with Kapacitor: <https://github.com/deis/monitor/issues/44>
 
 ## Workflow Addons/Services
 
 Developers should be able to quickly and easily provision application
 dependencies using a services or addon abstraction.
-<https://github.com/deisthree/deis/issues/231>
+<https://github.com/deis/deis/issues/231>
 
 ## Inbound/Outbound Webhooks
 
@@ -52,4 +52,4 @@ Deis Workflow should be able to send and receive webhooks from external
 systems. Facilitating integration with third party services like GitHub,
 Gitlab, Slack, Hipchat.
 
-* [X] Send webhook on platform events: <https://github.com/deisthree/deis/issues/1486> (Workflow v2.10)
+* [X] Send webhook on platform events: <https://github.com/deis/deis/issues/1486> (Workflow v2.10)
