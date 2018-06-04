@@ -5,7 +5,7 @@ This document is for developers who are interested in working directly on the De
 We try to make it simple to hack on Deis components. However, there are necessarily several moving pieces and some setup required. We welcome any suggestions for automating or simplifying this process.
 
 !!! note
-    The Deis team is actively engaged in containerizing Go and Python based development environments tailored specifically for Deis development in order to minimize the setup required.  This work is ongoing.  Refer to the [deis/router][router] project for a working example of a fully containerized development environment.
+    The Deis team is actively engaged in containerizing Go and Python based development environments tailored specifically for Deis development in order to minimize the setup required.  This work is ongoing.  Refer to the [teamhephy/router][router] project for a working example of a fully containerized development environment.
 
 If you're just getting into the Deis codebase, look for GitHub issues with the label [easy-fix][]. These are more straightforward or low-risk issues and are a great way to become more familiar with Deis.
 
@@ -20,7 +20,7 @@ In order to successfully compile and test Deis binaries and build Docker images 
 - [shellcheck][shellcheck]
 - [Docker][docker] (in a non-Linux environment, you will additionally want [Docker Machine][machine])
 
-For [deis/controller][controller], in particular, you will also need:
+For [teamhephy/controller][controller], in particular, you will also need:
 
 - Python 2.7 or later (with `pip`)
 - virtualenv (`sudo pip install virtualenv`)
@@ -83,39 +83,39 @@ After following these steps, some Docker Machine users report a slight delay (30
 
 Once the prerequisites have been met, we can begin to work with Deis components.
 
-Begin at Github by forking whichever Deis project you would like to contribute to, then clone that fork locally.  Since Deis is predominantly written in Go, the best place to put it is under `$GOPATH/src/github.com/deis/`.
+Begin at Github by forking whichever Hephy project you would like to contribute to, then clone that fork locally.  Since Hephy is predominantly written in Go, the best place to put it is under `$GOPATH/src/github.com/teamhephy/`.
 
 ```
-$ mkdir -p  $GOPATH/src/github.com/deis
-$ cd $GOPATH/src/github.com/deis
+$ mkdir -p  $GOPATH/src/github.com/teamhephy
+$ cd $GOPATH/src/github.com/teamhephy
 $ git clone git@github.com:<username>/<component>.git
 $ cd <component>
 ```
 
 !!! note
-    By checking out the forked copy into the namespace `github.com/deis/<component>`, we are tricking the Go toolchain into seeing our fork as the "official" source tree.
+    By checking out the forked copy into the namespace `github.com/teamhephy/<component>`, we are tricking the Go toolchain into seeing our fork as the "official" source tree.
 
 If you are going to be issuing pull requests to the upstream repository from which you forked, we suggest configuring Git such that you can easily rebase your code to the upstream repository's master branch. There are various strategies for doing this, but the [most common](https://help.github.com/articles/fork-a-repo/) is to add an `upstream` remote:
 
 ```
-$ git remote add upstream https://github.com/deisthree/<component>.git
+$ git remote add upstream https://github.com/teamhephy/<component>.git
 ```
 
 For the sake of simplicity, you may want to point an environment variable to your Deis code - the directory containing one or more Deis components:
 
 ```
-$ export DEIS=$GOPATH/src/github.com/deis
+$ export DEIS=$GOPATH/src/github.com/teamhephy
 ```
 
 Throughout the rest of this document, `$DEIS` refers to that location.
 
 ### Alternative: Forking with a Pushurl
 
-A number of Deis contributors prefer to pull directly from `deis/<component>`, but push to `<username>/<component>`. If that workflow suits you better, you can set it up this way:
+A number of Deis contributors prefer to pull directly from `teamhephy/<component>`, but push to `<username>/<component>`. If that workflow suits you better, you can set it up this way:
 
 ```
-$ git clone git@github.com:deis/<component>.git
-$ cd deis
+$ git clone git@github.com:teamhephy/<component>.git
+$ cd teamhephy
 $ git config remote.origin.pushurl git@github.com:<username>/<component>.git
 ```
 
@@ -222,7 +222,7 @@ $ kubectl --namespace=deis logs -f <pod name>
 
 ### Django Shell
 
-Specific to [deis/controller][controller]
+Specific to [teamhephy/controller][controller]
 
 ```
 $ kubectl --namespace=deis exec -it <pod name> -- python manage.py shell
@@ -237,7 +237,7 @@ Satisfied with your changes?  Share them!
 Please read [Submitting a Pull Request](submitting-a-pull-request.md). It contains a checklist of
 things you should do when proposing a change to any Deis component.
 
-[router]: https://github.com/deisthree/router
+[router]: https://github.com/teamhephy/router
 [easy-fix]: https://github.com/issues?q=user%3Adeis+label%3Aeasy-fix+is%3Aopen
 [git]: https://git-scm.com/
 [glide]: https://github.com/Masterminds/glide
@@ -245,7 +245,7 @@ things you should do when proposing a change to any Deis component.
 [shellcheck]: https://github.com/koalaman/shellcheck
 [docker]: https://www.docker.com/
 [machine]: http://docs.docker.com/machine/install-machine/
-[controller]: https://github.com/deisthree/controller
+[controller]: https://github.com/teamhephy/controller
 [vbox]: https://www.virtualbox.org/
 [testing]: testing.md
 [k8s]: http://kubernetes.io/

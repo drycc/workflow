@@ -17,20 +17,20 @@ Most pull requests will reference a GitHub issue. In the PR description - not in
 
 ## Include Tests
 
-If you significantly alter or add functionality to a component that impacts the broader Deis Workflow PaaS, you should submit a complementary PR to modify or amend end-to-end integration tests.  These integration tests can be found in the [deis/workflow-e2e][workflow-e2e] repository.
+If you significantly alter or add functionality to a component that impacts the broader Deis Workflow PaaS, you should submit a complementary PR to modify or amend end-to-end integration tests.  These integration tests can be found in the [teamhephy/workflow-e2e][workflow-e2e] repository.
 
 See [testing](testing.md) for more information.
 
 
 ## Include Docs
 
-Changes to any Deis Workflow component that could affect a user's experience also require a change or addition to the relevant documentation. For most Deis components, this involves updating the component's _own_ documentation. In some cases where a component is tightly integrated into [deis/workflow][workflow], its documentation must also be updated.
+Changes to any Deis Workflow component that could affect a user's experience also require a change or addition to the relevant documentation. For most Deis components, this involves updating the component's _own_ documentation. In some cases where a component is tightly integrated into [teamhephy/workflow][workflow], its documentation must also be updated.
 
 ## Cross-repo commits
 
-If a pull request is part of a larger piece of work involving one or more additional commits in other Workflow repositories, these commits can be referenced in the last PR to be submitted.  The downstream [e2e test job](https://ci.deis.io/job/workflow-test-pr/) will then supply every referenced commit (derived from PR issue number supplied) to the test runner so it can source the necessary Docker images for inclusion in the generated Workflow chart to be tested.
+If a pull request is part of a larger piece of work involving one or more additional commits in other Workflow repositories, these commits can be referenced in the last PR to be submitted.  The downstream [e2e test job](https://ci.teamhephy.info/job/workflow-e2e-pr/) will then supply every referenced commit (derived from PR issue number supplied) to the test runner so it can source the necessary Docker images for inclusion in the generated Workflow chart to be tested.
 
-For example, consider paired commits in [deis/controller](https://github.com/deisthree/controller) and [deis/workflow-e2e](https://github.com/deisthree/workflow-e2e).  The commit body for the first PR in `deis/workflow-e2e` would look like:
+For example, consider paired commits in [teamhephy/controller](https://github.com/teamhephy/controller) and [teamhephy/workflow-e2e](https://github.com/teamhephy/workflow-e2e).  The commit body for the first PR in `teamhephy/workflow-e2e` would look like:
 
 ```
 feat(foo_test): add e2e test for feature foo
@@ -39,7 +39,7 @@ feat(foo_test): add e2e test for feature foo
 ```
 Adding `[skip e2e]` forgoes the e2e tests on this commit. This and any other required PRs aside from the final PR should be submitted first, so that their respective build and image push jobs run.
 
-Lastly, the final PR in `deis/controller` should be created with the required PR number(s) listed, in the form of `[Rr]equires <repoName>#<pullRequestNumber>`, for use by the downstream e2e run.
+Lastly, the final PR in `teamhephy/controller` should be created with the required PR number(s) listed, in the form of `[Rr]equires <repoName>#<pullRequestNumber>`, for use by the downstream e2e run.
 
 ```
 feat(foo): add feature foo
@@ -120,5 +120,5 @@ An exception to this is when an errant commit needs to be reverted urgently. If 
 [pep8]: http://www.python.org/dev/peps/pep-0008/
 [python]: http://www.python.org/
 [zen]: http://www.python.org/dev/peps/pep-0020/
-[workflow]: https://github.com/deisthree/workflow
-[workflow-e2e]: https://github.com/deisthree/workflow-e2e
+[workflow]: https://github.com/teamhephy/workflow
+[workflow-e2e]: https://github.com/teamhephy/workflow-e2e

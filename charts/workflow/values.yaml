@@ -210,7 +210,7 @@ registry-token-refresher:
 
 router:
   dhparam: ""
-  # Any custom router annotations(https://github.com/deisthree/router#annotations)
+  # Any custom router annotations(https://github.com/teamhephy/router#annotations)
   # which need to be applied can be specified as key-value pairs under "deployment_annotations"
   deployment_annotations:
     #<example-key>: <example-value>
@@ -228,5 +228,5 @@ router:
   # service_type: LoadBalancer
 
 workflow-manager:
-  versions_api_url: https://versions.deis.com
-  doctor_api_url: https://doctor.deis.com
+  versions_api_url: https://versions.teamhephy.info
+  doctor_api_url: https://doctor.teamhephy.info

@@ -21,7 +21,7 @@ Read more about adding/removing SSH Keys [here](../users/ssh-keys.md#adding-and-
 
 If you do not have an existing application, you can clone an example application that demonstrates the Heroku Buildpack workflow.
 
-    $ git clone https://github.com/deisthree/example-go.git
+    $ git clone https://github.com/teamhephy/example-go.git
     $ cd example-go
 
 

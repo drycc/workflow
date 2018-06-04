@@ -62,7 +62,7 @@ Major or minor releases should happen on the master branch. Patch releases
 should check out the previous release tag and cherry-pick specific commits from master.
 
 **Note:** if a patch release, the release artifact will have to be manually promoted by triggering
-the [component-promote](https://ci.deis.io/job/component-promote) job with the following values:
+the [component-promote](https://ci.teamhephy.info/job/component-promote) job with the following values:
 
 ```bash
 COMPONENT_NAME=<component name>
@@ -86,7 +86,7 @@ Creating changelog for controller with tag v2.8.1 through commit 943a49267eeb285
 
 #### Fixes
 
-- [`615b834`](https://github.com/deisthree/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
+- [`615b834`](https://github.com/teamhephy/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
 ```
 
 Based on the changelog content, determine whether the component deserves a minor or patch
@@ -103,7 +103,7 @@ Creating changelog for controller with tag v2.8.1 through commit 943a49267eeb285
 
 #### Fixes
 
-- [`615b834`](https://github.com/deisthree/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
+- [`615b834`](https://github.com/teamhephy/controller/commit/615b834f39cb68a854cc1f1e2f0f82d862ea2731) boot: Ensure DEIS_DEBUG==true for debug output
 
 
 Please review the above changelog contents and ensure:
@@ -111,21 +111,21 @@ Please review the above changelog contents and ensure:
   2. The changes agree with the semver release tag (major, minor, or patch)
 
 Create release for Deis Controller v2.8.2? [y/n]: y
-New release is available at https://github.com/deisthree/controller/releases/tag/v2.8.2
+New release is available at https://github.com/teamhephy/controller/releases/tag/v2.8.2
 ```
 
 ### Step 2: Verify the Component is Available
 
 Tagging the component (see [Step 1](/roadmap/releases/#step-1-update-code-and-run-the-release-tool))
 starts a CI job that eventually results in an artifact being made available for public download.
-Please see the [CI flow diagrams](https://github.com/deisthree/jenkins-jobs/#flow) for details.
+Please see the [CI flow diagrams](https://github.com/teamhephy/jenkins-jobs/#flow) for details.
 
 Double-check that the artifact is available, either by a `docker pull` command or by running the
 appropriate installer script.
 
 If the artifact can't be downloaded, ensure that its CI release jobs are still in progress, or
 fix whatever issue arose in the pipeline. For example, the
-[master merge pipeline](https://github.com/deisthree/jenkins-jobs/#when-a-component-pr-is-merged-to-master)
+[master merge pipeline](https://github.com/teamhephy/jenkins-jobs/#when-a-component-pr-is-merged-to-master)
 may have failed to promote the `:git-abc1d23` candidate image and needs to be restarted with
 that component and commit.
 
@@ -134,7 +134,7 @@ this chart will also be packaged, signed and uploaded to its production chart re
 verify it can be fetched (and verified):
 
 ```
-$ helm repo add controller https://charts.deis.com/controller
+$ helm repo add controller https://charts.teamhephy.com/controller
 "controller" has been added to your repositories
 $ helm fetch --verify controller/controller --version v2.17.0
 Verification: &{0xc4207ec870 sha256:026e766e918ff28d2a7041bc3d560d149ee7eb0cb84165c9d9d00a3045ff45c3 controller-v2.17.0.tgz}
@@ -159,15 +159,15 @@ Some Workflow components not in the Helm chart must also be tagged in sync with 
 Follow the [component release process](#how-to-release-a-component) above and ensure that
 these components are tagged:
 
-- [deis/workflow-cli][]
-- [deis/workflow-e2e][]
+- [teamhephy/workflow-cli][]
+- [teamhephy/workflow-e2e][]
 
-The version number for [deis/workflow-cli][] should always match the overall Workflow version
+The version number for [teamhephy/workflow-cli][] should always match the overall Workflow version
 number.
 
 ### Step 3: Create Helm Chart
 
-To create and stage a release candidate chart for Workflow, we will build the [workflow-chart-stage](https://ci.deis.io/job/workflow-chart-stage) job with the following parameters:
+To create and stage a release candidate chart for Workflow, we will build the [workflow-chart-stage](https://ci.teamhephy.info/job/workflow-chart-stage) job with the following parameters:
 
 `RELEASE_TAG=$WORKFLOW_RELEASE`
 
@@ -192,7 +192,7 @@ When showstopper-level bugs are found, the process is as follows:
 
 ### Step 5: Release the Chart
 
-When testing has completed without uncovering any new showstopper bugs, kick off the [workflow-chart-release](https://ci.deis.io/job/workflow-chart-release) job with the following parameter:
+When testing has completed without uncovering any new showstopper bugs, kick off the [workflow-chart-release](https://ci.teamhephy.info/job/workflow-chart-release) job with the following parameter:
 
 `RELEASE_TAG=$WORKFLOW_RELEASE`
 
@@ -204,13 +204,13 @@ it if it has not done so already.
 Each component already updated its release notes on GitHub with CHANGELOG content. We'll now
 generate the master changelog for the Workflow chart, consisting of all component and auxilliary repo changes.
 
-We'll employ the `requirements.lock` file from the `WORKFLOW_PREV_RELEASE` chart, as well as a repo-to-chart-name [mapping file](https://github.com/deisthree/deisrel/blob/master/map.json), this time invoking `deisrel changelog global` to get all component changes between
+We'll employ the `requirements.lock` file from the `WORKFLOW_PREV_RELEASE` chart, as well as a repo-to-chart-name [mapping file](https://github.com/teamhephy/deisrel/blob/master/map.json), this time invoking `deisrel changelog global` to get all component changes between
 the chart versions existing in the `WORKFLOW_PREV_RELEASE` chart and the _most recent_ releases existing in GitHub.
 (Therefore, if there are any unreleased commits in a component repo, they will not appear here):
 
 ```bash
-helm repo add deis https://charts.deis.com/workflow
-helm fetch --untar deis/workflow --version $WORKFLOW_PREV_RELEASE
+helm repo add hephy https://charts.teamhephy.com/workflow
+helm fetch --untar hephy/workflow --version $WORKFLOW_PREV_RELEASE
 deisrel changelog global workflow/requirements.lock map.json > changelog-$WORKFLOW_RELEASE.md
 ```
 
@@ -219,7 +219,7 @@ update PR created in the next step.
 
 ### Step 7: Update Documentation
 
-Create a new pull request at [deis/workflow][] that updates version references to the new release.
+Create a new pull request at [teamhephy/workflow][] that updates version references to the new release.
 Use `git grep $WORKFLOW_PREV_RELEASE` to find any references, but be careful not to change
 `CHANGELOG.md`.
 
@@ -231,24 +231,24 @@ Make sure to add a header to the page to make it clear that this is for a Workfl
 ```
 
 Once the PR has been reviewed and merged, do a [component release](#how-to-release-a-component) of
-[deis/workflow][] itself. The version number for [deis/workflow][] should always match the
+[teamhephy/workflow][] itself. The version number for [teamhephy/workflow][] should always match the
 overall Workflow version number.
 
 ### Step 8: Close GitHub Milestones
 
-Create a pull request at [seed-repo](https://github.com/deisthree/seed-repo) to close the release
+Create a pull request at [seed-repo](https://github.com/teamhephy/seed-repo) to close the release
 milestone and create the next one. When changes are merged to seed-repo, milestones on all
 relevant projects will be updated. If there are open issues attached to the milestone, move them
 to the next upcoming milestone before merging the pull request.
 
-Milestones map to Deis Workflow releases in [deis/workflow][]. These milestones do not correspond
+Milestones map to Deis Workflow releases in [teamhephy/workflow][]. These milestones do not correspond
 to individual component release tags.
 
 ### Step 9: Release Workflow CLI Stable
 
 Now that the `$WORKFLOW_RELEASE` version of Workflow CLI has been vetted, we can push `stable` artifacts based on this version.
 
-Kick off https://ci.deis.io/job/workflow-cli-build-stable/ with the `TAG` build parameter of `$WORKFLOW_RELEASE`
+Kick off https://ci.teamhephy.info/job/workflow-cli-build-stable/ with the `TAG` build parameter of `$WORKFLOW_RELEASE`
 and then verify `stable` artifacts are available and appropriately updated after the job completes:
 
 ```
@@ -265,16 +265,16 @@ master CHANGELOG:
 
 ```
 @here Deis Workflow v2.17.0 is now live!
-Master CHANGELOG: https://deis.com/docs/workflow/changelogs/v2.17.0/
+Master CHANGELOG: https://teamhephy.info/docs/workflow/changelogs/v2.17.0/
 ```
 
 You're done with the release. Nice job!
 
 [component release]: /roadmap/releases/#how-to-release-a-component
 [continuous delivery]: https://en.wikipedia.org/wiki/Continuous_delivery
-[deis/workflow]: https://github.com/deisthree/workflow
-[deis/workflow-cli]: https://github.com/deisthree/workflow-cli
-[deis/workflow-e2e]: https://github.com/deisthree/workflow-e2e
-[deisrel]: https://github.com/deisthree/deisrel
+[teamhephy/workflow]: https://github.com/teamhephy/workflow
+[teamhephy/workflow-cli]: https://github.com/teamhephy/workflow-cli
+[teamhephy/workflow-e2e]: https://github.com/teamhephy/workflow-e2e
+[deisrel]: https://github.com/teamhephy/deisrel
 [Kubernetes Helm]: https://github.com/kubernetes/helm
 [semantic version]: http://semver.org

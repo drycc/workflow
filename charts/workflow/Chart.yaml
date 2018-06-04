@@ -1,7 +1,7 @@
 name: workflow
-home: https://github.com/deisthree/workflow
+home: https://github.com/teamhephy/workflow
 version: <Will be populated by the ci before publishing the chart>
-description: Deis Workflow
+description: Hephy Workflow
 maintainers:
-  - name: Deis Team
-    email: engineering@deis.com
+  - name: Team Hephy
+    email: team@teamhephy.com

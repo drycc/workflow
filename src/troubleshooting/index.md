@@ -29,6 +29,6 @@ Running into something not detailed here? Please [open an issue][issue] or hop i
 [#community on Slack][slack] for help!
 
 [kubectl]: kubectl.md
-[issue]: https://github.com/deisthree/workflow/issues/new
+[issue]: https://github.com/teamhephy/workflow/issues/new
 [slack]: http://slack.deis.io/
 [troubleshooting-app]: applications.md

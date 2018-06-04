@@ -39,11 +39,11 @@ $ kubectl --namespace=deis annotate service/deis-router service.beta.kubernetes.
 Prepare for a short downtime until both the ELB and the router have converged to the new configuration.
 
 !!! important
-    ELB PROXY protocol support was added in Kubernetes 1.3. If you are still on Kubernetes 1.2, you need to first upgrade to a newer [supported Kubernetes version](https://deis.com/docs/workflow/installing-workflow/system-requirements/#kubernetes-versions).
+    ELB PROXY protocol support was added in Kubernetes 1.3. If you are still on Kubernetes 1.2, you need to first upgrade to a newer [supported Kubernetes version](https://teamhephy.info/docs/workflow/installing-workflow/system-requirements/#kubernetes-versions).
 
 ## Manually configuring a load balancer
 
-If using a Kubernetes distribution or underlying infrastructure that does not support the automated provisioning of a front-facing load balancer, operators will wish to manually configure a load balancer (or use other tricks) to route inbound traffic from beyond the cluster into the cluster to the Deis router(s).  There are many ways to accomplish this.  This documentation will focus on the most common method.  Readers interested in other options may refer to [the router component's own documentation](https://github.com/deisthree/router#front-facing-load-balancer) for further details.
+If using a Kubernetes distribution or underlying infrastructure that does not support the automated provisioning of a front-facing load balancer, operators will wish to manually configure a load balancer (or use other tricks) to route inbound traffic from beyond the cluster into the cluster to the Deis router(s).  There are many ways to accomplish this.  This documentation will focus on the most common method.  Readers interested in other options may refer to [the router component's own documentation](https://github.com/teamhephy/router#front-facing-load-balancer) for further details.
 
 Begin by determining the "node ports" for the `deis-router` service:
 

@@ -4,15 +4,15 @@ Helm Charts are a set of Kubernetes manifests that reflect best practices for de
 application or service on Kubernetes.
 
 After you add the Deis Chart Repository, you can customize the chart using
-`helm inspect values deis/workflow > values.yaml` before using `helm install` to complete the
+`helm inspect values hephy/workflow > values.yaml` before using `helm install` to complete the
 installation.
 
 There are a few ways to customize the respective component:
 
  - If the value is exposed in the `values.yaml` file as derived above, one may modify the section of the component to tune these settings.  The modified value(s) will then take effect at chart installation or release upgrade time via either of the two respective commands:
 
-        $ helm install deis/workflow --namespace deis -f values.yaml
-        $ helm upgrade deis -f values.yaml
+        $ helm install hephy/workflow -n hephy --namespace deis -f values.yaml
+        $ helm upgrade hephy -f values.yaml
 
  - If the value hasn't yet been exposed in the `values.yaml` file, one may edit the component deployment with the tuned setting.  Here we edit the `deis-controller` deployment:
 
@@ -22,10 +22,10 @@ There are a few ways to customize the respective component:
 
  - Lastly, one may also fetch and edit the chart as served by version control/the chart repository itself:
 
-        $ helm fetch deis/workflow --untar
+        $ helm fetch hephy/workflow --untar
         $ $EDITOR workflow/charts/controller/templates/controller-deployment.yaml
 
-    Then run `helm install ./workflow --namespace deis --name deis` to apply the changes, or `helm upgrade deis ./workflow` if the cluster is already running.
+    Then run `helm install ./workflow --namespace deis --name hephy` to apply the changes, or `helm upgrade hephy ./workflow` if the cluster is already running.
 
 ## Setting Resource limits
 
@@ -39,7 +39,7 @@ limits set:
 
 ```
 builder:
-  org: "deisci"
+  org: "hephyci"
   pullPolicy: "Always"
   dockerTag: "canary"
   limits_cpu: "100m"
@@ -64,7 +64,7 @@ Setting                                         | Description
 REGISTRATION_MODE                               | set registration to "enabled", "disabled", or "admin_only" (default: "admin_only")
 GUNICORN_WORKERS                                | number of [gunicorn][] workers spawned to process requests (default: CPU cores * 4 + 1)
 RESERVED_NAMES                                  | a comma-separated list of names which applications cannot reserve for routing (default: "deis, deis-builder, deis-workflow-manager")
-SLUGRUNNER_IMAGE_NAME                           | the image used to run buildpack application slugs (default: "quay.io/deisci/slugrunner:canary")
+SLUGRUNNER_IMAGE_NAME                           | the image used to run buildpack application slugs (default: "quay.io/hephyci/slugrunner:canary")
 DEIS_DEPLOY_HOOK_URLS                           | a comma-separated list of URLs to send [deploy hooks][] to.
 DEIS_DEPLOY_HOOK_SECRET_KEY                     | a private key used to compute the HMAC signature for deploy hooks.
 DEIS_DEPLOY_REJECT_IF_PROCFILE_MISSING          | rejects a deploy if the previous build had a Procfile but the current deploy is missing it. A 409 is thrown in the API. Prevents accidental process types removal. (default: "false", allowed values: "true", "false")
@@ -129,7 +129,7 @@ output.disable_deis | false | Disable the Deis output plugin
 boot.install_build_tools | false | Install the build tools package. This is useful when using custom plugins
 daemon_environment | | Takes key-value pairs and turns them into environment variables.
 
-For more information about the various environment variables that can be set please see the [README](https://github.com/deisthree/fluentd/blob/master/README.md)
+For more information about the various environment variables that can be set please see the [README](https://github.com/teamhephy/fluentd/blob/master/README.md)
 
 ## Customizing the Logger
 
@@ -151,24 +151,24 @@ user   | "admin" | The first user created in the database (this user has admin p
 password | "admin" | Password for the first user.
 allow_sign_up | "true" | Allows users to sign up for an account.
 
-For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/deisthree/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
+For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/teamhephy/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
 
 ### [Telegraf](https://docs.influxdata.com/telegraf)
-For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/deisthree/monitor/blob/master/telegraf/rootfs/config.toml.tpl).
+For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/teamhephy/monitor/blob/master/telegraf/rootfs/config.toml.tpl).
 
 ### [InfluxDB](https://docs.influxdata.com/influxdb)
-You can find a list of values that can be set using environment variables [here](https://github.com/deisthree/monitor/blob/master/influxdb/rootfs/home/influxdb/config.toml.tpl).
+You can find a list of values that can be set using environment variables [here](https://github.com/teamhephy/monitor/blob/master/influxdb/rootfs/home/influxdb/config.toml.tpl).
 
 ## Customizing the Registry
 
 The [Registry][] component can be tuned by following the
-[deis/distribution config doc](https://github.com/deisthree/distribution/blob/master/docs/configuration.md).
+[teamhephy/distribution config doc](https://github.com/deis/distribution/blob/master/docs/configuration.md).
 
 ## Customizing the Router
 
 The majority of router settings are tunable through annotations, which allows the router to be
 re-configured with zero downtime post-installation. You can find the list of annotations to tune
-[here](https://github.com/deisthree/router#annotations).
+[here](https://github.com/teamhephy/router#annotations).
 
 The following environment variables are tunable for the [Router][] component:
 
@@ -182,10 +182,10 @@ The following environment variables are tunable for [Workflow Manager][]:
 
 Setting                            | Description
 ---------------------------------- | ---------------------------------
-CHECK_VERSIONS    | Enables the external version check at <https://versions.deis.com/> (default: "true")
+CHECK_VERSIONS    | Enables the external version check at <https://versions.teamhephy.info/> (default: "true")
 POLL_INTERVAL_SEC | The interval when Workflow Manager performs a version check, in seconds (default: 43200, or 12 hours)
-VERSIONS_API_URL  | The versions API URL (default: "<https://versions-staging.deis.com>")
-DOCTOR_API_URL    | The doctor API URL (default: "<https://doctor-staging.deis.com>")
+VERSIONS_API_URL  | The versions API URL (default: "<https://versions-staging.teamhephy.info>")
+DOCTOR_API_URL    | The doctor API URL (default: "<https://doctor-staging.teamhephy.info>")
 API_VERSION       | The version number Workflow Manager sends to the versions API (default: "v2")
 
 [Deploying Apps]: ../applications/deploying-apps.md

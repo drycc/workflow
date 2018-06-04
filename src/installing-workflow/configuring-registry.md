@@ -56,7 +56,7 @@ registry-token-refresher:
     hostname: ""
 ...
 ```
-**Note:** `registryid` and `hostname` should _not_ be set.  See [this issue](https://github.com/deisthree/registry-token-refresher/issues/11) for more info.
+**Note:** `registryid` and `hostname` should _not_ be set.  See [this issue](https://github.com/teamhephy/registry-token-refresher/issues/2) for more info.
 
 ### GCR
 

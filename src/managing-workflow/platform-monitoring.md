@@ -41,7 +41,7 @@ We now include a monitoring stack for introspection on a running Kubernetes clus
 ```
 
 ## [Grafana](https://grafana.com/)
-Grafana allows users to create custom dashboards that visualize the data captured to the running InfluxDB component. By default Grafana is exposed using a [service annotation](https://github.com/deisthree/router#how-it-works) through the router at the following URL: `http://grafana.mydomain.com`. The default login is `admin/admin`. If you are interested in changing these values please see [Tuning Component Settings][].
+Grafana allows users to create custom dashboards that visualize the data captured to the running InfluxDB component. By default Grafana is exposed using a [service annotation](https://github.com/teamhephy/router#how-it-works) through the router at the following URL: `http://grafana.mydomain.com`. The default login is `admin/admin`. If you are interested in changing these values please see [Tuning Component Settings][].
 
 Grafana will preload several dashboards to help operators get started with monitoring Kubernetes and Deis Workflow.
 These dashboards are meant as starting points and don't include every item that might be desirable to monitor in a
@@ -54,7 +54,7 @@ A production install of Grafana should have the following configuration values c
 
 * Change the default username and password from `admin/admin`. The value for the password is passed in plain text so it is best to set this value on the command line instead of checking it into version control.
 * Enable persistence
-* Use a supported external database such as mysql or postgres. You can find more information [here](https://github.com/deisthree/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl#L62)
+* Use a supported external database such as mysql or postgres. You can find more information [here](https://github.com/teamhephy/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl#L62)
 
 
 ### On Cluster Persistence
@@ -109,7 +109,7 @@ Telegraf is the metrics collection daemon used within the monitoring stack. It w
 * Container level metrics such as CPU and Memory
 * Kubernetes metrics such as API request latency, Pod Startup Latency, and number of running pods
 
-It is possible to send these metrics to other endpoints besides InfluxDB. For more information please consult the following [file](https://github.com/deisthree/monitor/blob/master/telegraf/rootfs/config.toml.tpl)
+It is possible to send these metrics to other endpoints besides InfluxDB. For more information please consult the following [file](https://github.com/teamhephy/monitor/blob/master/telegraf/rootfs/config.toml.tpl)
 
 ### Customizing the Monitoring Stack
 

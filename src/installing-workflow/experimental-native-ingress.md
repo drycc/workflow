@@ -86,7 +86,7 @@ After installing Workflow, [register a user and deploy an application](../quicks
 
 ##### Feedback
 
-While this feature is experimental we welcome feedback on the issue. We would like to learn more about use cases, and user experience. Please [open a new issue](https://github.com/deisthree/workflow/issues/new) for feedback.
+While this feature is experimental we welcome feedback on the issue. We would like to learn more about use cases, and user experience. Please [open a new issue](https://github.com/teamhephy/workflow/issues/new) for feedback.
 
 
 [builder]: ../understanding-workflow/components.md#builder

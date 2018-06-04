@@ -8,7 +8,7 @@ This is useful for integrating Deis into Docker-based CI/CD pipelines.
 
 Start by cloning an example application:
 
-    $ git clone https://github.com/deisthree/example-dockerfile-http.git
+    $ git clone https://github.com/teamhephy/example-dockerfile-http.git
     $ cd example-dockerfile-http
 
 Next use your local `docker` client to build the image and push

@@ -4,7 +4,7 @@ Each Deis component is one among an ecosystem of such components - many of which
 
 Each Deis component includes its own suite of style checks, [unit tests][], and black-box type [functional tests][].
 
-[Integration tests][] verify the behavior of the Deis components together as a system and are provided separately by the [deis/workflow-e2e][workflow-e2e] project.
+[Integration tests][] verify the behavior of the Deis components together as a system and are provided separately by the [teamhephy/workflow-e2e][workflow-e2e] project.
 
 GitHub pull requests for all Deis components are tested automatically by the [Travis CI][travis] [continuous integration][] system. Contributors should run the same tests locally before proposing any changes to the Deis codebase.
 
@@ -40,12 +40,12 @@ To execute style checks, unit tests, and functional tests all in one shot:
 $ make test
 ```
 
-To execute integration tests, refer to [deis/workflow-e2e][workflow-e2e] documentation.
+To execute integration tests, refer to [teamhephy/workflow-e2e][workflow-e2e] documentation.
 
 [unit tests]: http://en.wikipedia.org/wiki/Unit_testing
 [functional tests]: http://en.wikipedia.org/wiki/Functional_testing
 [integration tests]: http://en.wikipedia.org/wiki/Integration_testing
-[workflow-e2e]: https://github.com/deisthree/workflow-e2e
-[travis]: https://travis-ci.org/deis
+[workflow-e2e]: https://github.com/teamhephy/workflow-e2e
+[travis]: https://travis-ci.org/teamhephy
 [continuous integration]: http://en.wikipedia.org/wiki/Continuous_integration
 [dev-environment]: development-environment.md

@@ -3,7 +3,7 @@
 # names
 #
 site_name: Deis Workflow Documentation
-site_url: https://deis.com/docs/workflow
+site_url: https://teamhephy.com/docs/workflow
 pages:
   - Home: index.md
   - Quick Start:
@@ -131,4 +131,3 @@ extra_javascript:
   - static/js/foundation.offcanvas.js
   - static/js/headroom.min.js
   - static/js/adjustments.js
-google_analytics: ['UA-42867143-3', 'auto']
