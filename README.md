@@ -1,12 +1,23 @@
 
-|![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Warning.svg/156px-Warning.svg.png) | Deis Workflow will soon no longer be maintained.<br />Please [read the announcement](https://deis.com/blog/2017/deis-workflow-final-release/) for more detail. |
+|![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Warning.svg/156px-Warning.svg.png) | Hephy Workflow is the open source fork of Deis Workflow.<br />Please [read the announcement][] for more detail. |
 |---:|---|
+| 08/27/2018 | Team Hephy [blog][] comes online |
+| 08/20/2018 | Deis [#community slack][] goes dark |
+| 08/10/2018 | Hephy Workflow [v2.19.4][] fourth patch release |
+| 08/08/2018 | [Deis website][] goes dark, then redirects to Azure Kubernetes Service |
+| 08/01/2018 | Hephy Workflow [v2.19.3][] third patch release |
+| 07/17/2018 | Hephy Workflow [v2.19.2][] second patch release |
+| 07/12/2018 | Hephy Workflow [v2.19.1][] first patch release |
+| 06/29/2018 | Hephy Workflow [v2.19.0][] first release in the open source fork of Deis |
+| 06/16/2018 | Hephy Workflow [v2.19][] series is announced |
+| 03/01/2018 | End of Deis Workflow maintenance: critical patches no longer merged |
+| 12/11/2017 | Team Hephy [slack community][] invites first volunteers |
 | 09/07/2017 | Deis Workflow [v2.18][] final release before entering maintenance mode |
-| 03/01/2018 | End of Workflow maintenance: critical patches no longer merged |
+| 09/06/2017 | Team Hephy [slack community][] comes online |
 
-![](https://deis.com/images/deis-logo.png)
+![](https://raw.githubusercontent.com/teamhephy/workflow/master/themes/deis/static/img/deis_logo.png)
 
-[![Slack Status](https://slack.deis.io/badge.svg)](https://slack.deis.io/)
+[![Slack Status](https://slack.teamhephy.com/badge.svg)](https://slack.teamhephy.com/)
 
 **Deis Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
 
@@ -79,4 +90,15 @@ Then view the documentation on [http://localhost:8000](http://localhost:8000) or
 [mkdocs]: http://www.mkdocs.org/
 [issues]: https://github.com/teamhephy/workflow/issues
 [prs]: https://github.com/teamhephy/workflow/pulls
+[Deis website]: http://deis.com/
+[blog]: https://blog.teamhephy.info/blog/
+[read the announcement]: https://blog.teamhephy.info/blog/posts/announcements/hephy-workflow-deis-fork.html
+[#community slack]: https://slack.deis.io/
+[slack community]: https://slack.teamhephy.com/
 [v2.18]: https://github.com/teamhephy/workflow/releases/tag/v2.18.0
+[v2.19]: https://web.teamhephy.com
+[v2.19.0]: https://gist.github.com/Cryptophobia/24c204583b18b9fc74c629fb2b62dfa3/revisions
+[v2.19.1]: https://github.com/teamhephy/workflow/releases/tag/v2.19.1
+[v2.19.2]: https://github.com/teamhephy/workflow/releases/tag/v2.19.2
+[v2.19.3]: https://github.com/teamhephy/workflow/releases/tag/v2.19.3
+[v2.19.4]: https://github.com/teamhephy/workflow/releases/tag/v2.19.4
