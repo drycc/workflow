@@ -254,7 +254,7 @@ and then verify `stable` artifacts are available and appropriately updated after
 ```
 $ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.18.0
 $ ./deis version
-# (Should show $WORKFLOW_RELEASE) # FIXME: builds of CLI should match the current Workflow release.) 
+# (Should show $WORKFLOW_RELEASE)
 ```
 
 ### Step 10: Let Everyone Know

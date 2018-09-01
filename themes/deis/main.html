@@ -7,15 +7,15 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="keywords" content="{{ meta['keywords'] if meta }}" />
+  <meta name="keywords" content="{{ page.meta['keywords'] if page.meta }}" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="{{ page_description if page_description }}" />
-  {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
+  <meta name="description" content="{{ config.site_description if config.site_description }}" />
+  {% if page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
 
   <meta name="msvalidate.01" content="079E754911917142D42AB2A3694F9267" />
   <meta name="msvalidate.01" content="08598E7D936D9217891AE6C1665A645D" />
 
-  <title>{% if page_title %}{{ page_title }} - {% endif %}{{ site_name }}</title>
+  <title>{% if page.title %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
 
   <script type="text/javascript">var documentationBaseURL = "{{ base_url}}"</script>
   <link rel="icon" href="{{ base_url }}/static/img/favicon/favicon.png" type="image/png">
@@ -42,7 +42,7 @@
           <div class="container">
             <div class="row">
               <div class="small-12">
-                {{ content }}
+                {{ page.content }}
               </div>
             </div>
           </div>
@@ -62,7 +62,7 @@
     <script src="{{ path }}" async></script>
   {% endfor %}
 
-  {% if google_analytics %}
+  {% if config.google_analytics %}
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
