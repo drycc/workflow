@@ -5,7 +5,7 @@ Use the CLI to create and configure and manage applications.
 
 Install the latest `deis` client for Linux or Mac OS X with:
 
-    $ curl -sSL http://deis.io/deis-cli/install-v2.sh | bash
+    $ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.18.0
 
 The installer places the `deis` binary in your current directory, but you
 should move it somewhere in your $PATH:
