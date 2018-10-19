@@ -9,8 +9,8 @@ application configuration, creating and rolling back releases, managing domain n
 certificates, providing seamless edge routing, aggregating logs, and sharing applications with
 teams. All of this is exposed through a simple REST API and command line interface.
 
-Please note that this documentation is for Deis Workflow (v2). For v1 documentation visit
-<http://docs.deis.io/en/latest/>.
+Please note that this documentation is for Hephy Workflow (v2.19.4).  Older versions of Deis and
+Hephy Workflow are not supported.
 
 ## Getting Started
 
@@ -24,8 +24,7 @@ Feel like contibuting some code or want to get started as a maintainer? Pick an 
 
 ## Service and Support
 
-If you are interested in commercial service and support for Deis Workflow, check out the various
-[services offerings on deis.com](https://deis.com/services).
+Coming soon.
 
 
 [arch]: understanding-workflow/architecture.md

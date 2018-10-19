@@ -252,7 +252,7 @@ Kick off https://ci.teamhephy.info/job/workflow-cli-build-stable/ with the `TAG`
 and then verify `stable` artifacts are available and appropriately updated after the job completes:
 
 ```
-$ curl -sSL http://deis.io/deis-cli/install-v2.sh | bash
+$ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.18.0
 $ ./deis version
 # (Should show $WORKFLOW_RELEASE)
 ```
