@@ -252,7 +252,7 @@ Kick off https://ci.teamhephy.info/job/workflow-cli-build-stable/ with the `TAG`
 and then verify `stable` artifacts are available and appropriately updated after the job completes:
 
 ```
-$ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.18.0
+$ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.20.0
 $ ./deis version
 # (Should show $WORKFLOW_RELEASE)
 ```

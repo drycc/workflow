@@ -7,7 +7,7 @@ with Deis Workflow.
 
 Install the latest `deis` client for Linux or Mac OS X with:
 
-    $ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.18.0
+    $ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.20.0
 
 The installer puts `deis` in your current directory, but you should move it
 somewhere in your $PATH:
