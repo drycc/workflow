@@ -1,15 +1,15 @@
 ## Find Your Load Balancer Hostname
 
-On EC2, Deis Workflow will automatically provision and attach an Elastic Load Balancer (ELB) to the
+On EC2, Drycc Workflow will automatically provision and attach an Elastic Load Balancer (ELB) to the
 [Router][]. The Router is responsible for routing HTTP and HTTPS requests from the public internet
-to applications that are deployed and managed by Deis Workflow, as well as streaming TCP requests
+to applications that are deployed and managed by Drycc Workflow, as well as streaming TCP requests
 to the [Builder][].
 
-By describing the `deis-router` service, you can see what hostname allocated by AWS for your Deis
+By describing the `drycc-router` service, you can see what hostname allocated by AWS for your Drycc
 Workflow cluster:
 
 ```
-$ kubectl --namespace=deis describe svc deis-router | egrep LoadBalancer
+$ kubectl --namespace=drycc describe svc drycc-router | egrep LoadBalancer
 Type:                   LoadBalancer
 LoadBalancer Ingress:   abce0d48217d311e69a470643b4d9062-2074277678.us-west-1.elb.amazonaws.com
 ```
@@ -50,7 +50,7 @@ To create a hosted zone and an alias record set for your domain using Amazon Rou
 ### Using nip.io
 
 If you do not have registered a domain name and just want to try out Workflow on AWS, we can use
-the `nip.io` wildcard DNS service to route arbitrary hostnames to the Deis Workflow edge router.
+the `nip.io` wildcard DNS service to route arbitrary hostnames to the Drycc Workflow edge router.
 This lets us point the Workflow CLI at your cluster without having to either use your own domain or
 update DNS!
 
@@ -83,11 +83,11 @@ $ host something-random.52.8.166.233.nip.io
 something-random.52.8.166.233.nip.io has address 52.8.166.233
 ```
 
-By default, any HTTP traffic for the hostname `deis` will be sent to the Workflow API service. To
+By default, any HTTP traffic for the hostname `drycc` will be sent to the Workflow API service. To
 test that everything is connected properly you may validate connectivity using `curl`:
 
 ```
-$ curl http://deis.52.8.166.233.nip.io/v2/ && echo
+$ curl http://drycc.52.8.166.233.nip.io/v2/ && echo
 {"detail":"Authentication credentials were not provided."}
 ```
 

@@ -1,14 +1,14 @@
 # Using Docker Images
 
-Deis supports deploying applications via an existing [Docker Image][].
-This is useful for integrating Deis into Docker-based CI/CD pipelines.
+Drycc supports deploying applications via an existing [Docker Image][].
+This is useful for integrating Drycc into Docker-based CI/CD pipelines.
 
 
 ## Prepare an Application
 
 Start by cloning an example application:
 
-    $ git clone https://github.com/teamhephy/example-dockerfile-http.git
+    $ git clone https://github.com/drycc/example-dockerfile-http.git
     $ cd example-dockerfile-http
 
 Next use your local `docker` client to build the image and push
@@ -28,62 +28,62 @@ In order to deploy Docker images, they must conform to the following requirement
 * The Docker image must contain [bash](https://www.gnu.org/software/bash/) to run processes.
 
 !!! note
-    Note that if you are using a private registry of any kind (`gcr` or other) the application environment must include a `$PORT` config variable that matches the `EXPOSE`'d port, example: `deis config:set PORT=5000`. See [Configuring Registry](../installing-workflow/configuring-registry/#configuring-off-cluster-private-registry) for more info.
+    Note that if you are using a private registry of any kind (`gcr` or other) the application environment must include a `$PORT` config variable that matches the `EXPOSE`'d port, example: `drycc config:set PORT=5000`. See [Configuring Registry](../installing-workflow/configuring-registry/#configuring-off-cluster-private-registry) for more info.
 
 ## Create an Application
 
-Use `deis create` to create an application on the [controller][].
+Use `drycc create` to create an application on the [controller][].
 
     $ mkdir -p /tmp/example-dockerfile-http && cd /tmp/example-dockerfile-http
-    $ deis create example-dockerfile-http --no-remote
+    $ drycc create example-dockerfile-http --no-remote
     Creating application... done, created example-dockerfile-http
 
 !!! note
-    For all commands except for `deis create`, the `deis` client uses the name of the current directory
+    For all commands except for `drycc create`, the `drycc` client uses the name of the current directory
     as the app name if you don't specify it explicitly with `--app`.
 
 
 ## Deploy the Application
 
-Use `deis pull` to deploy your application from [DockerHub][] or
+Use `drycc pull` to deploy your application from [DockerHub][] or
 a public registry.
 
-    $ deis pull <username>/example-dockerfile-http:latest
+    $ drycc pull <username>/example-dockerfile-http:latest
     Creating build...  done, v2
 
-    $ curl -s http://example-dockerfile-http.local3.deisapp.com
-    Powered by Deis
+    $ curl -s http://example-dockerfile-http.local3.dryccapp.com
+    Powered by Drycc
 
 Because you are deploying a Docker image, the `cmd` process type is automatically scaled to 1 on first deploy.
 
-Use `deis scale cmd=3` to increase `cmd` processes to 3, for example. Scaling a
+Use `drycc scale cmd=3` to increase `cmd` processes to 3, for example. Scaling a
 process type directly changes the number of [Containers][container]
 running that process.
 
 ## Private Registry
 
-To deploy Docker images from a private registry or from a private repository, use `deis registry`
+To deploy Docker images from a private registry or from a private repository, use `drycc registry`
 to attach credentials to your application. These credentials are the same as you'd use when running
 `docker login` at your private registry.
 
 To deploy private Docker images, take the following steps:
 
 * Gather the username and password for the registry, such as a [Quay.io Robot Account][] or a [GCR.io Long Lived Token][]
-* Run `deis registry:set username=<the-user> password=<secret> -a <application-name>`
-* Now perform `deis pull` as normal, against an image in the private registry
+* Run `drycc registry:set username=<the-user> password=<secret> -a <application-name>`
+* Now perform `drycc pull` as normal, against an image in the private registry
 
 When using a [GCR.io Long Lived Token][], the JSON blob will have to be compacted first using a
-tool like [jq][] and then used in the password field in `deis registry:set`. For the username, use
+tool like [jq][] and then used in the password field in `drycc registry:set`. For the username, use
 `_json_key`. For example:
 
 ```
-deis registry:set username=_json_key password="$(cat google_cloud_cred.json | jq -c .)"
+drycc registry:set username=_json_key password="$(cat google_cloud_cred.json | jq -c .)"
 ```
 
-When using a private registry the docker images are no longer pulled into the Deis Internal Registry via
-the Deis Workflow Controller but rather is managed by Kubernetes. This will increase security and overall speed,
+When using a private registry the docker images are no longer pulled into the Drycc Internal Registry via
+the Drycc Workflow Controller but rather is managed by Kubernetes. This will increase security and overall speed,
 however the application `port` information can no longer be discovered. Instead the application `port` information can be set via
-`deis config:set PORT=80` prior to setting the registry information.
+`drycc config:set PORT=80` prior to setting the registry information.
 
 !!! note
     Currently [GCR.io][] and [ECR][] in short lived auth token mode are not supported.

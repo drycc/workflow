@@ -1,18 +1,18 @@
 # Using Buildpacks
 
-Deis supports deploying applications via [Heroku Buildpacks][]. Buildpacks are useful if you're interested in following Heroku's best practices for building applications or if you are deploying an application that already runs on Heroku.
+Drycc supports deploying applications via [Heroku Buildpacks][]. Buildpacks are useful if you're interested in following Heroku's best practices for building applications or if you are deploying an application that already runs on Heroku.
 
 ## Add SSH Key
 
-For **Buildpack** based application deploys via `git push`, Deis Workflow identifies users via SSH keys. SSH keys are pushed to the platform and must be unique to each user.
+For **Buildpack** based application deploys via `git push`, Drycc Workflow identifies users via SSH keys. SSH keys are pushed to the platform and must be unique to each user.
 
 - See [this document](../users/ssh-keys.md#generate-an-ssh-key) for instructions on how to generate an SSH key.
 
-- Run `deis keys:add` to upload your SSH key to Deis Workflow.
+- Run `drycc keys:add` to upload your SSH key to Drycc Workflow.
 
 ```
-$ deis keys:add ~/.ssh/id_deis.pub
-Uploading id_deis.pub to deis... done
+$ drycc keys:add ~/.ssh/id_drycc.pub
+Uploading id_drycc.pub to drycc... done
 ```
 
 Read more about adding/removing SSH Keys [here](../users/ssh-keys.md#adding-and-removing-ssh-keys).
@@ -21,24 +21,24 @@ Read more about adding/removing SSH Keys [here](../users/ssh-keys.md#adding-and-
 
 If you do not have an existing application, you can clone an example application that demonstrates the Heroku Buildpack workflow.
 
-    $ git clone https://github.com/teamhephy/example-go.git
+    $ git clone https://github.com/drycc/example-go.git
     $ cd example-go
 
 
 ## Create an Application
 
-Use `deis create` to create an application on the [Controller][].
+Use `drycc create` to create an application on the [Controller][].
 
-    $ deis create
+    $ drycc create
     Creating application... done, created skiing-keypunch
-    Git remote deis added
+    Git remote drycc added
 
 
 ## Push to Deploy
 
-Use `git push deis master` to deploy your application.
+Use `git push drycc master` to deploy your application.
 
-    $ git push deis master
+    $ git push drycc master
     Counting objects: 75, done.
     Delta compression using up to 8 threads.
     Compressing objects: 100% (48/48), done.
@@ -55,28 +55,28 @@ Use `git push deis master` to deploy your application.
     Build complete.
     Launching app.
     Launching...
-    Done, skiing-keypunch:v2 deployed to Deis
+    Done, skiing-keypunch:v2 deployed to Drycc
 
-    Use 'deis open' to view this application in your browser
+    Use 'drycc open' to view this application in your browser
 
-    To learn more, use 'deis help' or visit http://deis.io
+    To learn more, use 'drycc help' or visit http://drycc.cc
 
-    To ssh://git@deis.staging-2.deis.com:2222/skiing-keypunch.git
+    To ssh://git@drycc.staging-2.drycc.com:2222/skiing-keypunch.git
      * [new branch]      master -> master
 
     $ curl -s http://skiing-keypunch.example.com
-    Powered by Deis
+    Powered by Drycc
     Release v2 on skiing-keypunch-v2-web-02zb9
 
 Because a Heroku-style application is detected, the `web` process type is automatically scaled to 1 on first deploy.
 
-Use `deis scale web=3` to increase `web` processes to 3, for example. Scaling a
+Use `drycc scale web=3` to increase `web` processes to 3, for example. Scaling a
 process type directly changes the number of [pods] running that process.
 
 
 ## Included Buildpacks
 
-For convenience, a number of buildpacks come bundled with Deis:
+For convenience, a number of buildpacks come bundled with Drycc:
 
  * [Ruby Buildpack][]
  * [Nodejs Buildpack][]
@@ -91,7 +91,7 @@ For convenience, a number of buildpacks come bundled with Deis:
  * [Go Buildpack][]
  * [Multi Buildpack][]
 
-Deis will cycle through the `bin/detect` script of each buildpack to match the code you
+Drycc will cycle through the `bin/detect` script of each buildpack to match the code you
 are pushing.
 
 !!! note
@@ -103,7 +103,7 @@ are pushing.
 
 To use a custom buildpack, set the `BUILDPACK_URL` environment variable.
 
-    $ deis config:set BUILDPACK_URL=https://github.com/dpiddy/heroku-buildpack-ruby-minimal
+    $ drycc config:set BUILDPACK_URL=https://github.com/dpiddy/heroku-buildpack-ruby-minimal
     Creating config... done, v2
 
     === humble-autoharp
@@ -134,8 +134,8 @@ The builder will run these commands before and after the build process, respecti
 To pull code from private repositories, set the `SSH_KEY` environment variable to a private key
 which has access. Use either the path of a private key file or the raw key material:
 
-    $ deis config:set SSH_KEY=/home/user/.ssh/id_rsa
-    $ deis config:set SSH_KEY="""-----BEGIN RSA PRIVATE KEY-----
+    $ drycc config:set SSH_KEY=/home/user/.ssh/id_rsa
+    $ drycc config:set SSH_KEY="""-----BEGIN RSA PRIVATE KEY-----
     (...)
     -----END RSA PRIVATE KEY-----"""
 
@@ -143,9 +143,9 @@ For example, to use a custom buildpack hosted at a private GitHub URL, ensure th
 key exists in your [GitHub settings][]. Then set `SSH_KEY` to the corresponding SSH private key
 and set `BUILDPACK_URL` to the URL:
 
-    $ deis config:set SSH_KEY=/home/user/.ssh/github_id_rsa
-    $ deis config:set BUILDPACK_URL=git@github.com:user/private_buildpack.git
-    $ git push deis master
+    $ drycc config:set SSH_KEY=/home/user/.ssh/github_id_rsa
+    $ drycc config:set BUILDPACK_URL=git@github.com:user/private_buildpack.git
+    $ git push drycc master
 
 
 [pods]: http://kubernetes.io/v1.1/docs/user-guide/pods.html

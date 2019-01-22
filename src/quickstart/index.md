@@ -1,18 +1,18 @@
 # Quick Start
 
-Get started with Deis Workflow in three easy steps.
+Get started with Drycc Workflow in three easy steps.
 
-1. Install CLI tools for Helm and Deis Workflow
-2. Boot a Kubernetes and install Deis Workflow
+1. Install CLI tools for Helm and Drycc Workflow
+2. Boot a Kubernetes and install Drycc Workflow
 3. Deploy your first application
 
 This guide will help you set up a cluster suitable for evaluation, development and testing. When you are ready for staging and production, view our [production checklist](../managing-workflow/production-deployments.md).
 
 ## Step 1: Install CLI tools
 
-For the quickstart we will [install both Helm and Deis Workflow CLI](install-cli-tools.md).
+For the quickstart we will [install both Helm and Drycc Workflow CLI](install-cli-tools.md).
 
-## Step 2: Boot Kubernetes and Install Deis Workflow
+## Step 2: Boot Kubernetes and Install Drycc Workflow
 
 There are many ways to boot and run Kubernetes. You may choose to get up and running in cloud environments or locally on
 your laptop.
@@ -25,7 +25,7 @@ Cloud-based options:
 
 If you would like to test on your local machine follow, our guide for [Minikube](provider/minikube/boot.md).
 
-If you have already created a Kubernetes cluster, check out the [system requirements](../installing-workflow/system-requirements.md) and then proceed to [install Deis Workflow on your own Kubernetes cluster](../installing-workflow/index.md).
+If you have already created a Kubernetes cluster, check out the [system requirements](../installing-workflow/system-requirements.md) and then proceed to [install Drycc Workflow on your own Kubernetes cluster](../installing-workflow/index.md).
 
 ## Step 3: Deploy your first app
 

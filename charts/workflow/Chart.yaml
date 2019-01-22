@@ -1,7 +1,7 @@
 name: workflow
-home: https://github.com/teamhephy/workflow
+home: https://github.com/drycc/workflow
 version: <Will be populated by the ci before publishing the chart>
-description: Hephy Workflow
+description: Drycc Workflow
 maintainers:
-  - name: Team Hephy
-    email: team@teamhephy.com
+  - name: Team Drycc
+    email: team@drycc.com

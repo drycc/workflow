@@ -1,28 +1,28 @@
-# Deis Workflow  CLI
+# Drycc Workflow  CLI
 
-The Deis Workflow command-line interface (CLI), or client, allows you to interact
-with Deis Workflow.
+The Drycc Workflow command-line interface (CLI), or client, allows you to interact
+with Drycc Workflow.
 
 ## Installation
 
-Install the latest `deis` client for Linux or Mac OS X with:
+Install the latest `drycc` client for Linux or Mac OS X with:
 
-    $ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.20.0
+    $ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/master/install-v2.sh | bash -s v2.20.0
 
-The installer puts `deis` in your current directory, but you should move it
+The installer puts `drycc` in your current directory, but you should move it
 somewhere in your $PATH:
 
-    $ ln -fs $PWD/deis /usr/local/bin/deis
+    $ ln -fs $PWD/drycc /usr/local/bin/drycc
 
 ## Getting Help
 
-The Deis client comes with comprehensive documentation for every command.
-Use `deis help` to explore the commands available to you:
+The Drycc client comes with comprehensive documentation for every command.
+Use `drycc help` to explore the commands available to you:
 
-    $ deis help
-    The Deis command-line client issues API calls to a Deis controller.
+    $ drycc help
+    The Drycc command-line client issues API calls to a Drycc controller.
 
-    Usage: deis <command> [<args>...]
+    Usage: drycc <command> [<args>...]
 
     Auth commands::
 
@@ -30,12 +30,12 @@ Use `deis help` to explore the commands available to you:
       login         login to a controller
       logout        logout from the current controller
 
-    Subcommands, use `deis help [subcommand]` to learn more::
+    Subcommands, use `drycc help [subcommand]` to learn more::
     ...
 
-To get help on subcommands, use `deis help [subcommand]`:
+To get help on subcommands, use `drycc help [subcommand]`:
 
-    $ deis help apps
+    $ drycc help apps
     Valid commands for apps:
 
     apps:create        create a new application
@@ -46,36 +46,36 @@ To get help on subcommands, use `deis help [subcommand]`:
     apps:run           run a command in an ephemeral app container
     apps:destroy       destroy an application
 
-    Use `deis help [command]` to learn more
+    Use `drycc help [command]` to learn more
 
 
 ## Support for Multiple Profiles
 
 The CLI reads from the default `client` profile, which is located on your
-workstation at `$HOME/.deis/client.json`.
+workstation at `$HOME/.drycc/client.json`.
 
-Easily switch between multiple Deis Workflow installations or users by setting
-the `$DEIS_PROFILE` environment variable or by using the `-c` flag.
+Easily switch between multiple Drycc Workflow installations or users by setting
+the `$DRYCC_PROFILE` environment variable or by using the `-c` flag.
 
-There are two ways to set the `$DEIS_PROFILE` option.
+There are two ways to set the `$DRYCC_PROFILE` option.
 
 1. Path to a json configuration file.
 2. Profile name. If you set profile to just a name, it will be saved alongside the default profile,
-   in `$HOME/.deis/<name>.json`.
+   in `$HOME/.drycc/<name>.json`.
 
 Examples:
 
-    $ DEIS_PROFILE=production deis login deis.production.com
+    $ DRYCC_PROFILE=production drycc login drycc.production.com
     ...
-    Configuration saved to /home/testuser/.deis/production.json
-    $ DEIS_PROFILE=~/config.json deis login deis.example.com
+    Configuration saved to /home/testuser/.drycc/production.json
+    $ DRYCC_PROFILE=~/config.json drycc login drycc.example.com
     ...
     Configuration saved to /home/testuser/config.json
 
-The configuration flag works identically to and overrides `$DEIS_PROFILE`:
+The configuration flag works identically to and overrides `$DRYCC_PROFILE`:
 
-    $ deis whoami -c ~/config.json
-    You are deis at deis.example.com
+    $ drycc whoami -c ~/config.json
+    You are drycc at drycc.example.com
 
 ## Proxy Support
 
@@ -90,22 +90,22 @@ set the `http_proxy` or `https_proxy` environment variable to enable proxy suppo
 
 ## CLI Plugins
 
-Plugins allow developers to extend the functionality of the Deis Client, adding new commands or features.
+Plugins allow developers to extend the functionality of the Drycc Client, adding new commands or features.
 
-If an unknown command is specified, the client will attempt to execute the command as a dash-separated command. In this case, `deis resource:command` will execute `deis-resource` with the argument list `command`. In full form:
+If an unknown command is specified, the client will attempt to execute the command as a dash-separated command. In this case, `drycc resource:command` will execute `drycc-resource` with the argument list `command`. In full form:
 
     $ # these two are identical
-    $ deis accounts:list
-    $ deis-accounts list
+    $ drycc accounts:list
+    $ drycc-accounts list
 
 Any flags after the command will also be sent to the plugin as an argument:
 
     $ # these two are identical
-    $ deis accounts:list --debug
-    $ deis-accounts list --debug
+    $ drycc accounts:list --debug
+    $ drycc-accounts list --debug
 
 But flags preceding the command will not:
 
     $ # these two are identical
-    $ deis --debug accounts:list
-    $ deis-accounts list
+    $ drycc --debug accounts:list
+    $ drycc-accounts list

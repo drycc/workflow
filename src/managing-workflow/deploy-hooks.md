@@ -7,9 +7,9 @@ it can also be used to integrate different systems together.
 After one or more hooks are setup, hook output and errors appear in your application’s logs:
 
 ```
-$ deis logs
+$ drycc logs
 ...
-2011-03-15T15:07:29-07:00 deis[api]: Deploy hook sent to http://deis.rocks
+2011-03-15T15:07:29-07:00 drycc[api]: Deploy hook sent to http://drycc.rocks
 ```
 
 Deploy hooks are a generic HTTP hook. An administrator can create and configure multiple deploy
@@ -38,7 +38,7 @@ this:
 import hashlib
 import hmac
 
-hmac.new("my_secret_key", "http://deis.rocks?app=secure-woodland&release=v4&release_summary=gabrtv%20deployed%35b3726&sha=35b3726&user=gabrtv", digestmod=hashlib.sha1).hexdigest()
+hmac.new("my_secret_key", "http://drycc.rocks?app=secure-woodland&release=v4&release_summary=gabrtv%20deployed%35b3726&sha=35b3726&user=gabrtv", digestmod=hashlib.sha1).hexdigest()
 ```
 
 If the value of the computed HMAC hex digest and the value in the `Authorization` header are

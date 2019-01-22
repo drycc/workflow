@@ -6,17 +6,17 @@ application that fails to start or deploy.
 
 ## Application has a Dockerfile, but a Buildpack Deployment Occurs
 
-When you deploy an application to Workflow using `git push deis master` and the [Builder][]
+When you deploy an application to Workflow using `git push drycc master` and the [Builder][]
 attempts to deploy using the Buildpack workflow, check the following steps:
 
 1. Are you deploying the correct project?
-2. Are you pushing the correct git branch (`git push deis <branch>`)?
+2. Are you pushing the correct git branch (`git push drycc <branch>`)?
 3. Is the `Dockerfile` in the project's root directory?
 4. Have you committed the `Dockerfile` to the project?
 
 ## Application was Deployed, but is Failing to Start
 
-If you deployed your application but it is failing to start, you can use `deis logs` to check
+If you deployed your application but it is failing to start, you can use `drycc logs` to check
 why the application fails to boot. Sometimes, the application container may fail to boot without
 logging any information about the error. This typically occurs when the healthcheck configured for
 the application fails. In this case, you can start by

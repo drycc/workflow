@@ -1,6 +1,6 @@
 # Architecture
 
-Deis Workflow is built using a service oriented architecture. All components
+Drycc Workflow is built using a service oriented architecture. All components
 are published as a set of container images which can be deployed to any
 compliant Kubernetes cluster.
 
@@ -17,7 +17,7 @@ Workflow provides a clean and simple developer experience.
 
 ![Workflow Overview](../diagrams/Workflow_Overview.png)
 
-Deis Workflow provides additional functionality to your Kubernetes cluster, including:
+Drycc Workflow provides additional functionality to your Kubernetes cluster, including:
 
 * [Source to Image Builder][builder] which compiles your Application code via Buildpacks or Dockerfiles
 * [Cross-Pod Log Aggregation][logger] which gathers logs from all of your Application processes
@@ -31,7 +31,7 @@ Deis Workflow provides additional functionality to your Kubernetes cluster, incl
 All platform components and applications deployed via Workflow expect to be
 running on an existing Kubernetes cluster. This means that you can happily run
 your Kubernetes-native workloads next to applications that are managed through
-Deis Workflow.
+Drycc Workflow.
 
 ![Workflow and Kubernetes](../diagrams/Workflow_Detail.png)
 
@@ -57,7 +57,7 @@ within seconds.
 
 ## Topologies
 
-Deis Workflow no longer dictates a specific topology or server count for your
+Drycc Workflow no longer dictates a specific topology or server count for your
 deployment. The platform components will happily run on single-server
 configurations as well as multi-server production clusters.
 

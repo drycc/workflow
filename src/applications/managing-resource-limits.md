@@ -1,6 +1,6 @@
 ## Managing Application Resource Limits
 
-Deis Workflow supports restricting memory and CPU shares of each process. Requests/Limits set on a per-process type are given to
+Drycc Workflow supports restricting memory and CPU shares of each process. Requests/Limits set on a per-process type are given to
 Kubernetes as a requests and limits. Which means you guarantee <requests\> amount of resource for a process as well as limit
 the process from using more than <limits\>.
 By default, Kubernetes will set <requests\> equal to <limit\> if we don't explicitly set <requests\> value. Please keep in mind that `0 <= requests <= limits`.
@@ -22,10 +22,10 @@ Available units for memory are:
 !!! important
     The minimum memory limit allowed is 4MiB.
 
-Use `deis limits:set <type>=<value>` to restrict memory by process type, where value can be <limit\> or <request\>/<limit\> format :
+Use `drycc limits:set <type>=<value>` to restrict memory by process type, where value can be <limit\> or <request\>/<limit\> format :
 
 ```
-$ deis limits:set web=64M
+$ drycc limits:set web=64M
 Applying limits... done
 
 === indoor-whitecap Limits
@@ -36,7 +36,7 @@ web     64M
 --- CPU
 Unlimited
 
-$ deis limits:set cmd=32M/64M
+$ drycc limits:set cmd=32M/64M
 Applying limits... done
 
 === outdoor-whitecap Limits
@@ -48,10 +48,10 @@ cmd     32M/64M
 Unlimited
 ```
 
-If you would like to remove any configured memory limits use `deis limits:unset web`:
+If you would like to remove any configured memory limits use `drycc limits:unset web`:
 
 ```
-$ deis limits:unset web
+$ drycc limits:unset web
 Applying limits... done
 
 === indoor-whitecap Limits
@@ -65,7 +65,7 @@ Unlimited
 
 ## Limiting CPU
 
-You can also use `deis limits:set <type>=<value> --cpu` to restrict CPU shares,  where value can be <limit\> or
+You can also use `drycc limits:set <type>=<value> --cpu` to restrict CPU shares,  where value can be <limit\> or
 <request\>/<limit\> format. CPU shares are tracked in milli-cores. One CPU core is equivalent to 1000 milli-cores.
 To dedicate half a core to your process, you would need 500 milli-cores or 500m.
 
@@ -77,7 +77,7 @@ To dedicate half a core to your process, you would need 500 milli-cores or 500m.
 | 100m  | 100 milli-cores == 10% CPU core   |
 
 ```
-$ deis limits:set web=250m --cpu
+$ drycc limits:set web=250m --cpu
 Applying limits... done
 
 === indoor-whitecap Limits
@@ -88,7 +88,7 @@ web     64M
 --- CPU
 web     250m
 
-$ deis limits:set web=1500m/2000m --cpu
+$ drycc limits:set web=1500m/2000m --cpu
 Applying limits... done
 
 === indoor-whitecap Limits
@@ -103,7 +103,7 @@ web     1500m/2000m
 You can verify the CPU and memory limits by inspecting the application process Pod with `kubectl`:
 
 ```
-$ deis ps
+$ drycc ps
 === indoor-whitecap Processes
 --- web:
 indoor-whitecap-v14-web-8slcj up (v14)
@@ -126,10 +126,10 @@ Containers:
     the `limits:set` command will hang.  If this happens, use CTRL-C
     to break out of `limits:set` and use `limits:unset` to revert.
 
-To unset a CPU limit use `deis limits:unset web --cpu`:
+To unset a CPU limit use `drycc limits:unset web --cpu`:
 
 ```
-$ deis limits:unset web --cpu
+$ drycc limits:unset web --cpu
 Applying limits... done
 
 === indoor-whitecap Limits

@@ -1,19 +1,19 @@
 # Using Dockerfiles
 
-Deis supports deploying applications via Dockerfiles.  A [Dockerfile][] automates the steps for crafting a [Docker Image][].
+Drycc supports deploying applications via Dockerfiles.  A [Dockerfile][] automates the steps for crafting a [Docker Image][].
 Dockerfiles are incredibly powerful but require some extra work to define your exact application runtime environment.
 
 ## Add SSH Key
 
-For **Dockerfile** based application deploys via `git push`, Deis Workflow identifies users via SSH keys. SSH keys are pushed to the platform and must be unique to each user.
+For **Dockerfile** based application deploys via `git push`, Drycc Workflow identifies users via SSH keys. SSH keys are pushed to the platform and must be unique to each user.
 
 - See [this document](../users/ssh-keys.md#generate-an-ssh-key) for instructions on how to generate an SSH key.
 
-- Run `deis keys:add` to upload your SSH key to Deis Workflow.
+- Run `drycc keys:add` to upload your SSH key to Drycc Workflow.
 
 ```
-$ deis keys:add ~/.ssh/id_deis.pub
-Uploading id_deis.pub to deis... done
+$ drycc keys:add ~/.ssh/id_drycc.pub
+Uploading id_drycc.pub to drycc... done
 ```
 
 Read more about adding/removing SSH Keys [here](../users/ssh-keys.md#adding-and-removing-ssh-keys).
@@ -23,7 +23,7 @@ Read more about adding/removing SSH Keys [here](../users/ssh-keys.md#adding-and-
 
 If you do not have an existing application, you can clone an example application that demonstrates the Dockerfile workflow.
 
-    $ git clone https://github.com/teamhephy/helloworld.git
+    $ git clone https://github.com/drycc/helloworld.git
     $ cd helloworld
 
 
@@ -37,23 +37,23 @@ In order to deploy Dockerfile applications, they must conform to the following r
 * The Docker image must contain [bash](https://www.gnu.org/software/bash/) to run processes.
 
 !!! note
-    Note that if you are using a private registry of any kind (`gcr` or other) the application environment must include a `$PORT` config variable that matches the `EXPOSE`'d port, example: `deis config:set PORT=5000`. See [Configuring Registry](../installing-workflow/configuring-registry/#configuring-off-cluster-private-registry) for more info.
+    Note that if you are using a private registry of any kind (`gcr` or other) the application environment must include a `$PORT` config variable that matches the `EXPOSE`'d port, example: `drycc config:set PORT=5000`. See [Configuring Registry](../installing-workflow/configuring-registry/#configuring-off-cluster-private-registry) for more info.
 
 
 ## Create an Application
 
-Use `deis create` to create an application on the [Controller][].
+Use `drycc create` to create an application on the [Controller][].
 
-    $ deis create
+    $ drycc create
     Creating application... done, created folksy-offshoot
-    Git remote deis added
+    Git remote drycc added
 
 
 ## Push to Deploy
 
-Use `git push deis master` to deploy your application.
+Use `git push drycc master` to deploy your application.
 
-    $ git push deis master
+    $ git push drycc master
     Counting objects: 13, done.
     Delta compression using up to 8 threads.
     Compressing objects: 100% (13/13), done.
@@ -62,7 +62,7 @@ Use `git push deis master` to deploy your application.
     -----> Building Docker image
     Uploading context 4.096 kB
     Uploading context
-    Step 0 : FROM deis/base:latest
+    Step 0 : FROM drycc/base:latest
      ---> 60024338bc63
     Step 1 : RUN wget -O /tmp/go1.2.1.linux-amd64.tar.gz -q https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz
      ---> Using cache
@@ -79,12 +79,12 @@ Use `git push deis master` to deploy your application.
     Step 5 : ENV PATH /usr/local/go/bin:/go/bin:$PATH
      ---> Using cache
      ---> 2ba6f6c9f108
-    Step 6 : ADD . /go/src/github.com/deis/helloworld
+    Step 6 : ADD . /go/src/github.com/drycc/helloworld
      ---> 94ab7f4b977b
     Removing intermediate container 171b7d9fdb34
-    Step 7 : RUN cd /go/src/github.com/deis/helloworld && go install -v .
+    Step 7 : RUN cd /go/src/github.com/drycc/helloworld && go install -v .
      ---> Running in 0c8fbb2d2812
-    github.com/deis/helloworld
+    github.com/drycc/helloworld
      ---> 13b5af931393
     Removing intermediate container 0c8fbb2d2812
     Step 8 : ENV PORT 80
@@ -104,21 +104,21 @@ Use `git push deis master` to deploy your application.
 
            Launching... done, v2
 
-    -----> folksy-offshoot deployed to Deis
-           http://folksy-offshoot.local3.deisapp.com
+    -----> folksy-offshoot deployed to Drycc
+           http://folksy-offshoot.local3.dryccapp.com
 
-           To learn more, use `deis help` or visit http://deis.io
+           To learn more, use `drycc help` or visit http://drycc.cc
 
-    To ssh://git@local3.deisapp.com:2222/folksy-offshoot.git
+    To ssh://git@local3.dryccapp.com:2222/folksy-offshoot.git
      * [new branch]      master -> master
 
-    $ curl -s http://folksy-offshoot.local3.deisapp.com
-    Welcome to Deis!
-    See the documentation at http://docs.deis.io/ for more information.
+    $ curl -s http://folksy-offshoot.local3.dryccapp.com
+    Welcome to Drycc!
+    See the documentation at http://docs.drycc.cc/ for more information.
 
 Because a Dockerfile application is detected, the `cmd` process type is automatically scaled to 1 on first deploy.
 
-Use `deis scale cmd=3` to increase `cmd` processes to 3, for example. Scaling a
+Use `drycc scale cmd=3` to increase `cmd` processes to 3, for example. Scaling a
 process type directly changes the number of [containers][container]
 running that process.
 
@@ -130,11 +130,11 @@ As of Workflow v2.13.0, users can inject their application config into the Docke
 to their application:
 
 ```
-$ deis config:set DEIS_DOCKER_BUILD_ARGS_ENABLED=1
+$ drycc config:set DRYCC_DOCKER_BUILD_ARGS_ENABLED=1
 ```
 
-Every environment variable set with `deis config:set` will then be available for use inside the
-user's Dockerfile. For example, if a user runs `deis config:set POWERED_BY=Workflow`,
+Every environment variable set with `drycc config:set` will then be available for use inside the
+user's Dockerfile. For example, if a user runs `drycc config:set POWERED_BY=Workflow`,
 the user can utilize that build argument in their Dockerfile:
 
 ```

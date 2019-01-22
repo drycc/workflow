@@ -13,7 +13,7 @@ If you don't have time to code, consider helping with triage. The community will
 
 Before triaging an issue very far, make sure that the issue's author provided the standard issue information. This will help you make an educated recommendation on how this to categorize the issue. Standard information that should be included in most issues are things such as:
 
--   the version(s) of Deis this issue affects
+-   the version(s) of Drycc this issue affects
 -   a reproducible case if this is a bug
 -   page URL if this is a docs issue or the name of a man page
 
@@ -54,7 +54,7 @@ security     | Security-related issues such as TLS encryption, network segregati
 
 ## Easy Fix
 
-"Easy Fix" issues are a way for a new contributor to find issues that are fit for their experience level. These issues are typically for users who are new to Deis, and possibly Go, and is looking to help while learning the basics.
+"Easy Fix" issues are a way for a new contributor to find issues that are fit for their experience level. These issues are typically for users who are new to Drycc, and possibly Go, and is looking to help while learning the basics.
 
 ## Prioritizing issues
 

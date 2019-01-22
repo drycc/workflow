@@ -1,36 +1,36 @@
 # Deploying an Application
 
-An [Application][] is deployed to Deis using `git push` or the `deis` client.
+An [Application][] is deployed to Drycc using `git push` or the `drycc` client.
 
 ## Supported Applications
 
-Deis Workflow can deploy any application or service that can run inside a Docker container.  In order to be scaled
+Drycc Workflow can deploy any application or service that can run inside a Docker container.  In order to be scaled
 horizontally, applications must follow the [Twelve-Factor App][] methodology and store any application state in external
 backing services.
 
 For example, if your application persists state to the local filesystem -- common with content management systems like
-Wordpress and Drupal -- it cannot be scaled horizontally using `deis scale`.
+Wordpress and Drupal -- it cannot be scaled horizontally using `drycc scale`.
 
-Fortunately, most modern applications feature a stateless application tier that can scale horizontally inside Deis.
+Fortunately, most modern applications feature a stateless application tier that can scale horizontally inside Drycc.
 
 ## Login to the Controller
 
 !!! important
 	if you haven't yet, now is a good time to [install the client][install client] and [register](../users/registration.md).
 
-Before deploying an application, users must first authenticate against the Deis [Controller][]
-using the URL supplied by their Deis administrator.
+Before deploying an application, users must first authenticate against the Drycc [Controller][]
+using the URL supplied by their Drycc administrator.
 
 ```
-$ deis login http://deis.example.com
-username: deis
+$ drycc login http://drycc.example.com
+username: drycc
 password:
-Logged in as deis
+Logged in as drycc
 ```
 
 ## Select a Build Process
 
-Deis Workflow supports three different ways of building applications:
+Drycc Workflow supports three different ways of building applications:
 
 ### Buildpacks
 
@@ -48,7 +48,7 @@ Learn how to deploy applications [using Dockerfiles](../applications/using-docke
 
 ### Docker Image
 
-Deploying a Docker image onto Deis allows you to take a Docker image from either a public
+Deploying a Docker image onto Drycc allows you to take a Docker image from either a public
 or a private registry and copy it over bit-for-bit, ensuring that you are running the same
 image in development or in your CI pipeline as you are in production.
 
@@ -60,9 +60,9 @@ It is possible to configure a few of the [globally tunable](../applications/mana
 
 Setting                                         | Description
 ----------------------------------------------- | ---------------------------------
-DEIS_DISABLE_CACHE                              | if set, this will disable the [slugbuilder cache][] (default: not set)
-DEIS_DEPLOY_BATCHES                             | the number of pods to bring up and take down sequentially during a scale (default: number of available nodes)
-DEIS_DEPLOY_TIMEOUT                             | deploy timeout in seconds per deploy batch (default: 120)
+DRYCC_DISABLE_CACHE                              | if set, this will disable the [slugbuilder cache][] (default: not set)
+DRYCC_DEPLOY_BATCHES                             | the number of pods to bring up and take down sequentially during a scale (default: number of available nodes)
+DRYCC_DEPLOY_TIMEOUT                             | deploy timeout in seconds per deploy batch (default: 120)
 IMAGE_PULL_POLICY                               | the kubernetes [image pull policy][pull-policy] for application images (default: "IfNotPresent") (allowed values: "Always", "IfNotPresent")
 KUBERNETES_DEPLOYMENTS_REVISION_HISTORY_LIMIT   | how many [revisions][kubernetes-deployment-revision] Kubernetes keeps around of a given Deployment (default: all revisions)
 KUBERNETES_POD_TERMINATION_GRACE_PERIOD_SECONDS | how many seconds kubernetes waits for a pod to finish work after a SIGTERM before sending SIGKILL (default: 30)
@@ -77,11 +77,11 @@ Deployments behave a little bit differently from the RC based deployment strateg
 
 Kubernetes takes care of the entire deploy, doing rolling updates in the background. As a result, there is only an overall deployment timeout instead of a configurable per-batch timeout.
 
-The base timeout is multiplied with `DEIS_DEPLOY_BATCHES` to create an overall timeout. This would be 240 (timeout) * 4 (batches) = 960 second overall timeout.
+The base timeout is multiplied with `DRYCC_DEPLOY_BATCHES` to create an overall timeout. This would be 240 (timeout) * 4 (batches) = 960 second overall timeout.
 
 #### RC deploy
 
-This deploy timeout defines how long to wait for each batch to complete in `DEIS_DEPLOY_BATCHES`.
+This deploy timeout defines how long to wait for each batch to complete in `DRYCC_DEPLOY_BATCHES`.
 
 #### Additions to the base timeout
 
@@ -90,16 +90,16 @@ Additionally the timeout system accounts for slow image pulls by adding an addit
 
 ### Deployments
 
-Workflow uses [Deployments][] for deploys. In prior versions [ReplicationControllers][] were used with the ability to turn on Deployments via `DEIS_KUBERNETES_DEPLOYMENTS=1`.
+Workflow uses [Deployments][] for deploys. In prior versions [ReplicationControllers][] were used with the ability to turn on Deployments via `DRYCC_KUBERNETES_DEPLOYMENTS=1`.
 
-The advantage of [Deployments][] is that rolling-updates will happen server-side in Kubernetes instead of in Deis Workflow Controller,
+The advantage of [Deployments][] is that rolling-updates will happen server-side in Kubernetes instead of in Drycc Workflow Controller,
 along with a few other Pod management related functionality. This allows a deploy to continue even when the CLI connection is interrupted.
 
 Behind the scenes your application deploy will be built up of a Deployment object per process type,
 each having multiple ReplicaSets (one per release) which in turn manage the Pods running your application.
 
-Deis Workflow will behave the same way with `DEIS_KUBERNETES_DEPLOYMENTS` enabled or disabled (only applicable to versions prior to 2.4).
-The changes are behind the scenes. Where you will see differences while using the CLI is `deis ps:list` will output Pod names differently.
+Drycc Workflow will behave the same way with `DRYCC_KUBERNETES_DEPLOYMENTS` enabled or disabled (only applicable to versions prior to 2.4).
+The changes are behind the scenes. Where you will see differences while using the CLI is `drycc ps:list` will output Pod names differently.
 
 [slugbuilder cache]: ./managing-app-configuration.md#slugbuilder-cache
 [install client]: ../users/cli.md#installation

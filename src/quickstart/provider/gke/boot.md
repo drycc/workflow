@@ -1,6 +1,6 @@
 # Booting Kubernetes on Google Container Engine
 
-Google Container Engine (GKE) is a managed Kubernetes environment which is great for hosting Deis Workflow. Google Container Engine manages the Kubernetes master and you pay for the compute nodes. Clusters smaller than five nodes are charged only for the compute. Clusters six nodes are larger cost $0.15/hour per cluster.
+Google Container Engine (GKE) is a managed Kubernetes environment which is great for hosting Drycc Workflow. Google Container Engine manages the Kubernetes master and you pay for the compute nodes. Clusters smaller than five nodes are charged only for the compute. Clusters six nodes are larger cost $0.15/hour per cluster.
 
 If you do not already have a Google Cloud account, you can start a trial with $300 of free credit [here](https://goo.gl/ysYyZK). After completing sign up, you must add your billing information.
 
@@ -38,7 +38,7 @@ Click "Create" and Google Container Engine will provision your cluster. The proc
 
 ![](images/gke-node-version.jpg)]
 
-After the cluster is created, check the node version. See [Kubernetes Versions](https://deis.com/docs/workflow/installing-workflow/system-requirements/#kubernetes-versions) under System Requirements for more details.
+After the cluster is created, check the node version. See [Kubernetes Versions](https://drycc.com/docs/workflow/installing-workflow/system-requirements/#kubernetes-versions) under System Requirements for more details.
 
 ## Install and configure the Google Cloud CLI
 
@@ -111,5 +111,5 @@ You'll need to run:
 
 To download the credentials necessary. The `kubectl cluster-info` command should then work as intended.
 
-You are now ready to [install Deis Workflow](install-gke.md)
+You are now ready to [install Drycc Workflow](install-gke.md)
 

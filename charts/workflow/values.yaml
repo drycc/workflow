@@ -51,11 +51,11 @@ global:
   host_port: 5555
   # Prefix for the imagepull secret created when using private registry
   secret_prefix: "private-registry"
-  # Experimental feature to use Kubernetes ingress instead of Workflow's deis-router.
+  # Experimental feature to use Kubernetes ingress instead of Workflow's drycc-router.
   #
   # Valid values are:
-  # - true: deis-router will not be deployed. Workflow will not be usable until a Kubernetes ingress controller is installed.
-  # - false: deis-router will be deployed (default).
+  # - true: drycc-router will not be deployed. Workflow will not be usable until a Kubernetes ingress controller is installed.
+  # - false: drycc-router will be deployed (default).
   experimental_native_ingress: false
   # If the Kubernetes cluster uses CNI
   # use_cni: true
@@ -132,7 +132,7 @@ controller:
   registration_mode: "admin_only"
   # The publicly resolvable hostname to build your cluster with.
   #
-  # This will be the hostname that is used to build endpoints such as "deis.$HOSTNAME"
+  # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
   platform_domain: ""
 
 database:
@@ -210,7 +210,7 @@ registry-token-refresher:
 
 router:
   dhparam: ""
-  # Any custom router annotations(https://github.com/teamhephy/router#annotations)
+  # Any custom router annotations(https://github.com/drycc/router#annotations)
   # which need to be applied can be specified as key-value pairs under "deployment_annotations"
   deployment_annotations:
     #<example-key>: <example-value>
@@ -228,5 +228,5 @@ router:
   # service_type: LoadBalancer
 
 workflow-manager:
-  versions_api_url: https://versions.teamhephy.info
-  doctor_api_url: https://doctor.teamhephy.info
+  versions_api_url: https://versions.drycc.info
+  doctor_api_url: https://doctor.drycc.info

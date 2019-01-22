@@ -381,4 +381,4 @@ $ kubectl -n kube-system get po
 ```
 
 
-You are now ready to [install Deis Workflow](install-aws.md)
+You are now ready to [install Drycc Workflow](install-aws.md)

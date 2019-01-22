@@ -2,9 +2,9 @@
 # NOTE: titles need to be capitalized here to work around MkDocs automatically downcasing title
 # names
 #
-site_name: Deis Workflow Documentation
-site_url: https://teamhephy.com/docs/workflow
-pages:
+site_name: Drycc Workflow Documentation
+site_url: https://drycc.com/docs/workflow
+nav:
   - Home: index.md
   - Quick Start:
     - Overview: quickstart/index.md
@@ -85,10 +85,10 @@ pages:
     - Conduct: contributing/conduct.md
     - Maintainers: contributing/maintainers.md
   - Reference Guide:
-    - Migrating from Deis v1: reference-guide/migration.md
+    - Migrating from Drycc v1: reference-guide/migration.md
     - Creating a Self-Signed SSL Certificate: reference-guide/creating-a-self-signed-ssl-certificate.md
     - Terms: reference-guide/terms.md
-    # FIXME (bacongobbler): our custom deis theme only supports a toctree depth of 2 due to css issues
+    # FIXME (bacongobbler): our custom drycc theme only supports a toctree depth of 2 due to css issues
     - Controller API v2.0: reference-guide/controller-api/v2.0.md
     - Controller API v2.1: reference-guide/controller-api/v2.1.md
     - Controller API v2.2: reference-guide/controller-api/v2.2.md
@@ -119,7 +119,7 @@ pages:
     - v2.0.0: changelogs/v2.0.0.md
 theme:
   name: null
-  custom_dir: 'themes/deis'
+  custom_dir: 'themes/drycc'
 docs_dir: src
 markdown_extensions:
   - markdown_checklist.extension

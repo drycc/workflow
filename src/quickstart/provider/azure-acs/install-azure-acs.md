@@ -1,4 +1,4 @@
-# Install Deis Workflow on Azure Container Service
+# Install Drycc Workflow on Azure Container Service
 
 ## Check Your Setup
 
@@ -17,14 +17,14 @@ helm init
 
 Ensure the `kubectl` client is installed and can connect to your Kubernetes cluster.
 
-## Add the Deis Chart Repository
+## Add the Drycc Chart Repository
 
-The Deis Chart Repository contains everything needed to install Deis Workflow onto a Kubernetes cluster, with a single `helm install deis/workflow --namespace deis` command.
+The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc` command.
 
 Add this repository to Helm:
 
 ```
-$ helm repo add deis https://charts.deis.com/workflow
+$ helm repo add drycc https://charts.drycc.com/workflow
 ```
 
 ## Create New Azure Storage Account
@@ -37,27 +37,27 @@ $ export AZURE_SA_KEY=`az storage account keys list -n $AZURE_SA_NAME -g $AZURE_
 
 ```
 
- > Note: Premium Storage skus are not supported yet due to [lack of block blob storage support](https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/using-blob-service-operations-with-azure-premium-storage) required for the deis database to function.
+ > Note: Premium Storage skus are not supported yet due to [lack of block blob storage support](https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/using-blob-service-operations-with-azure-premium-storage) required for the drycc database to function.
 
-## Install Deis Workflow
+## Install Drycc Workflow
 
 Now that Helm is installed and the repository has been added, install Workflow by running:
 
 ```
-$ helm install deis/workflow --namespace=deis --set global.storage=azure,azure.accountname=$AZURE_SA_NAME,azure.accountkey=$AZURE_SA_KEY,azure.registry_container=registry,azure.database_container=database,azure.builder_container=builder
+$ helm install drycc/workflow --namespace=drycc --set global.storage=azure,azure.accountname=$AZURE_SA_NAME,azure.accountkey=$AZURE_SA_KEY,azure.registry_container=registry,azure.database_container=database,azure.builder_container=builder
 ```
 
-Helm will install a variety of Kubernetes resources in the `deis` namespace.
+Helm will install a variety of Kubernetes resources in the `drycc` namespace.
 Wait for the pods that Helm launched to be ready. Monitor their status by running:
 
 ```
-$ kubectl --namespace=deis get pods
+$ kubectl --namespace=drycc get pods
 ```
 
 If it's preferred to have `kubectl` automatically update as the pod states change, run (type Ctrl-C to stop the watch):
 
 ```
-$ kubectl --namespace=deis get pods -w
+$ kubectl --namespace=drycc get pods -w
 ```
 
 Depending on the order in which the Workflow components initialize, some pods may restart. This is common during the
@@ -67,21 +67,21 @@ automatically restart it.
 Here, it can be seen that the controller, builder and registry all took a few loops before they were able to start:
 
 ```
-$ kubectl --namespace=deis get pods
+$ kubectl --namespace=drycc get pods
 NAME                          READY     STATUS    RESTARTS   AGE
-deis-builder-hy3xv            1/1       Running   5          5m
-deis-controller-g3cu8         1/1       Running   5          5m
-deis-database-rad1o           1/1       Running   0          5m
-deis-logger-fluentd-1v8uk     1/1       Running   0          5m
-deis-logger-fluentd-esm60     1/1       Running   0          5m
-deis-logger-sm8b3             1/1       Running   0          5m
-deis-minio-4ww3t              1/1       Running   0          5m
-deis-registry-asozo           1/1       Running   1          5m
-deis-router-k1ond             1/1       Running   0          5m
-deis-workflow-manager-68nu6   1/1       Running   0          5m
+drycc-builder-hy3xv            1/1       Running   5          5m
+drycc-controller-g3cu8         1/1       Running   5          5m
+drycc-database-rad1o           1/1       Running   0          5m
+drycc-logger-fluentd-1v8uk     1/1       Running   0          5m
+drycc-logger-fluentd-esm60     1/1       Running   0          5m
+drycc-logger-sm8b3             1/1       Running   0          5m
+drycc-minio-4ww3t              1/1       Running   0          5m
+drycc-registry-asozo           1/1       Running   1          5m
+drycc-router-k1ond             1/1       Running   0          5m
+drycc-workflow-manager-68nu6   1/1       Running   0          5m
 ```
 
-Once all of the pods are in the `READY` state, Deis Workflow is up and running!
+Once all of the pods are in the `READY` state, Drycc Workflow is up and running!
 
 Next, [configure dns](dns.md) so you can register your first user and deploy an application.
 

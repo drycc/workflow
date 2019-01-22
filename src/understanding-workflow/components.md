@@ -12,16 +12,16 @@ the functionality in your own project we invite you to give it a shot!
 
 ## Controller
 
-**Project Location:** [teamhephy/controller](https://github.com/teamhephy/controller)
+**Project Location:** [drycc/controller](https://github.com/drycc/controller)
 
 The controller component is an HTTP API server which serves as the endpoint for
-the `deis` CLI. The controller provides all of the platform functionality as
+the `drycc` CLI. The controller provides all of the platform functionality as
 well as interfacing with your Kubernetes cluster. The controller persists all
 of its data to the database component.
 
 ## Database
 
-**Project Location:** [teamhephy/postgres](https://github.com/teamhephy/postgres)
+**Project Location:** [drycc/postgres](https://github.com/drycc/postgres)
 
 The database component is a managed instance of [PostgreSQL][] which holds a
 majority of the platforms state. Backups and WAL files are pushed to object
@@ -30,7 +30,7 @@ replayed from object storage so no data is lost.
 
 ## Builder
 
-**Project Location:** [teamhephy/builder](https://github.com/teamhephy/builder)
+**Project Location:** [drycc/builder](https://github.com/drycc/builder)
 
 
 The builder component is responsible for accepting code pushes via [Git][] and
@@ -44,17 +44,17 @@ managing the build process of your [Application][]. The builder process is:
 
 Builder currently supports both buildpack and Dockerfile based builds.
 
-**Project Location:** [teamhephy/slugbuilder](https://github.com/teamhephy/slugbuilder)
+**Project Location:** [drycc/slugbuilder](https://github.com/drycc/slugbuilder)
 
 For Buildpack-based deploys, the builder component will launch a one-shot Pod
-in the `deis` namespace. This pod runs `slugbuilder` component which handles
+in the `drycc` namespace. This pod runs `slugbuilder` component which handles
 default and custom buildpacks (specified by `BUILDPACK_URL`). The "compiled"
 application results in a slug, consisting of your application code and all of
 its dependencies as determined by the buildpack. The slug is pushed to the
 cluster-configured object storage for later execution. For more information
 about buildpacks see [using buildpacks][using-buildpacks].
 
-**Project Location:** [teamhephy/dockerbuilder](https://github.com/teamhephy/dockerbuilder)
+**Project Location:** [drycc/dockerbuilder](https://github.com/drycc/dockerbuilder)
 
 For Applications which contain a `Dockerfile` in the root of the repository,
 `builder` will instead launch the `dockerbuilder` to package your application.
@@ -64,7 +64,7 @@ Docker registry on cluster. For more information see [using Dockerfiles][using-d
 
 ## Slugrunner
 
-**Project Location:** [teamhephy/slugrunner](https://github.com/teamhephy/slugrunner)
+**Project Location:** [drycc/slugrunner](https://github.com/drycc/slugrunner)
 
 Slugrunner is the component responsible for executing buildpack-based
 Applications. Slugrunner receives slug information from the controller and
@@ -73,7 +73,7 @@ processes.
 
 ## Object Storage
 
-**Project Location:** [teamhephy/minio](https://github.com/teamhephy/minio)
+**Project Location:** [drycc/minio](https://github.com/drycc/minio)
 
 All of the Workflow components that need to persist data will ship them to the
 object storage that was configured for the cluster.For example, database ships
@@ -90,7 +90,7 @@ configure minio to use persistent storage available in your environment.
 
 ## Registry
 
-**Project Location:** [teamhephy/registry](https://github.com/teamhephy/registry)
+**Project Location:** [drycc/registry](https://github.com/drycc/registry)
 
 The registry component is a managed docker registry which holds application
 images generated from the builder component. Registry persists the Docker image
@@ -99,11 +99,11 @@ configured for the cluster.
 
 ## Router
 
-**Project Location:** [teamhephy/router](https://github.com/teamhephy/router)
+**Project Location:** [drycc/router](https://github.com/drycc/router)
 
 The router component is based on [Nginx][] and is responsible for routing
 inbound HTTP(S) traffic to your applications. The default workflow charts
-provision a Kubernetes service in the `deis` namespace with a service type of
+provision a Kubernetes service in the `drycc` namespace with a service type of
 `LoadBalancer`. Depending on your Kubernetes configuration, this may provision
 a cloud-based loadbalancer automatically.
 
@@ -117,14 +117,14 @@ The logging subsystem consists of two components. Fluentd handles log shipping
 and logger maintains a ring-buffer of application logs.
 
 
-**Project Location:** [teamhephy/fluentd](https://github.com/teamhephy/fluentd)
+**Project Location:** [drycc/fluentd](https://github.com/drycc/fluentd)
 
 Fluentd is deployed to your Kubernetes cluster via Daemon Sets. Fluentd
 subscribes to all container logs, decorates the output with Kubernetes metadata
 and can be configured to drain logs to multiple destinations. By default,
-fluentd ships logs to the logger component, which powers `deis logs`.
+fluentd ships logs to the logger component, which powers `drycc logs`.
 
-**Project Location:** [teamhephy/logger](https://github.com/teamhephy/logger)
+**Project Location:** [drycc/logger](https://github.com/drycc/logger)
 
 The `logger` component receives log streams from `fluentd`, collating by
 Application name. Logger does not persist logs to disk, instead maintaining an
@@ -133,7 +133,7 @@ documentation][logger-documentation].
 
 ## Monitor
 
-**Project Location:** [teamhephy/monitor](https://github.com/teamhephy/monitor)
+**Project Location:** [drycc/monitor](https://github.com/drycc/monitor)
 
 The monitoring subsystem consists of three components: Telegraf, InfluxDB and Grafana.
 
@@ -147,17 +147,17 @@ a more robust InfluxDB setup in a production setting.
 
 Grafana is a standalone graphing application. It natively supports InfluxDB as a datasource and
 provides a robust engine for creating dashboards on top of timeseries data. Workflow provides a few
-dashboards out of the box for monitoring Deis Workflow and Kubernetes. The dashboards can be used
+dashboards out of the box for monitoring Drycc Workflow and Kubernetes. The dashboards can be used
 as a starting point for creating more custom dashboards to suit a user's needs.
 
 ## Workflow Manager
 
-**Project Location:** [teamhephy/workflow-manager](https://github.com/teamhephy/workflow-manager)
+**Project Location:** [drycc/workflow-manager](https://github.com/drycc/workflow-manager)
 
 `Workflow Manager` will regularly check your cluster against the latest stable
 components. If components are missing due to failure or are simply out of date,
 Workflow operators will know at a glance. By default, this submits component
-and version information to Deis' version service. If you prefer, you may
+and version information to Drycc' version service. If you prefer, you may
 disable the function by setting `WORKFLOW_MANAGER_CHECKVERSIONS` to false in
 Workflow Manager's Deployment.
 
@@ -175,9 +175,9 @@ Workflow Manager's Deployment.
 [architecture]: architecture.md
 [concepts]: concepts.md
 [configure-objectstorage]: ../installing-workflow/configuring-object-storage.md
-[logger-documentation]: https://github.com/teamhephy/logger
+[logger-documentation]: https://github.com/drycc/logger
 [release]: ../reference-guide/terms.md#release
-[router-documentation]: https://github.com/teamhephy/router
+[router-documentation]: https://github.com/drycc/router
 [router]: #router
 [using-buildpacks]: ../applications/using-buildpacks.md
 [using-dockerfiles]: ../applications/using-dockerfiles.md

@@ -3,29 +3,29 @@
 Helm Charts are a set of Kubernetes manifests that reflect best practices for deploying an
 application or service on Kubernetes.
 
-After you add the Deis Chart Repository, you can customize the chart using
-`helm inspect values hephy/workflow > values.yaml` before using `helm install` to complete the
+After you add the Drycc Chart Repository, you can customize the chart using
+`helm inspect values drycc/workflow > values.yaml` before using `helm install` to complete the
 installation.
 
 There are a few ways to customize the respective component:
 
  - If the value is exposed in the `values.yaml` file as derived above, one may modify the section of the component to tune these settings.  The modified value(s) will then take effect at chart installation or release upgrade time via either of the two respective commands:
 
-        $ helm install hephy/workflow -n hephy --namespace deis -f values.yaml
-        $ helm upgrade hephy -f values.yaml
+        $ helm install drycc/workflow -n drycc --namespace drycc -f values.yaml
+        $ helm upgrade drycc -f values.yaml
 
- - If the value hasn't yet been exposed in the `values.yaml` file, one may edit the component deployment with the tuned setting.  Here we edit the `deis-controller` deployment:
+ - If the value hasn't yet been exposed in the `values.yaml` file, one may edit the component deployment with the tuned setting.  Here we edit the `drycc-controller` deployment:
 
-        $ kubectl --namespace deis edit deployment deis-controller
+        $ kubectl --namespace drycc edit deployment drycc-controller
 
     Add/edit the setting via the appropriate environment variable and value under the `env` section and save.  The updated deployment will recreate the component pod with the new/modified setting.
 
  - Lastly, one may also fetch and edit the chart as served by version control/the chart repository itself:
 
-        $ helm fetch hephy/workflow --untar
+        $ helm fetch drycc/workflow --untar
         $ $EDITOR workflow/charts/controller/templates/controller-deployment.yaml
 
-    Then run `helm install ./workflow --namespace deis --name hephy` to apply the changes, or `helm upgrade hephy ./workflow` if the cluster is already running.
+    Then run `helm install ./workflow --namespace drycc --name drycc` to apply the changes, or `helm upgrade drycc ./workflow` if the cluster is already running.
 
 ## Setting Resource limits
 
@@ -39,7 +39,7 @@ limits set:
 
 ```
 builder:
-  org: "hephyci"
+  org: "drycc"
   pullPolicy: "Always"
   dockerTag: "canary"
   limits_cpu: "100m"
@@ -63,13 +63,13 @@ Setting                                         | Description
 ----------------------------------------------- | ---------------------------------
 REGISTRATION_MODE                               | set registration to "enabled", "disabled", or "admin_only" (default: "admin_only")
 GUNICORN_WORKERS                                | number of [gunicorn][] workers spawned to process requests (default: CPU cores * 4 + 1)
-RESERVED_NAMES                                  | a comma-separated list of names which applications cannot reserve for routing (default: "deis, deis-builder, deis-workflow-manager")
-SLUGRUNNER_IMAGE_NAME                           | the image used to run buildpack application slugs (default: "quay.io/hephyci/slugrunner:canary")
-DEIS_DEPLOY_HOOK_URLS                           | a comma-separated list of URLs to send [deploy hooks][] to.
-DEIS_DEPLOY_HOOK_SECRET_KEY                     | a private key used to compute the HMAC signature for deploy hooks.
-DEIS_DEPLOY_REJECT_IF_PROCFILE_MISSING          | rejects a deploy if the previous build had a Procfile but the current deploy is missing it. A 409 is thrown in the API. Prevents accidental process types removal. (default: "false", allowed values: "true", "false")
-DEIS_DEPLOY_PROCFILE_MISSING_REMOVE             | when turned on (default) any missing process type in a Procfile compared to the previous deploy is removed. When set to false will allow an empty Procfile to go through without removing missing process types, note that new images, configs and so on will get updated on all proc types.  (default: "true", allowed values: "true", "false")
-DEIS_DEFAULT_CONFIG_TAGS                        | set tags for all applications by default, for example: '{"role": "worker"}'. (default: '')
+RESERVED_NAMES                                  | a comma-separated list of names which applications cannot reserve for routing (default: "drycc, drycc-builder, drycc-workflow-manager")
+SLUGRUNNER_IMAGE_NAME                           | the image used to run buildpack application slugs (default: "quay.io/drycc/slugrunner:canary")
+DRYCC_DEPLOY_HOOK_URLS                           | a comma-separated list of URLs to send [deploy hooks][] to.
+DRYCC_DEPLOY_HOOK_SECRET_KEY                     | a private key used to compute the HMAC signature for deploy hooks.
+DRYCC_DEPLOY_REJECT_IF_PROCFILE_MISSING          | rejects a deploy if the previous build had a Procfile but the current deploy is missing it. A 409 is thrown in the API. Prevents accidental process types removal. (default: "false", allowed values: "true", "false")
+DRYCC_DEPLOY_PROCFILE_MISSING_REMOVE             | when turned on (default) any missing process type in a Procfile compared to the previous deploy is removed. When set to false will allow an empty Procfile to go through without removing missing process types, note that new images, configs and so on will get updated on all proc types.  (default: "true", allowed values: "true", "false")
+DRYCC_DEFAULT_CONFIG_TAGS                        | set tags for all applications by default, for example: '{"role": "worker"}'. (default: '')
 KUBERNETES_NAMESPACE_DEFAULT_QUOTA_SPEC         | set resource quota to application namespace by setting [ResourceQuota](http://kubernetes.io/docs/admin/resourcequota/) spec, for example: `{"spec":{"hard":{"pods":"10"}}}`, restrict app owner to spawn more then 10 pods (default: "", no quota will be applied to namespace)
 
 ### LDAP authentication settings
@@ -93,8 +93,8 @@ LDAP_GROUP_FILTER  | The filter for user's groups (default: "", example: ```obje
 
 Setting                                         | Description
 ----------------------------------------------- | ---------------------------------
-DEIS_DEPLOY_BATCHES                             | the number of pods to bring up and take down sequentially during a scale (default: number of available nodes)
-DEIS_DEPLOY_TIMEOUT                             | deploy timeout in seconds per deploy batch (default: 120)
+DRYCC_DEPLOY_BATCHES                             | the number of pods to bring up and take down sequentially during a scale (default: number of available nodes)
+DRYCC_DEPLOY_TIMEOUT                             | deploy timeout in seconds per deploy batch (default: 120)
 IMAGE_PULL_POLICY                               | the kubernetes [image pull policy][pull-policy] for application images (default: "IfNotPresent") (allowed values: "Always", "IfNotPresent")
 KUBERNETES_DEPLOYMENTS_REVISION_HISTORY_LIMIT   | how many [revisions][kubernetes-deployment-revision] Kubernetes keeps around of a given Deployment (default: all revisions)
 KUBERNETES_POD_TERMINATION_GRACE_PERIOD_SECONDS | how many seconds kubernetes waits for a pod to finish work after a SIGTERM before sending SIGKILL (default: 30)
@@ -125,11 +125,11 @@ sources.kubelet | false | Capture kubelet logs
 sources.kube_api | false | Capture Kubernetes API logs
 sources.controller | false | Capture Kubernetes Controller logs
 sources.scheduler | false | Capture Kubernetes Scheduler logs
-output.disable_deis | false | Disable the Deis output plugin
+output.disable_drycc | false | Disable the Drycc output plugin
 boot.install_build_tools | false | Install the build tools package. This is useful when using custom plugins
 daemon_environment | | Takes key-value pairs and turns them into environment variables.
 
-For more information about the various environment variables that can be set please see the [README](https://github.com/teamhephy/fluentd/blob/master/README.md)
+For more information about the various environment variables that can be set please see the [README](https://github.com/drycc/fluentd/blob/master/README.md)
 
 ## Customizing the Logger
 
@@ -151,24 +151,24 @@ user   | "admin" | The first user created in the database (this user has admin p
 password | "admin" | Password for the first user.
 allow_sign_up | "true" | Allows users to sign up for an account.
 
-For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/teamhephy/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
+For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/drycc/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
 
 ### [Telegraf](https://docs.influxdata.com/telegraf)
-For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/teamhephy/monitor/blob/master/telegraf/rootfs/config.toml.tpl).
+For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/drycc/monitor/blob/master/telegraf/rootfs/config.toml.tpl).
 
 ### [InfluxDB](https://docs.influxdata.com/influxdb)
-You can find a list of values that can be set using environment variables [here](https://github.com/teamhephy/monitor/blob/master/influxdb/rootfs/home/influxdb/config.toml.tpl).
+You can find a list of values that can be set using environment variables [here](https://github.com/drycc/monitor/blob/master/influxdb/rootfs/home/influxdb/config.toml.tpl).
 
 ## Customizing the Registry
 
 The [Registry][] component can be tuned by following the
-[teamhephy/distribution config doc](https://github.com/deis/distribution/blob/master/docs/configuration.md).
+[drycc/distribution config doc](https://github.com/drycc/distribution/blob/master/docs/configuration.md).
 
 ## Customizing the Router
 
 The majority of router settings are tunable through annotations, which allows the router to be
 re-configured with zero downtime post-installation. You can find the list of annotations to tune
-[here](https://github.com/teamhephy/router#annotations).
+[here](https://github.com/drycc/router#annotations).
 
 The following environment variables are tunable for the [Router][] component:
 
@@ -182,10 +182,10 @@ The following environment variables are tunable for [Workflow Manager][]:
 
 Setting                            | Description
 ---------------------------------- | ---------------------------------
-CHECK_VERSIONS    | Enables the external version check at <https://versions.teamhephy.info/> (default: "true")
+CHECK_VERSIONS    | Enables the external version check at <https://versions.drycc.info/> (default: "true")
 POLL_INTERVAL_SEC | The interval when Workflow Manager performs a version check, in seconds (default: 43200, or 12 hours)
-VERSIONS_API_URL  | The versions API URL (default: "<https://versions-staging.teamhephy.info>")
-DOCTOR_API_URL    | The doctor API URL (default: "<https://doctor-staging.teamhephy.info>")
+VERSIONS_API_URL  | The versions API URL (default: "<https://versions-staging.drycc.info>")
+DOCTOR_API_URL    | The doctor API URL (default: "<https://doctor-staging.drycc.info>")
 API_VERSION       | The version number Workflow Manager sends to the versions API (default: "v2")
 
 [Deploying Apps]: ../applications/deploying-apps.md

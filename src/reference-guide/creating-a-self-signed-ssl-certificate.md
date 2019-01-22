@@ -40,7 +40,7 @@ The self-signed SSL certificate is generated from the server.key private key and
 
     $ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 
-The server.crt file is your site certificate suitable for use with [Deis's SSL endpoint][app ssl] along with the server.key private key.
+The server.crt file is your site certificate suitable for use with [Drycc's SSL endpoint][app ssl] along with the server.key private key.
 
 [app ssl]: ../applications/ssl-certificates.md
 [platform ssl]: ../managing-workflow/platform-ssl.md

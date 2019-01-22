@@ -53,4 +53,4 @@ kubernetes-dashboard is running at https://192.168.99.100:8443/api/v1/proxy/name
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 ```
 
-You are now ready to [install Deis Workflow](install-minikube.md)
+You are now ready to [install Drycc Workflow](install-minikube.md)

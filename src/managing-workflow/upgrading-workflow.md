@@ -1,10 +1,10 @@
 # Upgrading Workflow
 
-Deis Workflow releases may be upgraded in-place with minimal downtime. This upgrade process requires:
+Drycc Workflow releases may be upgraded in-place with minimal downtime. This upgrade process requires:
 
 * Helm version [2.1.0 or newer](https://github.com/kubernetes/helm/releases/tag/v2.1.0)
 * Configured Off-Cluster Storage
-* A Kubernetes cluster with more than one node is required for the rolling upgrade of the deis-router (as it is a rolling upgrade with host ports)
+* A Kubernetes cluster with more than one node is required for the rolling upgrade of the drycc-router (as it is a rolling upgrade with host ports)
 
 ## Off-Cluster Storage Required
 
@@ -31,7 +31,7 @@ First, find the name of the release helm gave to your deployment with `helm ls`,
 
 ```
 $ helm repo update
-$ helm upgrade <release-name> hephy/workflow
+$ helm upgrade <release-name> drycc/workflow
 ```
 
 
@@ -39,7 +39,7 @@ $ helm upgrade <release-name> hephy/workflow
 
 ```
 $ B64_KEY_JSON="$(cat ~/path/to/key.json | base64 -w 0)"
-$ helm upgrade <release_name> hephy/workflow -f values.yaml --set gcs.key_json="${B64_KEY_JSON}",registry-token-refresher.gcr.key_json="${B64_KEY_JSON}"
+$ helm upgrade <release_name> drycc/workflow -f values.yaml --set gcs.key_json="${B64_KEY_JSON}",registry-token-refresher.gcr.key_json="${B64_KEY_JSON}"
 ```
 
 Alternatively, simply replace the appropriate values in values.yaml and do without the `--set`
@@ -51,42 +51,42 @@ upgrading.
 Verify that all components have started and passed their readiness checks:
 
 ```
-$ kubectl --namespace=deis get pods
+$ kubectl --namespace=drycc get pods
 NAME                                     READY     STATUS    RESTARTS   AGE
-deis-builder-2448122224-3cibz            1/1       Running   0          5m
-deis-controller-1410285775-ipc34         1/1       Running   3          5m
-deis-database-e7c5z                      1/1       Running   0          5m
-deis-logger-cgjup                        1/1       Running   3          5m
-deis-logger-fluentd-45h7j                1/1       Running   0          5m
-deis-logger-fluentd-4z7lw                1/1       Running   0          5m
-deis-logger-fluentd-k2wsw                1/1       Running   0          5m
-deis-logger-fluentd-skdw4                1/1       Running   0          5m
-deis-logger-redis-8nazu                  1/1       Running   0          5m
-deis-monitor-grafana-tm266               1/1       Running   0          5m
-deis-monitor-influxdb-ah8io              1/1       Running   0          5m
-deis-monitor-telegraf-51zel              1/1       Running   1          5m
-deis-monitor-telegraf-cdasg              1/1       Running   0          5m
-deis-monitor-telegraf-hea6x              1/1       Running   0          5m
-deis-monitor-telegraf-r7lsg              1/1       Running   0          5m
-deis-nsqd-3yrg2                          1/1       Running   0          5m
-deis-registry-1814324048-yomz5           1/1       Running   0          5m
-deis-registry-proxy-4m3o4                1/1       Running   0          5m
-deis-registry-proxy-no3r1                1/1       Running   0          5m
-deis-registry-proxy-ou8is                1/1       Running   0          5m
-deis-registry-proxy-zyajl                1/1       Running   0          5m
-deis-router-1357759721-a3ard             1/1       Running   0          5m
-deis-workflow-manager-2654760652-kitf9   1/1       Running   0          5m
+drycc-builder-2448122224-3cibz            1/1       Running   0          5m
+drycc-controller-1410285775-ipc34         1/1       Running   3          5m
+drycc-database-e7c5z                      1/1       Running   0          5m
+drycc-logger-cgjup                        1/1       Running   3          5m
+drycc-logger-fluentd-45h7j                1/1       Running   0          5m
+drycc-logger-fluentd-4z7lw                1/1       Running   0          5m
+drycc-logger-fluentd-k2wsw                1/1       Running   0          5m
+drycc-logger-fluentd-skdw4                1/1       Running   0          5m
+drycc-logger-redis-8nazu                  1/1       Running   0          5m
+drycc-monitor-grafana-tm266               1/1       Running   0          5m
+drycc-monitor-influxdb-ah8io              1/1       Running   0          5m
+drycc-monitor-telegraf-51zel              1/1       Running   1          5m
+drycc-monitor-telegraf-cdasg              1/1       Running   0          5m
+drycc-monitor-telegraf-hea6x              1/1       Running   0          5m
+drycc-monitor-telegraf-r7lsg              1/1       Running   0          5m
+drycc-nsqd-3yrg2                          1/1       Running   0          5m
+drycc-registry-1814324048-yomz5           1/1       Running   0          5m
+drycc-registry-proxy-4m3o4                1/1       Running   0          5m
+drycc-registry-proxy-no3r1                1/1       Running   0          5m
+drycc-registry-proxy-ou8is                1/1       Running   0          5m
+drycc-registry-proxy-zyajl                1/1       Running   0          5m
+drycc-router-1357759721-a3ard             1/1       Running   0          5m
+drycc-workflow-manager-2654760652-kitf9   1/1       Running   0          5m
 ```
 
-### Step 3: Upgrade the Deis Client
+### Step 3: Upgrade the Drycc Client
 
-Users of Deis Workflow should now upgrade their deis client to avoid getting `WARNING: Client and server API versions do not match. Please consider upgrading.` warnings.
+Users of Drycc Workflow should now upgrade their drycc client to avoid getting `WARNING: Client and server API versions do not match. Please consider upgrading.` warnings.
 
 ```
-curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.20.0 && sudo mv deis $(which deis)
+curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/master/install-v2.sh | bash -s v2.20.0 && sudo mv drycc $(which drycc)
 ```
 
 
-[minio]: https://github.com/teamhephy/minio
+[minio]: https://github.com/drycc/minio
 [Configuring Object Storage]: ../installing-workflow/configuring-object-storage.md
-[Workflow-Migration]: https://github.com/teamhephy/workflow-migration/blob/master/README.md
+[Workflow-Migration]: https://github.com/drycc/workflow-migration/blob/master/README.md

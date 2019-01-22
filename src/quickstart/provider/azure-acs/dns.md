@@ -1,17 +1,17 @@
 ## Find the Load Balancer Address
 
-On Azure Container Engine, Deis Workflow will automatically provision and
+On Azure Container Engine, Drycc Workflow will automatically provision and
 attach a Azure Load Balancer to the router component. This component is
 responsible for routing HTTP and HTTPS requests from the public internet to
-applications that are deployed and managed by Deis Workflow.
+applications that are deployed and managed by Drycc Workflow.
 
-Discover the ip address assigned to the `deis-router`, by describing the
-`deis-router` service:
+Discover the ip address assigned to the `drycc-router`, by describing the
+`drycc-router` service:
 
 ```
-$ kubectl --namespace=deis get service deis-router
+$ kubectl --namespace=drycc get service drycc-router
 NAME          CLUSTER-IP    EXTERNAL-IP    PORT(S)                            AGE
-deis-router   10.0.60.172   13.82.148.57   80/TCP,443/TCP,2222/TCP,9090/TCP   54m
+drycc-router   10.0.60.172   13.82.148.57   80/TCP,443/TCP,2222/TCP,9090/TCP   54m
 ```
 
 If the `EXTERNAL-IP` column shows `<pending>` instead of an ip address continue
@@ -20,7 +20,7 @@ to wait until Azure finishes provisioning and attaching the load balancer.
 ## Prepare the Hostname
 
 Now that an ip address has been attached to the load balancer use the `nip.io`
-DNS service to route arbitrary hostnames to the Deis Workflow edge router.
+DNS service to route arbitrary hostnames to the Drycc Workflow edge router.
 Usage of `nip.io` is not recommended for long-term use and is intended here as
 a short cut to prevent fiddling with DNS.
 
@@ -37,10 +37,10 @@ $ host something-random.13.82.148.57.nip.io
 something-random.13.82.148.57.nip.io has address 13.82.148.57
 ```
 
-By default, any HTTP traffic destined for the hostname `deis` is automatically sent to the Workflow API service. To test that everything is connected properly use `curl`:
+By default, any HTTP traffic destined for the hostname `drycc` is automatically sent to the Workflow API service. To test that everything is connected properly use `curl`:
 
 ```
-$ curl http://deis.13.82.148.57.nip.io/v2/ && echo
+$ curl http://drycc.13.82.148.57.nip.io/v2/ && echo
 {"detail":"Authentication credentials were not provided."}
 ```
 

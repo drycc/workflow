@@ -1,24 +1,24 @@
-## Deis Workflow Client CLI
+## Drycc Workflow Client CLI
 
-The Deis command-line interface (CLI), lets you interact with Deis Workflow.
+The Drycc command-line interface (CLI), lets you interact with Drycc Workflow.
 Use the CLI to create and configure and manage applications.
 
-Install the latest `deis` client for Linux or Mac OS X with:
+Install the latest `drycc` client for Linux or Mac OS X with:
 
-    $ curl -sSL https://raw.githubusercontent.com/teamhephy/workflow-cli/master/install-v2.sh | bash -s v2.20.0
+    $ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/master/install-v2.sh | bash -s v2.20.0
 
-The installer places the `deis` binary in your current directory, but you
+The installer places the `drycc` binary in your current directory, but you
 should move it somewhere in your $PATH:
 
-    $ sudo ln -fs $PWD/deis /usr/local/bin/deis
+    $ sudo ln -fs $PWD/drycc /usr/local/bin/drycc
 
 *or*:
 
-    $ sudo mv $PWD/deis /usr/local/bin/deis
+    $ sudo mv $PWD/drycc /usr/local/bin/drycc
 
-Check your work by running `deis version`:
+Check your work by running `drycc version`:
 
-    $ deis version
+    $ drycc version
     v2.17.0
 
 !!! note
@@ -26,13 +26,13 @@ Check your work by running `deis version`:
 
 ## Helm Installation
 
-We will install Deis Workflow using Helm which is a tool for installing and managing software in a
+We will install Drycc Workflow using Helm which is a tool for installing and managing software in a
 Kubernetes cluster.
 
 Install the latest `helm` cli for Linux or Mac OS X by following the
 [installation instructions][helm-install].
 
-## Step 2: Boot a Kubernetes Cluster and Install Deis Workflow
+## Step 2: Boot a Kubernetes Cluster and Install Drycc Workflow
 
 There are many ways to boot and run Kubernetes. You may choose to get up and running in cloud environments or locally on your laptop.
 

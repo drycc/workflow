@@ -7,9 +7,9 @@ transmitted securely.
 To enable SSL on a custom domain, e.g., `www.example.com`, use the SSL endpoint.
 
 !!! note
-    `deis certs` is only useful for custom domains. Default application domains are
+    `drycc certs` is only useful for custom domains. Default application domains are
     SSL-enabled already and can be accessed simply by using https,
-    e.g. `https://foo.deisapp.com` (provided that you have [installed your wildcard
+    e.g. `https://foo.dryccapp.com` (provided that you have [installed your wildcard
     certificate][platform-ssl] on the routers or on the load balancer).
 
 
@@ -19,7 +19,7 @@ Because of the unique nature of SSL validation, provisioning SSL for your domain
 process that involves several third-parties. You will need to:
 
 1. Purchase an SSL certificate from your SSL provider
-2. Upload the cert to Deis
+2. Upload the cert to Drycc
 
 
 ## Acquire SSL Certificate
@@ -32,10 +32,10 @@ provider, see [buy an SSL certificate with RapidSSL][] for instructions.
 ## DNS and Domain Configuration
 
 Once the SSL certificate is provisioned and your cert is confirmed, you must route requests for
-your domain through Deis. Unless you've already done so, add the domain specified when generating
+your domain through Drycc. Unless you've already done so, add the domain specified when generating
 the CSR to your app with:
 
-    $ deis domains:add www.example.com -a foo
+    $ drycc domains:add www.example.com -a foo
     Adding www.example.com to foo... done
 
 
@@ -44,14 +44,14 @@ the CSR to your app with:
 Add your certificate, any intermediate certificates, and private key to the endpoint with the
 `certs:add` command.
 
-    $ deis certs:add example-com server.crt server.key
+    $ drycc certs:add example-com server.crt server.key
     Adding SSL endpoint... done
     www.example.com
 
 !!! note
     The name given to the certificate can only contain a-z (lowercase), 0-9 and hyphens
 
-The Deis platform will investigate the certificate and extract any relevant information from it
+The Drycc platform will investigate the certificate and extract any relevant information from it
 such as the Common Name, Subject Alt Names (SAN), fingerprint and more.
 
 This allows for wildcard certificates and multiple domains in the SAN without uploading duplicates.
@@ -60,13 +60,13 @@ This allows for wildcard certificates and multiple domains in the SAN without up
 
 Sometimes, your certificates (such as a self-signed or a cheap certificate) need additional
 certificates to establish the chain of trust. What you need to do is bundle all the certificates
-into one file and give that to Deis. Importantly, your site’s certificate must be the first one:
+into one file and give that to Drycc. Importantly, your site’s certificate must be the first one:
 
     $ cat server.crt server.ca > server.bundle
 
-After that, you can add them to Deis with the `certs:add` command:
+After that, you can add them to Drycc with the `certs:add` command:
 
-    $ deis certs:add example-com server.bundle server.key
+    $ drycc certs:add example-com server.bundle server.key
     Adding SSL endpoint... done
     www.example.com
 
@@ -75,19 +75,19 @@ After that, you can add them to Deis with the `certs:add` command:
 Certificates are not automagically connected up to domains, instead you will have to attach a
 certificate to a domain
 
-    $ deis certs:attach example-com example.com
+    $ drycc certs:attach example-com example.com
 
 Each certificate can be connected to many domains. There is no need to upload duplicates.
 
 To remove an association
 
-    $ deis certs:detach example-com example.com
+    $ drycc certs:detach example-com example.com
 
 ## Endpoint overview
 
-You can verify the details of your domain's SSL configuration with `deis certs`.
+You can verify the details of your domain's SSL configuration with `drycc certs`.
 
-    $ deis certs
+    $ drycc certs
 
          Name     |    Common Name    | SubjectAltName    |         Expires         |   Fingerprint   |   Domains    |   Updated   |   Created
     +-------------+-------------------+-------------------+-------------------------+-----------------+--------------+-------------+-------------+
@@ -96,7 +96,7 @@ You can verify the details of your domain's SSL configuration with `deis certs`.
 
 or by looking at at each certificates detailed information
 
-    $ deis certs:info example-com
+    $ drycc certs:info example-com
 
     === bar-com Certificate
     Common Name(s):     example.com
@@ -104,8 +104,8 @@ or by looking at at each certificates detailed information
     Starts At:          2016-01-15 23:57:57 +0000 UTC
     Fingerprint:        7A:CA:B8:50:FF:8D:EB:03:3D:AC:AD:13:4F:EE:03:D5:5D:EB:5E:37:51:8C:E0:98:F8:1B:36:2B:20:83:0D:C0
     Subject Alt Name:   blog.example.com
-    Issuer:             /C=US/ST=CA/L=San Francisco/O=Deis/OU=Engineering/CN=example.com/emailAddress=engineering@deis.com
-    Subject:            /C=US/ST=CA/L=San Francisco/O=Deis/OU=Engineering/CN=example.com/emailAddress=engineering@deis.com
+    Issuer:             /C=US/ST=CA/L=San Francisco/O=Drycc/OU=Engineering/CN=example.com/emailAddress=engineering@drycc.com
+    Subject:            /C=US/ST=CA/L=San Francisco/O=Drycc/OU=Engineering/CN=example.com/emailAddress=engineering@drycc.com
 
     Connected Domains:  example.com
     Owner:              admin-user
@@ -129,7 +129,7 @@ configured correctly.
 To enforce all HTTP requests be redirected to HTTPS, TLS can be enforced at the router level by
 running
 
-    $ deis tls:enable -a foo
+    $ drycc tls:enable -a foo
     Enabling https-only requests for foo... done
 
 Users hitting the HTTP endpoint for the application will now receive a 301 redirect to the HTTPS
@@ -137,14 +137,14 @@ endpoint.
 
 To disable enforced TLS, run
 
-    $ deis tls:disable -a foo
+    $ drycc tls:disable -a foo
     Disabling https-only requests for foo... done
 
 ## Remove Certificate
 
 You can remove a certificate using the `certs:remove` command:
 
-    $ deis certs:remove my-cert
+    $ drycc certs:remove my-cert
     Removing www.example.com... Done.
 
 ## Swapping out certificates
@@ -158,8 +158,8 @@ signifies the expiry year. This allows for `example-com-2018` when a new certifi
 Assuming all applications are already using `example-com-2017` the following commands can be ran,
 chained together or otherwise:
 
-    $ deis certs:detach example-com-2017 example.com
-    $ deis certs:attach example-com-2018 example.com
+    $ drycc certs:detach example-com-2017 example.com
+    $ drycc certs:attach example-com-2018 example.com
 
 This will take care of a singular domain which allows the operator to verify everything went
 as planned and slowly roll it out to any other application using the same method.
@@ -179,7 +179,7 @@ the case, your certificate may be considered untrusted for many browsers.
 If you have uploaded a certificate that was signed by a root authority but you get the message that
 it is not trusted, then something is wrong with the certificate. For example, it may be missing
 [intermediary certificates][]. If so, download the intermediary certificates from your SSL provider,
-remove the certificate from Deis and re-run the `certs:add` command.
+remove the certificate from Drycc and re-run the `certs:add` command.
 
 [RapidSSL]: https://www.rapidssl.com/
 [buy an SSL certificate with RapidSSL]: https://www.rapidssl.com/buy-ssl/

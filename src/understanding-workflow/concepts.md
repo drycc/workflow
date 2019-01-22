@@ -1,6 +1,6 @@
 # Concepts
 
-Deis Workflow is a lightweight application platform that deploys and scales
+Drycc Workflow is a lightweight application platform that deploys and scales
 Twelve-Factor apps as containers across a Kubernetes cluster.
 
 ## Twelve-Factor Applications
@@ -28,7 +28,7 @@ Building containers directly from application source code, aggregating logs,
 and managing deployment configurations and app releases are just some of the
 features Workflow adds.
 
-Deis Workflow is a set of Kubernetes-native components, installable via
+Drycc Workflow is a set of Kubernetes-native components, installable via
 [Helm][]. Systems engineers who are familiar with Kubernetes will feel right
 at home running Workflow.
 
@@ -42,7 +42,7 @@ application as a lightweight, portable, self-sufficient container.
 If you have not yet converted your application to containers, Workflow provides
 a simple and straightforward "source to Docker image" capability. Supporting
 multiple language runtimes via community [buildpacks][], building your application
-in a container can be as easy as `git push deis master`.
+in a container can be as easy as `git push drycc master`.
 
 Applications which are packaged via a buildpack are run in Docker containers as
 part of the `slugrunner` process. View the [slugrunner component][slugrunner]
@@ -72,7 +72,7 @@ certificates, and developer-provided configuration.
 
 ### Build Stage
 
-The [builder][] component processes incoming `git push deis master` requests
+The [builder][] component processes incoming `git push drycc master` requests
 and manages your application packaging.
 
 If your application is using a [buildpack][buildpacks], builder will launch an ephemeral
@@ -81,7 +81,7 @@ application artifact is stored by the platform for execution during the run
 stage.
 
 If instead builder finds a [Dockerfile][dockerfile], it follows those instructions to
-create a Docker image. The resulting artifact is stored in a Deis-managed registry which
+create a Docker image. The resulting artifact is stored in a Drycc-managed registry which
 will be referenced during the run stage.
 
 If another system already builds and packages your application, that container

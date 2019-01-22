@@ -33,7 +33,7 @@ See [Security Considerations][] for details.
 ## Registration is Admin-Only
 
 By default, registration with the Workflow controller is in "admin_only" mode. The first user
-to run a `deis register` command becomes the initial "admin" user, and registrations after that
+to run a `drycc register` command becomes the initial "admin" user, and registrations after that
 are disallowed unless requested by an admin.
 
 Please see the following documentation to learn about changing registration mode:
@@ -58,13 +58,13 @@ crucial. See [Platform SSL][] for the platform.
 
 If all router pods in your cluster become unavailable then you will be unable to access the workflow API or
 any deployed applications. To reduce the potential of this happening it is recommended that you scale the
-deis-router Deployment to run more than one router pod. This can be accomplished by running
-`kubectl --namespace=deis scale --replicas=2 deployment/deis-router`
+drycc-router Deployment to run more than one router pod. This can be accomplished by running
+`kubectl --namespace=drycc scale --replicas=2 deployment/drycc-router`
 
 ## Using on-cluster registry with CNI
 
 If you are using [CNI](https://github.com/containernetworking/cni) for managing container network, you cannot use `hostPort` notation due to [this issue](https://github.com/kubernetes/kubernetes/issues/23920).
-In this case you could enable CNI for `deis-registry-proxy` by setting `use_cni` variable to `true` inside `values.yaml` or by adding `--set global.use_cni=true` to `helm`'s args.
+In this case you could enable CNI for `drycc-registry-proxy` by setting `use_cni` variable to `true` inside `values.yaml` or by adding `--set global.use_cni=true` to `helm`'s args.
 
 ## Running Workflow with RBAC
 

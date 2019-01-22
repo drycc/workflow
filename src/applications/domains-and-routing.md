@@ -1,18 +1,18 @@
 ## Domains and Routing
 
-You can use `deis domains` to add or remove custom domains to the application:
+You can use `drycc domains` to add or remove custom domains to the application:
 
-    $ deis domains:add hello.bacongobbler.com
+    $ drycc domains:add hello.bacongobbler.com
     Adding hello.bacongobbler.com to finest-woodshed... done
 
 Once that's done, you can go into a DNS registrar and set up a CNAME from the new
 appname to the old one:
 
-    $ dig hello.deisapp.com
+    $ dig hello.dryccapp.com
     [...]
     ;; ANSWER SECTION:
-    hello.bacongobbler.com.         1759    IN    CNAME    finest-woodshed.deisapp.com.
-    finest-woodshed.deisapp.com.    270     IN    A        172.17.8.100
+    hello.bacongobbler.com.         1759    IN    CNAME    finest-woodshed.dryccapp.com.
+    finest-woodshed.dryccapp.com.    270     IN    A        172.17.8.100
 
 !!! note
     Setting a CNAME for a root domain can cause issues. Setting an @ record
@@ -21,15 +21,15 @@ appname to the old one:
     an application, however you can work around this by pointing the @ record to the
     address of the load balancer (if any).
 
-To add or remove the application from the routing mesh, use `deis routing`:
+To add or remove the application from the routing mesh, use `drycc routing`:
 
-    $ deis routing:disable
+    $ drycc routing:disable
     Disabling routing for finest-woodshed... done
 
 This will make the application unreachable through the [Router][], but the application is still
 reachable internally through its [Kubernetes Service][service]. To re-enable routing:
 
-    $ deis routing:enable
+    $ drycc routing:enable
     Enabling routing for finest-woodshed... done
 
 

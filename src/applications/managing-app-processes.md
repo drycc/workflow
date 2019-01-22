@@ -1,12 +1,12 @@
 # Managing Application Processes
 
-Deis Workflow manages your application as a set of processes that can be named, scaled and configured according to their
+Drycc Workflow manages your application as a set of processes that can be named, scaled and configured according to their
 role. This gives you the flexibility to easily manage the different facets of your application. For example, you may have
 web-facing processes that handle HTTP traffic, background worker processes that do async work, and a helper process that
 streams from the Twitter API.
 
 By using a Procfile, either checked in to your application or provided via the CLI you can specify the name of the type
-and the application command that should run. To spawn other process types, use `deis scale <type>=<n>` to scale those
+and the application command that should run. To spawn other process types, use `drycc scale <type>=<n>` to scale those
 types accordingly.
 
 ## Default Process Types
@@ -60,19 +60,19 @@ web: bundle exec ruby web.rb -p ${PORT:-5000}
 sleeper: sleep 900
 ```
 
-If you are using [remote Docker images][docker image], you may define process types by either running `deis pull` with a
+If you are using [remote Docker images][docker image], you may define process types by either running `drycc pull` with a
 `Procfile` in your working directory, or by passing a stringified Procfile to the `--procfile` CLI option.
 
 For example, passing process types inline:
 
 ```
-$ deis pull deis/example-go:latest --procfile="cmd: /app/bin/boot"
+$ drycc pull drycc/example-go:latest --procfile="cmd: /app/bin/boot"
 ```
 
 Read a `Procfile` in another directory:
 
 ```
-$ deis pull deis/example-go:latest --procfile="$(cat deploy/Procfile)"
+$ drycc pull drycc/example-go:latest --procfile="$(cat deploy/Procfile)"
 ```
 
 Or via a Procfile located in your current, working directory:
@@ -83,10 +83,10 @@ cmd: /bin/boot
 sleeper: echo "sleeping"; sleep 900
 
 
-$ deis pull -a steely-mainsail deis/example-go
+$ drycc pull -a steely-mainsail drycc/example-go
 Creating build... done
 
-$ deis scale sleeper=1 -a steely-mainsail
+$ drycc scale sleeper=1 -a steely-mainsail
 Scaling processes... but first, coffee!
 done in 0s
 === steely-mainsail Processes
@@ -103,7 +103,7 @@ steely-mainsail-sleeper-3291896318-oq1jr up (v3)
 To remove a process type simply scale it to 0:
 
 ```
-$ deis scale sleeper=0 -a steely-mainsail
+$ drycc scale sleeper=0 -a steely-mainsail
 Scaling processes... but first, coffee!
 done in 3s
 === steely-mainsail Processes
@@ -113,11 +113,11 @@ steely-mainsail-cmd-3291896318-nyrim up (v3)
 
 ## Scaling Processes
 
-Applications deployed on Deis Workflow scale out via the [process model][]. Use `deis scale` to control the number of
+Applications deployed on Drycc Workflow scale out via the [process model][]. Use `drycc scale` to control the number of
 [containers][container] that power your app.
 
 ```
-$ deis scale cmd=5 -a iciest-waggoner
+$ drycc scale cmd=5 -a iciest-waggoner
 Scaling processes... but first, coffee!
 done in 3s
 === iciest-waggoner Processes
@@ -136,7 +136,7 @@ types see our documentation for [Managing App Processes](managing-app-processes.
 In this example, we are scaling the process type `web` to 5 but leaving the process type `background` with one worker.
 
 ```
-$ deis scale web=5
+$ drycc scale web=5
 Scaling processes... but first, coffee!
 done in 4s
 === scenic-icehouse Processes
@@ -160,7 +160,7 @@ client connections.
 For example, scaling from 5 processes to 3:
 
 ```
-$ deis scale web=3
+$ drycc scale web=3
 Scaling processes... but first, coffee!
 done in 1s
 === scenic-icehouse Processes
@@ -182,14 +182,14 @@ This feature is built on top of [Horizontal Pod Autoscaling][HPA] in Kubernetes 
 	This is an alpha feature. It is recommended to be on the latest Kubernetes when using this feature.
 
 ```
-$ deis autoscale:set web --min=3 --max=8 --cpu-percent=75
+$ drycc autoscale:set web --min=3 --max=8 --cpu-percent=75
 Applying autoscale settings for process type web on scenic-icehouse... done
 
 ```
 And then review the scaling rule that was created for `web`
 
 ```
-$ deis autoscale:list
+$ drycc autoscale:list
 === scenic-icehouse Autoscale
 
 --- web:
@@ -201,18 +201,18 @@ CPU: 75%
 Remove scaling rule
 
 ```
-$ deis autoscale:unset web
+$ drycc autoscale:unset web
 Removing autoscale for process type web on scenic-icehouse... done
 ```
 
-For autoscaling to work CPU requests have to be specified on each application Pod (can be done via `deis limits --cpu`). This allows the autoscale policies to do the [appropriate calculations][autoscale-algo] and make decisions on when to scale up and down.
+For autoscaling to work CPU requests have to be specified on each application Pod (can be done via `drycc limits --cpu`). This allows the autoscale policies to do the [appropriate calculations][autoscale-algo] and make decisions on when to scale up and down.
 
 Scale up can only happen if there was no rescaling within the last 3 minutes. Scale down will wait for 5 minutes from the last rescaling. That information and more can be found at [HPA algorithm page][autoscale-algo].
 
 
 ## Web vs Cmd Process Types
 
-When deploying to Deis Workflow using a Heroku Buildpack, Workflow boots the `web` process type to
+When deploying to Drycc Workflow using a Heroku Buildpack, Workflow boots the `web` process type to
 boot the application server. When you deploy an application that has a Dockerfile or uses [Docker
 images][docker image], Workflow boots the `cmd` process type. Both act similarly in that
 they are exposed to the router as web applications. However, the `cmd` process type is special
@@ -226,11 +226,11 @@ down the old process type and scale the new process type up.
 
 ## Restarting an Application Processes
 
-If you need to restart an application process, you may use `deis ps:restart`. Behind the scenes, Deis Workflow instructs
+If you need to restart an application process, you may use `drycc ps:restart`. Behind the scenes, Drycc Workflow instructs
 Kubernetes to terminate the old process and launch a new one in its place.
 
 ```
-$ deis ps
+$ drycc ps
 === scenic-icehouse Processes
 --- web:
 scenic-icehouse-web-3291896318-7lord up (v2)
@@ -238,7 +238,7 @@ scenic-icehouse-web-3291896318-rsekj up (v2)
 scenic-icehouse-web-3291896318-vokg7 up (v2)
 --- background:
 scenic-icehouse-background-3291896318-yf8kh up (v2)
-$ deis ps:restart scenic-icehouse-background-3291896318-yf8kh
+$ drycc ps:restart scenic-icehouse-background-3291896318-yf8kh
 Restarting processes... but first, coffee!
 done in 6s
 === scenic-icehouse Processes

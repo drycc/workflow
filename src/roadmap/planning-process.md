@@ -1,14 +1,14 @@
 # Planning Process
 
-Deis features a lightweight process that emphasizes openness and ensures every community member can be an integral part of planning for the future.
+Drycc features a lightweight process that emphasizes openness and ensures every community member can be an integral part of planning for the future.
 
 ## The Role of Maintainers
 
-[Maintainers][] lead the Deis projects. Their duties include proposing the Roadmap, reviewing and integrating contributions and maintaining the vision of the project.
+[Maintainers][] lead the Drycc projects. Their duties include proposing the Roadmap, reviewing and integrating contributions and maintaining the vision of the project.
 
 ## Open Roadmap
 
-The [Deis Roadmap](roadmap.md) is a community document. While Maintainers propose the Roadmap, it gets discussed and refined in Release Planning Meetings.
+The [Drycc Roadmap](roadmap.md) is a community document. While Maintainers propose the Roadmap, it gets discussed and refined in Release Planning Meetings.
 
 ## Contributing to the Roadmap
 
@@ -22,7 +22,7 @@ The Roadmap gets delivered progressively via the [Release Schedule][].  Releases
 
 Major decisions affecting the Roadmap are discussed during Release Planning Meetings on the first Thursday of each month, aligned with the [Release Schedule][].
 
-Release Planning Meetings are open to the public with access coordinated via the [Deis #community Slack channel](https://slack.deis.io).
+Release Planning Meetings are open to the public with access coordinated via the [Drycc #community Slack channel](https://slack.drycc.cc).
 Notes from past meetings are below, along with links to a recording of the entire meeting on YouTube.
 
 ## Credits

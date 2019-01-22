@@ -1,7 +1,7 @@
 # Booting Kubernetes on Azure Container Service
 
 Azure Container Service (ACS) is an optimized container hosting solution that works
-with all the open source tools you know. Azure is great for Kubernetes and Deis Workflow.
+with all the open source tools you know. Azure is great for Kubernetes and Drycc Workflow.
 
 If you don't yet have a Microsoft Azure account, start a trial with $200 of free credit
 [here](https://azure.microsoft.com/en-us/free/).
@@ -178,7 +178,7 @@ KubeDNS is running at https://mydnsprefix.myregion.cloudapp.azure.com/api/v1/pro
 kubernetes-dashboard is running at https://mydnsprefix.myregion.cloudapp.azure.com/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard
 ```
 
-You are now ready to [install Deis Workflow](install-azure-acs.md)
+You are now ready to [install Drycc Workflow](install-azure-acs.md)
 
 [Azure Portal]: https://portal.azure.com/
 [install Azure CLI to your computer]: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli

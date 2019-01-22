@@ -9,10 +9,10 @@ The first user created on a Workflow installation is automatically an administra
 
 ## Register with a Controller
 
-Use `deis register` with the [Controller][] URL (supplied by your Deis administrator)
+Use `drycc register` with the [Controller][] URL (supplied by your Drycc administrator)
 to create a new account. After successful registration you will be logged in as the new user.
 
-    $ deis register http://deis.example.com
+    $ drycc register http://drycc.example.com
     username: myuser
     password:
     password (confirm):
@@ -21,33 +21,33 @@ to create a new account. After successful registration you will be logged in as 
     Logged in as myuser
 
 !!! important
-    The first user to register with Deis Workflow automatically becomes an administrator. Additional users who register will be ordinary users.
+    The first user to register with Drycc Workflow automatically becomes an administrator. Additional users who register will be ordinary users.
 
 ## Login to Workflow
 
-If you already have an account, use `deis login` to authenticate against the Deis Workflow API.
+If you already have an account, use `drycc login` to authenticate against the Drycc Workflow API.
 
-    $ deis login http://deis.example.com
-    username: deis
+    $ drycc login http://drycc.example.com
+    username: drycc
     password:
-    Logged in as deis
+    Logged in as drycc
 
 ## Logout from Workflow
 
-Logout of an existing controller session using `deis logout`.
+Logout of an existing controller session using `drycc logout`.
 
-    $ deis logout
-    Logged out as deis
+    $ drycc logout
+    Logged out as drycc
 
 ## Verify Your Session
 
-You can verify your client configuration by running `deis whoami`.
+You can verify your client configuration by running `drycc whoami`.
 
-    $ deis whoami
-    You are deis at http://deis.example.com
+    $ drycc whoami
+    You are drycc at http://drycc.example.com
 
 !!! note
-    Session and client configuration is stored in the `~/.deis/client.json` file.
+    Session and client configuration is stored in the `~/.drycc/client.json` file.
 
 ## Registering New Users
 
@@ -56,14 +56,14 @@ becomes the first "admin" user. Others will now receive an error when trying to 
 logged in, an admin user can register new users:
 
 ```shell
-$ deis register --login=false --username=newuser --password=changeme123 --email=newuser@deis.io
+$ drycc register --login=false --username=newuser --password=changeme123 --email=newuser@drycc.cc
 ```
 
 ## Controlling Registration Modes
 
-After creating your first user, you may wish to change the registration mode for Deis Workflow.
+After creating your first user, you may wish to change the registration mode for Drycc Workflow.
 
-Deis Workflow supports three registration modes:
+Drycc Workflow supports three registration modes:
 
 | Mode                  | Description                                     |
 | ---                   | ---                                             |
@@ -72,9 +72,9 @@ Deis Workflow supports three registration modes:
 | disabled              | Does not allow anyone to register new users.    |
 
 To modify the registration mode for Workflow you may add or modify the `REGISTRATION_MODE` environment variable for the
-controller component. If Deis Workflow is already running, use:
+controller component. If Drycc Workflow is already running, use:
 
-`kubectl --namespace=deis patch deployments deis-controller -p '{"spec":{"template":{"spec":{"containers":[{"name":"deis-controller","env":[{"name":"REGISTRATION_MODE","value":"disabled"}]}]}}}}'`
+`kubectl --namespace=drycc patch deployments drycc-controller -p '{"spec":{"template":{"spec":{"containers":[{"name":"drycc-controller","env":[{"name":"REGISTRATION_MODE","value":"disabled"}]}]}}}}'`
 
 Modify the `value` portion to match the desired mode.
 
@@ -82,17 +82,17 @@ Kubernetes will automatically deploy a new ReplicaSet and corresponding Pod with
 
 ## Managing Administrative Permissions
 
-You can use the `deis perms` command to promote a user to an admin:
+You can use the `drycc perms` command to promote a user to an admin:
 
 ```
-$ deis perms:create john --admin
+$ drycc perms:create john --admin
 Adding john to system administrators... done
 ```
 
 View current admins:
 
 ```
-$ deis perms:list --admin
+$ drycc perms:list --admin
 === Administrators
 admin
 john
@@ -101,7 +101,7 @@ john
 Demote admins to normal users:
 
 ```
-$ deis perms:delete john --admin
+$ drycc perms:delete john --admin
 Removing john from system administrators... done
 ```
 
@@ -113,15 +113,15 @@ time that they sign up on the platform. If this token is compromised, it will ne
 
 A user can regenerate their own token like this:
 
-    $ deis auth:regenerate
+    $ drycc auth:regenerate
 
 An administrator can also regenerate the token of another user like this:
 
-    $ deis auth:regenerate -u test-user
+    $ drycc auth:regenerate -u test-user
 
 At this point, the user will no longer be able to authenticate against the controller with his auth token:
 
-    $ deis apps
+    $ drycc apps
     401 UNAUTHORIZED
     Detail:
     Invalid token
@@ -130,7 +130,7 @@ They will need to log back in to use their new auth token.
 
 If there is a cluster wide security breach, an administrator can regenerate everybody's auth token like this:
 
-    $ deis auth:regenerate --all=true
+    $ drycc auth:regenerate --all=true
 
 
 ## Changing Account Password
@@ -138,7 +138,7 @@ If there is a cluster wide security breach, an administrator can regenerate ever
 A user can change their own account's password like this:
 
 ```
-$ deis auth:passwd
+$ drycc auth:passwd
 current password:
 new password:
 new password (confirm):
@@ -147,7 +147,7 @@ new password (confirm):
 An administrator can change the password of another user's account like this:
 
 ```
-$ deis auth:passwd --username=<username>
+$ drycc auth:passwd --username=<username>
 new password:
 new password (confirm):
 ```

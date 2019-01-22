@@ -1,8 +1,8 @@
 # Configuring Postgres
 
-Deis Workflow's controller component relies on a PostgreSQL database to store platform state.
+Drycc Workflow's controller component relies on a PostgreSQL database to store platform state.
 
-By default, Deis Workflow ships with the [database] component, which provides an in-cluster PostgreSQL database backed up to in-cluster or off-cluster [object storage]. Currently, for object storage, which is utilized by _several_ Workflow components, only off-cluster solutions such as S3 or GCS are recommended in production environments. Experience has shown that many operators already opting for off-cluster object storage similarly prefer to host Postgres off-cluster as well, using Amazon RDS or similar. When excercising both options, a Workflow installation becomes entirely stateless, and is thus restored or rebuilt with greater ease should the need ever arise.
+By default, Drycc Workflow ships with the [database] component, which provides an in-cluster PostgreSQL database backed up to in-cluster or off-cluster [object storage]. Currently, for object storage, which is utilized by _several_ Workflow components, only off-cluster solutions such as S3 or GCS are recommended in production environments. Experience has shown that many operators already opting for off-cluster object storage similarly prefer to host Postgres off-cluster as well, using Amazon RDS or similar. When excercising both options, a Workflow installation becomes entirely stateless, and is thus restored or rebuilt with greater ease should the need ever arise.
 
 ## Provisioning off-cluster Postgres
 
@@ -22,23 +22,23 @@ If you are able to log into the RDBMS as a superuser or a user with appropriate 
 
 ```
 $ psql -h <host> -p <port> -d postgres -U <"postgres" or your own username>
-> create user <deis username; typically "deis"> with password '<password>';
-> create database <database name; typically "deis"> with owner <deis username>;
+> create user <drycc username; typically "drycc"> with password '<password>';
+> create database <database name; typically "drycc"> with owner <drycc username>;
 > \q
 ```
 
 ## Configuring Workflow
 
-The Helm chart for Deis Workflow can be easily configured to connect the Workflow controller component to an off-cluster PostgreSQL database.
+The Helm chart for Drycc Workflow can be easily configured to connect the Workflow controller component to an off-cluster PostgreSQL database.
 
-* **Step 1:** If you haven't already fetched the values, do so with `helm inspect values deis/workflow > values.yaml`
+* **Step 1:** If you haven't already fetched the values, do so with `helm inspect values drycc/workflow > values.yaml`
 * **Step 2:** Update database connection details by modifying `values.yaml`:
     * Update the `database_location` parameter to `off-cluster`.
     * Update the values in the `[database]` configuration section to properly reflect all connection details.
     * Save your changes.
     * Note: you do not need to (and must not) base64 encode any values, as the Helm chart will automatically handle encoding as necessary.
 
-You are now ready to `helm install deis/workflow --namespace deis -f values.yaml` [as usual][installing].
+You are now ready to `helm install drycc/workflow --namespace drycc -f values.yaml` [as usual][installing].
 
 [database]: ../understanding-workflow/components.md#database
 [object storage]: configuring-object-storage.md

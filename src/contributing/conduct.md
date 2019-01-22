@@ -1,10 +1,10 @@
 # Conduct
 
-The Deis community welcomes and encourages participation by **everyone**.
+The Drycc community welcomes and encourages participation by **everyone**.
 
 No matter how you identify yourself or how others perceive you: we welcome you. We welcome contributions from everyone as long as they interact constructively with our community.
 
-The Deis developer community continues to grow, and it is inevitable that disagreements and conflict will arise. We ask that participants conduct themselves according to these principles:
+The Drycc developer community continues to grow, and it is inevitable that disagreements and conflict will arise. We ask that participants conduct themselves according to these principles:
 
 1. **Be welcoming, friendly, and patient.**
 

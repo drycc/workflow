@@ -4,38 +4,38 @@ For the rest of this example we will refer to a special variables called `$hostn
 
 #### Option 1: Standard Installation
 
-For a standard installation that includes deis-router, you can calculate the hostname value using its public IP address and a wildcard DNS record.
+For a standard installation that includes drycc-router, you can calculate the hostname value using its public IP address and a wildcard DNS record.
 
-If your router IP is `1.1.1.1`, its `$hostname` will be `deis.1.1.1.1.nip.io`. You can find your IP address by running:
+If your router IP is `1.1.1.1`, its `$hostname` will be `drycc.1.1.1.1.nip.io`. You can find your IP address by running:
 
 ```
-kubectl --namespace=deis describe svc deis-router
+kubectl --namespace=drycc describe svc drycc-router
 ```
 
 If you do not have an load balancer IP, the router automatically forwards traffic from a kubernetes node to the router. In this case, use the IP of a kubernetes node and the node
 port that routes to port 80 on the controller.
 
-Deis workflow requires a wildcard DNS record to dynamically map app names to the router.
+Drycc workflow requires a wildcard DNS record to dynamically map app names to the router.
 
 #### Option 2: Experimental Native Ingress Installation
 
-In this example, the user should already have DNS set up pointing to their known host. The `$hostname` value can be calculated by prepending `deis.` to the value set in `controller.platform_domain`.
+In this example, the user should already have DNS set up pointing to their known host. The `$hostname` value can be calculated by prepending `drycc.` to the value set in `controller.platform_domain`.
 
 ## Register an Admin User
 
-The first user to register against Deis Workflow will automatically be given administrative privileges.
+The first user to register against Drycc Workflow will automatically be given administrative privileges.
 
 Use the controller `$hostname` to register a user in the cluster.
 
 ```
-$ deis register http://$hostname
+$ drycc register http://$hostname
 username: admin
 password:
 password (confirm):
-email: jhansen@deis.com
+email: jhansen@drycc.com
 Registered admin
 Logged in as admin
-$ deis whoami
+$ drycc whoami
 You are admin at http://$hostname
 ```
 
@@ -43,31 +43,31 @@ You have now registered your first user and you are ready to deploy an applicati
 
 ## Deploy an Application
 
-Deis Workflow supports three different types of applications, Buildpacks,
+Drycc Workflow supports three different types of applications, Buildpacks,
 Dockerfiles and Docker Images. Our first application will be a simple Docker
 Image-based application, so you don't have to wrestle with checking out code.
 
-Run `deis create` to create a new application on Deis Workflow. If you do not
+Run `drycc create` to create a new application on Drycc Workflow. If you do not
 specify a name for your application, Workflow automatically generates a
 friendly (and sometimes funny) name.
 
 ```
-$ deis create --no-remote
+$ drycc create --no-remote
 Creating Application... done, created proper-barbecue
-If you want to add a git remote for this app later, use `deis git:remote -a proper-barbecue`
+If you want to add a git remote for this app later, use `drycc git:remote -a proper-barbecue`
 ```
 
 Our application has been created and named `proper-barbecue`. As with the
-`deis` hostname, any HTTP traffic to `proper-barbecue` will be automatically
+`drycc` hostname, any HTTP traffic to `proper-barbecue` will be automatically
 routed to your application pods by the edge router.
 
 Let's use the CLI to tell the platform to deploy an application and then use curl to send a request to the app:
 
 ```
-$ deis pull deis/example-go -a proper-barbecue
+$ drycc pull drycc/example-go -a proper-barbecue
 Creating build... done
 $ curl http://proper-barbecue.$hostname
-Powered by Deis
+Powered by Drycc
 ```
 
 !!! note
@@ -76,16 +76,16 @@ Powered by Deis
 Workflow's edge router knows all about application names and automatically
 sends traffic to the right application. The router sends traffic for
 `proper-barbecue.104.197.125.75.nip.io` to your app, just like
-`deis.104.197.125.75.nip.io` was sent to the Workflow API service.
+`drycc.104.197.125.75.nip.io` was sent to the Workflow API service.
 
 ## Change Application Configuration
 
 Next, let's change some configuration using the CLI. Our example app is built
-to read configuration from the environment. By using `deis config:set` we can
+to read configuration from the environment. By using `drycc config:set` we can
 change how the application behaves:
 
 ```
-$ deis config:set POWERED_BY="Docker Images + Kubernetes" -a proper-barbecue
+$ drycc config:set POWERED_BY="Docker Images + Kubernetes" -a proper-barbecue
 Creating config... done
 
 === proper-barbecue Config
@@ -108,7 +108,7 @@ Last, let's scale our application by adding more application processes. Using th
 additional processes to service requests:
 
 ```
-$ deis scale cmd=2 -a proper-barbecue
+$ drycc scale cmd=2 -a proper-barbecue
 Scaling processes... but first, coffee!
 done in 36s
 === proper-barbecue Processes
@@ -117,20 +117,20 @@ proper-barbecue-v18-cmd-rk644 up (v18)
 proper-barbecue-v18-cmd-0ag04 up (v18)
 ```
 
-Congratulations! You have deployed, configured, and scaled your first application using Deis Workflow.
+Congratulations! You have deployed, configured, and scaled your first application using Drycc Workflow.
 
 ## Going Further
-There is a lot more you can do with Deis Workflow, play around with the CLI:
+There is a lot more you can do with Drycc Workflow, play around with the CLI:
 
 !!! important
-    In order to have permission to push an app you must add a SSH key to your user on the Deis Workflow.
+    In order to have permission to push an app you must add a SSH key to your user on the Drycc Workflow.
     For more information, please check [Users and SSH Keys](../users/ssh-keys/) and [Troubleshooting Workflow](../troubleshooting/).
 
-* Roll back to a previous release with `deis rollback -a proper-barbecue`
-* See application logs with `deis logs -a proper-barbecue`
+* Roll back to a previous release with `drycc rollback -a proper-barbecue`
+* See application logs with `drycc logs -a proper-barbecue`
 * Try one of our other example applications like:
-    * [deis/example-ruby-sinatra](https://github.com/teamhephy/example-ruby-sinatra)
-    * [deis/example-nodejs-express](https://github.com/teamhephy/example-nodejs-express)
-    * [deis/example-java-jetty](https://github.com/teamhephy/example-java-jetty)
+    * [drycc/example-ruby-sinatra](https://github.com/drycc/example-ruby-sinatra)
+    * [drycc/example-nodejs-express](https://github.com/drycc/example-nodejs-express)
+    * [drycc/example-java-jetty](https://github.com/drycc/example-java-jetty)
 * Read about using application [Buildpacks](../applications/using-buildpacks) or [Dockerfiles](../applications/using-dockerfiles.md)
-* Join our [#community slack channel](https://slack.deis.io) and meet the team!
+* Join our [#community slack channel](https://slack.drycc.cc) and meet the team!
