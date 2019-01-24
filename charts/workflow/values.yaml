@@ -82,37 +82,45 @@ s3:
   # Your AWS secret key. Leave it empty if you want to use IAM credentials.
   secretkey: ""
   # Any S3 region
-  region: "us-west-1"
+  endpoint: "your-s3-endpoint"
   # Your buckets.
+  builder_bucket: "your-builder-bucket-name"
   registry_bucket: "your-registry-bucket-name"
   database_bucket: "your-database-bucket-name"
+
+oss:
+  accesskey: ""
+  secretkey: ""
+  endpoint: "your-oos-endpoint"
   builder_bucket: "your-builder-bucket-name"
+  registry_bucket: "your-registry-bucket-name"
+  database_bucket: "your-database-bucket-name"
 
 azure:
-  accountname: "YOUR ACCOUNT NAME"
-  accountkey: "YOUR ACCOUNT KEY"
-  registry_container: "your-registry-container-name"
-  database_container: "your-database-container-name"
-  builder_container: "your-builder-container-name"
+  accesskey: "YOUR ACCOUNT NAME"
+  secretkey: "YOUR ACCOUNT KEY"
+  endpoint: "your-azure-endpoint"
+  builder_bucket: "your-builder-container-name"
+  registry_bucket: "your-registry-container-name"
+  database_bucket: "your-database-container-name"
 
 gcs:
   # key_json is expanded into a JSON file on the remote server. It must be
   # well-formatted JSON data.
+  accesskey: "your accessKey for minio gateway"
+  secretkey: "your secretkey for minio gateway"
   key_json: <base64-encoded JSON data>
+  projectid: "your-gcs-projectid"
+  builder_bucket: "your-builder-bucket-name"
   registry_bucket: "your-registry-bucket-name"
   database_bucket: "your-database-bucket-name"
-  builder_bucket: "your-builder-bucket-name"
 
-swift:
-  username: "Your OpenStack Swift Username"
-  password: "Your OpenStack Swift Password"
-  authurl: "Swift auth URL for obtaining an auth token"
-  # Your OpenStack tenant name if you are using auth version 2 or 3.
-  tenant: ""
-  authversion: "Your OpenStack swift auth version"
-  registry_container: "your-registry-container-name"
-  database_container: "your-database-container-name"
-  builder_container: "your-builder-container-name"
+minio:
+  accesskey: "8TZRY2JRWMPT6UMXR6I5"
+  secretkey: "gbstrOvotMMcg2sMfGUhA5a6Et/EI5ALtIHsobYk"
+  builder_bucket: "0fad60517a9e4225a07d77d7b9b58629"
+  registry_bucket: "c2da53f11c7a455db35797c3ba625d80"
+  database_bucket: "e95eb5c54c3a4047abe5269a68fa9a67"
 
 # Set the default (global) way of how Application (your own) images are
 # pulled from within the Controller.
