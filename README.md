@@ -1,21 +1,3 @@
-
-|![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Warning.svg/156px-Warning.svg.png) | Drycc Workflow is the open source fork of Drycc Workflow.<br />Please [read the announcement][] for more detail. |
-|---:|---|
-| 11/29/2018 | Drycc Workflow [v2.20.0][] new release |
-| 08/27/2018 | Team Drycc [blog][] comes online |
-| 08/20/2018 | Drycc [#community slack][] goes dark |
-| 08/10/2018 | Drycc Workflow [v2.19.4][] fourth patch release |
-| 08/08/2018 | [Drycc website][] goes dark, then redirects to Azure Kubernetes Service |
-| 03/16/2018 | [Drycc Workflow website][] comes online |
-| 03/01/2018 | End of Drycc Workflow maintenance: critical patches no longer merged |
-| 12/11/2017 | Team Drycc [slack community][] invites first volunteers |
-| 09/07/2017 | Drycc Workflow [v2.18][] final release before entering maintenance mode |
-| 09/06/2017 | Team Drycc [slack community][] comes online |
-
-![](https://raw.githubusercontent.com/drycc/workflow/master/themes/drycc/static/img/drycc_logo.png)
-
-[![Slack Status](https://slack.drycc.com/badge.svg)](https://slack.drycc.com/)
-
 **Drycc Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
 
 Drycc Workflow is the second major release (v2) of the Drycc PaaS. If you are looking for the CoreOS-based PaaS visit [https://github.com/drycc/drycc](https://github.com/drycc/drycc).
