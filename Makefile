@@ -21,7 +21,7 @@ BUILD_CMD := $(MKDOCSBUILD) --site-dir $(BUILDDIR) && \
 	echo && \
 	echo "Build finished. The HTML pages are in $(BUILDDIR)."
 
-TEST_CMD := grep -q "<title>Drycc Workflow Documentation</title>" _build/html/index.html && \
+TEST_CMD := grep -q "<title>Home - Drycc Workflow Documentation</title>" _build/html/index.html && \
 	echo && \
 	echo "Test finished. The HTML pages are in $(BUILDDIR)."
 

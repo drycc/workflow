@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/drycc/workflow.svg?branch=master)](https://travis-ci.org/drycc/workflow)
+
 # Drycc workflow
 
 **Drycc Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
