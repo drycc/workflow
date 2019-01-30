@@ -1,7 +1,5 @@
 # Drycc workflow
 
-[![Build Status](https://travis-ci.org/drycc/workflow.svg?branch=master)](https://travis-ci.org/drycc/workflow)
-
 **Drycc Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
 
 Drycc Workflow is the second major release (v2) of the Drycc PaaS. If you are looking for the CoreOS-based PaaS visit [https://github.com/drycc/drycc](https://github.com/drycc/drycc).
@@ -73,12 +71,4 @@ Then view the documentation on [http://localhost:8000](http://localhost:8000) or
 [mkdocs]: http://www.mkdocs.org/
 [issues]: https://github.com/drycc/workflow/issues
 [prs]: https://github.com/drycc/workflow/pulls
-[Drycc website]: http://drycc.com/
-[blog]: https://blog.drycc.info/blog/
-[read the announcement]: https://blog.drycc.info/blog/posts/announcements/drycc-workflow-drycc-fork.html
-[#community slack]: https://slack.drycc.cc/
-[slack community]: https://slack.drycc.com/
-[v2.18]: https://github.com/drycc/workflow/releases/tag/v2.18.0
-[Drycc Workflow website]: https://web.drycc.com
-[v2.19.0]: https://gist.github.com/Cryptophobia/24c204583b18b9fc74c629fb2b62dfa3
-[v2.20.0]: https://gist.github.com/Cryptophobia/667cc30f42dc38d6784212eea00bfc58
+[Drycc website]: http://drycc.cc/
