@@ -5,7 +5,7 @@ Use the CLI to create and configure and manage applications.
 
 Install the `drycc` client for Linux or Mac OS X with:
 
-    $ sudo bash < <(curl -fsSL https://github.com/drycc/workflow-cli/releases/download/v1.0.1/install-drycc.sh)
+    $ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/master/install.tmpl | bash -s v1.0.1
 
 Others please visit: https://github.com/drycc/workflow-cli/releases
 
