@@ -59,7 +59,7 @@ The Drycc Chart Repository contains everything needed to install Drycc Workflow 
 Add this repository to Helm:
 
 ```
-$ helm repo add drycc https://charts.drycc.com/workflow
+$ helm repo add drycc https://charts.drycc.cc/stable/workflow
 ```
 
 ## Install Drycc Workflow
@@ -115,4 +115,4 @@ After installing Workflow, [register a user and deploy an application](../quicks
 
 [Kubernetes v1.3.4+]: system-requirements.md#kubernetes-versions
 [helm]: https://github.com/kubernetes/helm/blob/master/docs/install.md
-[valuesfile]: https://charts.drycc.com/workflow/values-v2.17.0.yaml
+[valuesfile]: https://charts.drycc.cc/stable/workflow/values-v2.17.0.yaml

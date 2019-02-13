@@ -134,7 +134,7 @@ this chart will also be packaged, signed and uploaded to its production chart re
 verify it can be fetched (and verified):
 
 ```
-$ helm repo add controller https://charts.drycc.com/controller
+$ helm repo add controller https://charts.drycc.cc/stable/controller
 "controller" has been added to your repositories
 $ helm fetch --verify controller/controller --version v2.17.0
 Verification: &{0xc4207ec870 sha256:026e766e918ff28d2a7041bc3d560d149ee7eb0cb84165c9d9d00a3045ff45c3 controller-v2.17.0.tgz}
@@ -209,7 +209,7 @@ the chart versions existing in the `WORKFLOW_PREV_RELEASE` chart and the _most r
 (Therefore, if there are any unreleased commits in a component repo, they will not appear here):
 
 ```bash
-helm repo add drycc https://charts.drycc.com/workflow
+helm repo add drycc https://charts.drycc.cc/stable/workflow
 helm fetch --untar drycc/workflow --version $WORKFLOW_PREV_RELEASE
 dryccrel changelog global workflow/requirements.lock map.json > changelog-$WORKFLOW_RELEASE.md
 ```

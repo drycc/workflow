@@ -3,9 +3,11 @@
 The Drycc command-line interface (CLI), lets you interact with Drycc Workflow.
 Use the CLI to create and configure and manage applications.
 
-Install the latest `drycc` client for Linux or Mac OS X with:
+Install the `drycc` client for Linux or Mac OS X with:
 
-    $ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/master/install-v2.sh | bash -s v2.20.0
+    $ sudo bash < <(curl -fsSL https://github.com/drycc/workflow-cli/releases/download/v1.0.1/install-drycc.sh)
+
+Others please visit: https://github.com/drycc/workflow-cli/releases
 
 The installer places the `drycc` binary in your current directory, but you
 should move it somewhere in your $PATH:
