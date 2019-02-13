@@ -61,7 +61,7 @@ Use `git push drycc master` to deploy your application.
 
     To learn more, use 'drycc help' or visit http://drycc.cc
 
-    To ssh://git@drycc.staging-2.drycc.com:2222/skiing-keypunch.git
+    To ssh://git@drycc.staging-2.drycc.cc:2222/skiing-keypunch.git
      * [new branch]      master -> master
 
     $ curl -s http://skiing-keypunch.example.com

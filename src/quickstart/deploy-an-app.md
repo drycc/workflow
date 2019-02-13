@@ -32,7 +32,7 @@ $ drycc register http://$hostname
 username: admin
 password:
 password (confirm):
-email: jhansen@drycc.com
+email: jhansen@drycc.cc
 Registered admin
 Logged in as admin
 $ drycc whoami

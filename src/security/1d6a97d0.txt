@@ -1,6 +1,6 @@
 sec   4096R/1D6A97D0 2016-11-03
       Key fingerprint = 41AF 6B6A 9489 9B58 1EB6  9ED1 17E5 26B5 1D6A 97D0
-uid                  Drycc, Inc. (Helm chart signing key) <security@drycc.com>
+uid                  Drycc, Inc. (Helm chart signing key) <security@drycc.cc>
 ssb   4096R/2CA931B0 2016-11-03
 ssb   4096R/41C9CA1E 2016-11-03 [expires: 2024-11-01]
 

@@ -5,10 +5,10 @@
 Now that Helm is installed and the repository has been added, install Workflow with a native ingress by running:
 
 ```
-$ helm install drycc/workflow --namespace drycc --set global.experimental_native_ingress=true,controller.platform_domain=drycc.com
+$ helm install drycc/workflow --namespace drycc --set global.experimental_native_ingress=true,controller.platform_domain=drycc.cc
 ```
 
-Where `controller.platform_domain` is a **required** parameter that is traditionally not required for Workflow that is explained in the next section. In this example we are using `drycc.com` for `$hostname`.
+Where `controller.platform_domain` is a **required** parameter that is traditionally not required for Workflow that is explained in the next section. In this example we are using `drycc.cc` for `$hostname`.
  
 Helm will install a variety of Kubernetes resources in the `drycc` namespace.
 Wait for the pods that Helm launched to be ready. Monitor their status by running:
@@ -73,12 +73,12 @@ NAME           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
 drycc-builder   10.0.165.140   40.86.182.187   2222:32488/TCP   33m
 ```
 
-If we were using `drycc.com` as a hostname, we would need to create the following A DNS records.
+If we were using `drycc.cc` as a hostname, we would need to create the following A DNS records.
 
 | Name                         | Type          | Value          |
 | ---------------------------- |:-------------:| --------------:|
-| *.drycc.com                   | A             | 138.91.243.152 |
-| drycc-builder.drycc.com        | A             | 40.86.182.187  |
+| *.drycc.cc                   | A             | 138.91.243.152 |
+| drycc-builder.drycc.cc        | A             | 40.86.182.187  |
 
 Once all of the pods are in the `READY` state, and `drycc.$host` resolves to the external IP found above, Workflow is up and running!
 

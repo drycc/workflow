@@ -5,7 +5,7 @@ and for each of its [components](../understanding-workflow/components.md).
 
 Helm provides tools for establishing and verifying chart integrity.  (For an overview, see the [Provenance](https://github.com/kubernetes/helm/blob/master/docs/provenance.md) doc.)  All release charts from the Drycc Workflow team are now signed using this mechanism.
 
-The full `Drycc, Inc. (Helm chart signing key) <security@drycc.com>` public key can be found [here](../security/1d6a97d0.txt), as well as the [pgp.mit.edu](http://pgp.mit.edu/pks/lookup?op=vindex&fingerprint=on&search=0x17E526B51D6A97D0) keyserver and the official Drycc Keybase [account][drycc-keybase].  The key's fingerprint can be cross-checked against all of these sources.
+The full `Drycc, Inc. (Helm chart signing key) <security@drycc.cc>` public key can be found [here](../security/1d6a97d0.txt), as well as the [pgp.mit.edu](http://pgp.mit.edu/pks/lookup?op=vindex&fingerprint=on&search=0x17E526B51D6A97D0) keyserver and the official Drycc Keybase [account][drycc-keybase].  The key's fingerprint can be cross-checked against all of these sources.
 
 ## Verifying a signed chart
 
@@ -15,7 +15,7 @@ To add it to the default `~/.gnupg/pubring.gpg` keyring, any of the following co
 
 ```
 $ # via our hosted location
-$ curl https://drycc.com/workflow/docs/security/1d6a97d0.txt | gpg --import
+$ curl https://drycc.cc/workflow/docs/security/1d6a97d0.txt | gpg --import
 
 $ # via the pgp.mit.edu keyserver
 $ gpg --keyserver pgp.mit.edu --recv-keys 1D6A97D0

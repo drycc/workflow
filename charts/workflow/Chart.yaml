@@ -4,4 +4,4 @@ version: <Will be populated by the ci before publishing the chart>
 description: Drycc Workflow
 maintainers:
   - name: Team Drycc
-    email: team@drycc.com
+    email: team@drycc.cc

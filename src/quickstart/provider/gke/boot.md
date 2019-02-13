@@ -38,7 +38,7 @@ Click "Create" and Google Container Engine will provision your cluster. The proc
 
 ![](images/gke-node-version.jpg)]
 
-After the cluster is created, check the node version. See [Kubernetes Versions](https://drycc.com/docs/workflow/installing-workflow/system-requirements/#kubernetes-versions) under System Requirements for more details.
+After the cluster is created, check the node version. See [Kubernetes Versions](https://drycc.cc/docs/workflow/installing-workflow/system-requirements/#kubernetes-versions) under System Requirements for more details.
 
 ## Install and configure the Google Cloud CLI
 
