@@ -1,10 +1,10 @@
 # Welcome to Drycc
 
-Drycc is a community branch of the popular PaaS service deis. But since Microsoft acquired the Deis
-team, it has stopped updating, so it decided to work hard to build a completely new and open developer
-community.
+Drycc is a community branch of the popular PaaS service deis. 
 
-We invite everyone to join us and help build the next generation of PaaS cloud services
+Since Microsoft acquired the Deis team, it has stopped updating, so it decided to work hard to
+build a completely new and open developer community, we invite everyone to join us and help build
+the next generation of PaaS cloud services.
 
 Drycc Workflow is an open source Platform as a Service (PaaS) that adds a developer-friendly layer
 to any Kubernetes cluster, making it easy to deploy and manage applications.

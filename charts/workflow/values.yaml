@@ -7,6 +7,7 @@ global:
   # - s3: Store persistent data in AWS S3 (configure in S3 section)
   # - azure: Store persistent data in Azure's object storage
   # - gcs: Store persistent data in Google Cloud Storage
+  # - oss: Store persistent data in Aliyun OSS
   # - minio: Store persistent data on in-cluster Minio server
   storage: minio
 
@@ -73,7 +74,7 @@ global:
   # Valid values are:
   # - true: all RBAC-related manifests will be installed (in case your cluster supports RBAC)
   # - false: no RBAC-related manifests will be installed
-  use_rbac: false
+  use_rbac: true
 
 
 s3:
