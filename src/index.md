@@ -1,16 +1,18 @@
-# Welcome to Drycc Workflow
+# Welcome to Drycc
 
-Drycc (pronounced DAY-iss) Workflow is an open source Platform as a Service (PaaS) that adds a
-developer-friendly layer to any Kubernetes cluster, making it easy to deploy and manage
-applications.
+Drycc is a community branch of the popular PaaS service deis. But since Microsoft acquired the Deis
+team, it has stopped updating, so it decided to work hard to build a completely new and open developer
+community.
+
+We invite everyone to join us and help build the next generation of PaaS cloud services
+
+Drycc Workflow is an open source Platform as a Service (PaaS) that adds a developer-friendly layer
+to any Kubernetes cluster, making it easy to deploy and manage applications.
 
 Drycc Workflow includes capabilities for building and deploying from source via `git push`, simple
 application configuration, creating and rolling back releases, managing domain names and SSL
 certificates, providing seamless edge routing, aggregating logs, and sharing applications with
 teams. All of this is exposed through a simple REST API and command line interface.
-
-Please note that this documentation is for Drycc Workflow (v2.20.0).  Older versions of Drycc and
-Drycc Workflow are not supported.
 
 ## Getting Started
 
