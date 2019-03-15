@@ -229,13 +229,16 @@ router:
   service_annotations:
     #<example-key>: <example-value>
 
-  # Enable to pin router pod hostPort when using minikube
-  host_port:
-    enabled: false
-
-  # Service type default to LoadBalancer
-  # service_type: LoadBalancer
+  service:
+    # Service type default to LoadBalancer
+    type: LoadBalancer
+    # If service.type is not set to NodePort, the following statement will be ignored.
+    nodePort:
+      builder: ""
+      http: ""
+      https: ""
+      healthz: ""
 
 workflow-manager:
-  versions_api_url: https://versions.drycc.info
-  doctor_api_url: https://doctor.drycc.info
+  versions_api_url: https://versions.drycc.cc
+  doctor_api_url: https://doctor.drycc.cc

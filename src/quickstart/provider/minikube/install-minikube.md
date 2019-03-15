@@ -27,7 +27,7 @@ $ helm repo add drycc http://charts.drycc.cc/stable
 Now that Helm is installed and the repository has been added, install Workflow by running:
 
 ```
-$ helm install drycc/workflow --namespace drycc --set router.host_port.enabled=true
+$ helm install drycc/workflow --namespace drycc --set router.service.type=NodePort
 ```
 
 Helm will install a variety of Kubernetes resources in the `drycc` namespace.
