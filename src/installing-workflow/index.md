@@ -50,7 +50,7 @@ More rigorous installations would benefit from using outside sources for the fol
 
 #### (Experimental) Kubernetes Native Ingress
 
-Workflow now offers [experimental native ingress](experimental-native-ingress.md) to take advantage of native Kubernetes routing. Any compatible Kubernetes ingress controller can be used in place of Workflow's nginx-based drycc-router. Follow [this guide](experimental-native-ingress.md) to enable experimental native ingress.
+Workflow now offers [experimental native ingress](use-native-ingress.md) to take advantage of native Kubernetes routing. Any compatible Kubernetes ingress controller can be used in place of Workflow's nginx-based drycc-router. Follow [this guide](use-native-ingress.md) to enable experimental native ingress.
 
 ## Add the Drycc Chart Repository
 

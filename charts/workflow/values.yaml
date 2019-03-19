@@ -57,7 +57,7 @@ global:
   # Valid values are:
   # - true: drycc-router will not be deployed. Workflow will not be usable until a Kubernetes ingress controller is installed.
   # - false: drycc-router will be deployed (default).
-  experimental_native_ingress: false
+  use_native_ingress: false
   # If the Kubernetes cluster uses CNI
   # use_cni: true
   # Set the `listen` variable for registry-proxy's NGINX

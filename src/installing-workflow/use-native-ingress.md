@@ -5,7 +5,7 @@
 Now that Helm is installed and the repository has been added, install Workflow with a native ingress by running:
 
 ```
-$ helm install drycc/workflow --namespace drycc --set global.experimental_native_ingress=true,controller.platform_domain=drycc.cc
+$ helm install drycc/workflow --namespace drycc --set global.use_native_ingress=true,controller.platform_domain=drycc.cc
 ```
 
 Where `controller.platform_domain` is a **required** parameter that is traditionally not required for Workflow that is explained in the next section. In this example we are using `drycc.cc` for `$hostname`.
@@ -45,7 +45,7 @@ drycc-workflow-manager-68nu6   1/1       Running   0          5m
 
 ## Install a Kubernetes Ingress Controller
 
-Now that Workflow has been deployed with the `global.experimental_native_ingress` flag set to `true`, we will need a Kubernetes ingress controller in place to begin routing traffic.
+Now that Workflow has been deployed with the `global.use_native_ingress` flag set to `true`, we will need a Kubernetes ingress controller in place to begin routing traffic.
 
 Here is an example of how to use [traefik](https://traefik.io/) as an ingress controller for Workflow. Of course, you are welcome to use any controller you wish.
 
