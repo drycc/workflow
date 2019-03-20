@@ -49,7 +49,7 @@ global:
   # - gcr: Use Google's GCR
   registry_location: "on-cluster"
   # The host port to which registry proxy binds to
-  host_port: 5555
+  registry_service_port: 5555
   # Prefix for the imagepull secret created when using private registry
   secret_prefix: "private-registry"
   # Experimental feature to use Kubernetes ingress instead of Workflow's drycc-router.
@@ -57,7 +57,7 @@ global:
   # Valid values are:
   # - true: drycc-router will not be deployed. Workflow will not be usable until a Kubernetes ingress controller is installed.
   # - false: drycc-router will be deployed (default).
-  use_native_ingress: false
+  use_ingress: false
   # If the Kubernetes cluster uses CNI
   # use_cni: true
   # Set the `listen` variable for registry-proxy's NGINX
