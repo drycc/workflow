@@ -69,7 +69,11 @@ global:
   # - true: all RBAC-related manifests will be installed (in case your cluster supports RBAC)
   # - false: no RBAC-related manifests will be installed
   use_rbac: true
-
+  # Experimental feature to use Kubernetes ingress instead of Workflow's drycc-router.
+  # If ingress_class is empty, use drycc-router
+  # Otherwise, please check `kubernetes.io/ingress.class`
+  # The cert-manager component must be installed
+  ingress_class: ""
 
 s3:
   # Your AWS access key. Leave it empty if you want to use IAM credentials.
@@ -126,6 +130,13 @@ minio:
 # Values values are:
 # - Always
 # - IfNotPresent
+builder:
+  service:
+    # Service type default to ClusterIP, the entrance will be taken over by router.
+    type: ClusterIP
+    # If service.type is not set to NodePort, the following statement will be ignored.
+    nodePort: ""
+
 controller:
   app_pull_policy: "IfNotPresent"
   # Possible values are:
@@ -232,17 +243,6 @@ router:
       http: ""
       https: ""
       healthz: ""
-
-ingress:
-  # Experimental feature to use Kubernetes ingress instead of Workflow's drycc-router.
-  #
-  # Valid values are:
-  # - true: drycc-router will not be deployed. Workflow will not be usable until a Kubernetes ingress controller is installed.
-  # - false: drycc-router will be deployed (default).
-  enabled: false
-  # annotations:
-  #   kubernetes.io/ingress.class: nginx
-  #   kubernetes.io/tls-acme: 'true'
 
 workflow-manager:
   versions_api_url: https://versions.drycc.cc

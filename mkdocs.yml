@@ -37,7 +37,7 @@ nav:
     - Configuring Postgres: installing-workflow/configuring-postgres.md
     - Configuring the Registry: installing-workflow/configuring-registry.md
     - Chart Provenance: installing-workflow/chart-provenance.md
-    - Use Native Ingress: installing-workflow/use-native-ingress.md
+    - Use Kubernetes Ingress: installing-workflow/ingress.md
   - Users:
     - Command Line Interface: users/cli.md
     - Users and Registration: users/registration.md
