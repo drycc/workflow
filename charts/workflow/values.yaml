@@ -52,12 +52,6 @@ global:
   registry_service_port: 5555
   # Prefix for the imagepull secret created when using private registry
   secret_prefix: "private-registry"
-  # Experimental feature to use Kubernetes ingress instead of Workflow's drycc-router.
-  #
-  # Valid values are:
-  # - true: drycc-router will not be deployed. Workflow will not be usable until a Kubernetes ingress controller is installed.
-  # - false: drycc-router will be deployed (default).
-  use_ingress: false
   # If the Kubernetes cluster uses CNI
   # use_cni: true
   # Set the `listen` variable for registry-proxy's NGINX
@@ -238,6 +232,17 @@ router:
       http: ""
       https: ""
       healthz: ""
+
+ingress:
+  # Experimental feature to use Kubernetes ingress instead of Workflow's drycc-router.
+  #
+  # Valid values are:
+  # - true: drycc-router will not be deployed. Workflow will not be usable until a Kubernetes ingress controller is installed.
+  # - false: drycc-router will be deployed (default).
+  enabled: false
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: 'true'
 
 workflow-manager:
   versions_api_url: https://versions.drycc.cc
