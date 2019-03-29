@@ -1,6 +1,8 @@
 # This is the global configuration file for Workflow
 
 global:
+  # Admin email, used for each component to send email to administrator
+  email: "drycc@drycc.cc"
   # Set the storage backend
   #
   # Valid values are:
@@ -148,6 +150,8 @@ controller:
   #
   # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
   platform_domain: ""
+  # Whether cert_manager is enabled to automatically generate controller certificates
+  cert_manager_enabled: "true"
 
 database:
   # The username and password to be used by the on-cluster database.
