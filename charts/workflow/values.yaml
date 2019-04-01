@@ -71,9 +71,8 @@ global:
   # - true: all RBAC-related manifests will be installed (in case your cluster supports RBAC)
   # - false: no RBAC-related manifests will be installed
   use_rbac: true
-  # Experimental feature to use Kubernetes ingress instead of Workflow's drycc-router.
-  # If ingress_class is empty, use drycc-router
-  # Otherwise, please check `kubernetes.io/ingress.class`
+  # Use the default ingress of kubernetes, if not set
+  # Please check `kubernetes.io/ingress.class`
   # The cert-manager component must be installed
   ingress_class: ""
 
