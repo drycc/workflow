@@ -71,9 +71,12 @@ global:
   # - true: all RBAC-related manifests will be installed (in case your cluster supports RBAC)
   # - false: no RBAC-related manifests will be installed
   use_rbac: true
-  # Use the default ingress of kubernetes, if not set
   # Please check `kubernetes.io/ingress.class`
   # The cert-manager component must be installed
+  # If you want to use HTTPSEnforced or whitelist functions, you must specify:
+  # - nginx
+  # - traefik
+  # Only the above options have been supported so far
   ingress_class: ""
 
 s3:
