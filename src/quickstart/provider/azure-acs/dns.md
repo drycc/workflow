@@ -5,13 +5,13 @@ attach a Azure Load Balancer to the router component. This component is
 responsible for routing HTTP and HTTPS requests from the public internet to
 applications that are deployed and managed by Drycc Workflow.
 
-Discover the ip address assigned to the `drycc-router`, by describing the
-`drycc-router` service:
+Discover the ip address assigned to the nginx `Ingress`, by describing the
+`ingress` service:
 
 ```
-$ kubectl --namespace=drycc get service drycc-router
-NAME          CLUSTER-IP    EXTERNAL-IP    PORT(S)                            AGE
-drycc-router   10.0.60.172   13.82.148.57   80/TCP,443/TCP,2222/TCP,9090/TCP   54m
+$ kubectl --namespace=nginx-ingress get svc
+NAME              CLUSTER-IP    EXTERNAL-IP    PORT(S)                            AGE
+default-backend   10.0.60.172   13.82.148.57   80/TCP,443/TCP,2222/TCP,9090/TCP   54m
 ```
 
 If the `EXTERNAL-IP` column shows `<pending>` instead of an ip address continue

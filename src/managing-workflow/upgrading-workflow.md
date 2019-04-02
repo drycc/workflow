@@ -4,7 +4,6 @@ Drycc Workflow releases may be upgraded in-place with minimal downtime. This upg
 
 * Helm version [2.1.0 or newer](https://github.com/kubernetes/helm/releases/tag/v2.1.0)
 * Configured Off-Cluster Storage
-* A Kubernetes cluster with more than one node is required for the rolling upgrade of the drycc-router (as it is a rolling upgrade with host ports)
 
 ## Off-Cluster Storage Required
 
@@ -74,7 +73,6 @@ drycc-registry-proxy-4m3o4                1/1       Running   0          5m
 drycc-registry-proxy-no3r1                1/1       Running   0          5m
 drycc-registry-proxy-ou8is                1/1       Running   0          5m
 drycc-registry-proxy-zyajl                1/1       Running   0          5m
-drycc-router-1357759721-a3ard             1/1       Running   0          5m
 drycc-workflow-manager-2654760652-kitf9   1/1       Running   0          5m
 ```
 

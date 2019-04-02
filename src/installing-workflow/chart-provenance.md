@@ -1,6 +1,6 @@
 # Chart Provenance
 
-As of Workflow [v2.8.0](../changelogs/v2.8.0.md), Drycc has released [Kubernetes Helm][helm] charts for Workflow
+Drycc has released [Kubernetes Helm][helm] charts for Workflow
 and for each of its [components](../understanding-workflow/components.md).
 
 Helm provides tools for establishing and verifying chart integrity.  (For an overview, see the [Provenance](https://github.com/kubernetes/helm/blob/master/docs/provenance.md) doc.)  All release charts from the Drycc Workflow team are now signed using this mechanism.
@@ -49,7 +49,8 @@ Error: Failed to fetch provenance "http://charts.drycc.cc/stable/workflow/workfl
 Alternatively, the chart can also be verified at install time:
 
 ```
-$ helm install --verify drycc/workflow --namespace drycc
+$ helm install --verify drycc/workflow --namespace drycc \
+    --set controller.platform_domain=yourdomain.com
 NAME:   exiled-mink
 LAST DEPLOYED: Wed Aug  9 08:22:16 2017
 NAMESPACE: drycc

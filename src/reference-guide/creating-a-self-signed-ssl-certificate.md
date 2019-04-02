@@ -43,4 +43,4 @@ The self-signed SSL certificate is generated from the server.key private key and
 The server.crt file is your site certificate suitable for use with [Drycc's SSL endpoint][app ssl] along with the server.key private key.
 
 [app ssl]: ../applications/ssl-certificates.md
-[platform ssl]: ../managing-workflow/platform-ssl.md
+[platform ssl]: https://kubernetes.io/docs/concepts/services-networking/ingress/

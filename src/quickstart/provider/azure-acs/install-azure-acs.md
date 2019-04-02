@@ -77,7 +77,6 @@ drycc-logger-fluentd-esm60     1/1       Running   0          5m
 drycc-logger-sm8b3             1/1       Running   0          5m
 drycc-minio-4ww3t              1/1       Running   0          5m
 drycc-registry-asozo           1/1       Running   1          5m
-drycc-router-k1ond             1/1       Running   0          5m
 drycc-workflow-manager-68nu6   1/1       Running   0          5m
 ```
 

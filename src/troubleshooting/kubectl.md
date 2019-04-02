@@ -21,7 +21,6 @@ running, run:
 	drycc-monitor-stdout-novxs     0/1       Pending             0          3s
 	drycc-monitor-telegraf-dc3y3   0/1       Pending             0          2s
 	drycc-registry-5bor6           0/1       Pending             0          3s
-	drycc-router-r02sd             0/1       Pending             0          2s
 	drycc-workflow-manager-hizv6   0/1       Pending             0          2s
 
 !!! tip

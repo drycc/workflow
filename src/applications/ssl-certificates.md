@@ -129,7 +129,7 @@ configured correctly.
 To enforce all HTTP requests be redirected to HTTPS, TLS can be enforced at the router level by
 running
 
-    $ drycc tls:enable -a foo
+    $ drycc tls:force:enable -a foo
     Enabling https-only requests for foo... done
 
 Users hitting the HTTP endpoint for the application will now receive a 301 redirect to the HTTPS
@@ -137,8 +137,21 @@ endpoint.
 
 To disable enforced TLS, run
 
-    $ drycc tls:disable -a foo
+    $ drycc tls:force:disable -a foo
     Disabling https-only requests for foo... done
+
+## Automated Certificate Management
+
+With Automated Certificate Management (ACM), Drycc automatically manages TLS certificates for apps with Hobby and Professional dynos on the Common Runtime, and for apps in Private Spaces that enable the feature.
+Certificates handled by ACM automatically renew one month before they expire, and new certificates are created automatically whenever you add or remove a custom domain. All applications with paid dynos include ACM for free.
+Automated Certificate Management uses Let’s Encrypt, the free, automated, and open certificate authority for managing your application’s TLS certificates. Let’s Encrypt is run for the public benefit by the Internet Security Research Group (ISRG).
+
+To enable ACM with the following command:
+    $ drycc tls:auto:enable -a foo
+
+To disable ACM with the following command:
+    $ drycc tls:auto:disable -a foo
+
 
 ## Remove Certificate
 
@@ -183,6 +196,6 @@ remove the certificate from Drycc and re-run the `certs:add` command.
 
 [RapidSSL]: https://www.rapidssl.com/
 [buy an SSL certificate with RapidSSL]: https://www.rapidssl.com/buy-ssl/
-[platform-ssl]: ../managing-workflow/platform-ssl.md
+[platform-ssl]: https://kubernetes.io/docs/concepts/services-networking/ingress/
 [root CAs]: https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/included/
 [intermediary certificates]: http://en.wikipedia.org/wiki/Intermediate_certificate_authorities

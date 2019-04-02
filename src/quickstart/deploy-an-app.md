@@ -1,25 +1,8 @@
 ## Determine Your Host and Hostname Values
 
-For the rest of this example we will refer to a special variables called `$hostname`. Please choose one of the two methods for building your `$hostname`.
-
-#### Option 1: Standard Installation
-
-For a standard installation that includes drycc-router, you can calculate the hostname value using its public IP address and a wildcard DNS record.
-
-If your router IP is `1.1.1.1`, its `$hostname` will be `drycc.1.1.1.1.nip.io`. You can find your IP address by running:
-
-```
-kubectl --namespace=drycc describe svc drycc-router
-```
-
-If you do not have an load balancer IP, the router automatically forwards traffic from a kubernetes node to the router. In this case, use the IP of a kubernetes node and the node
-port that routes to port 80 on the controller.
-
 Drycc workflow requires a wildcard DNS record to dynamically map app names to the router.
 
-#### Option 2: Experimental Native Ingress Installation
-
-In this example, the user should already have DNS set up pointing to their known host. The `$hostname` value can be calculated by prepending `drycc.` to the value set in `controller.platform_domain`.
+User should already have DNS set up pointing to their known host. The `$hostname` value can be calculated by prepending `drycc.` to the value set in `controller.platform_domain`.
 
 ## Register an Admin User
 

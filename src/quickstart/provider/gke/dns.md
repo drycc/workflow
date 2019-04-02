@@ -5,11 +5,11 @@ attach a Google Cloud Loadbalancer to the router copmonent. This component is
 responsible for routing HTTP and HTTPS requests from the public internet to
 applications that are deployed and managed by Drycc Workflow.
 
-By describing the `drycc-router` service, you can see what IP address has been
+By describing the nginx `ingress` service, you can see what IP address has been
 allocated by Google Cloud for your Drycc Workflow cluster:
 
 ```
-$ kubectl --namespace=drycc describe svc drycc-router | grep LoadBalancer
+$ kubectl --namespace=ingress-nginx describe svc | grep LoadBalancer
 Type:                   LoadBalancer
 LoadBalancer Ingress:   104.197.125.75
 ```

@@ -1,6 +1,6 @@
-# Experimental Native Ingress
+# Specify Ingress
 
-## Install Drycc Workflow (With experimental native ingress support)
+## Install Drycc Workflow (Specify ingress)
 
 Now that Helm is installed and the repository has been added, install Workflow with a native ingress by running:
 
@@ -64,12 +64,12 @@ Now that Workflow has been deployed with the `global.ingress_class` , we will ne
 Here is an example of how to use [traefik](https://traefik.io/) as an ingress controller for Workflow. Of course, you are welcome to use any controller you wish.
 
 ```
-$ helm install stable/traefik --name ingress --namespace kube-system
+$ helm install stable/traefik --name ingress --namespace kube-system --set ssl.enabled=true
 ```
 
 ## Configure DNS
 
-The experimental ingress feature requires a user to set up a hostname, and assumes the `drycc.$host` convention.
+User must to set up a hostname, and assumes the `drycc.$host` convention.
 
 We need to point the `*.$host` record to the public IP address of your ingress controller. You can get the public IP using the following command. A wildcard entry is necessary here as apps will use the same rule after they are deployed.
 
@@ -87,6 +87,18 @@ NAME           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
 drycc-builder   10.0.165.140   40.86.182.187   2222:32488/TCP   33m
 ```
 
+If ingress-nginx is used, ports can be exposed in the following ways.
+
+```
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: tcp-services
+  namespace: ingress-nginx
+data:
+  2222: "drycc/drycc-builder:2222"
+```
+
 If we were using `drycc.cc` as a hostname, we would need to create the following A DNS records.
 
 | Name                         | Type          | Value          |
@@ -97,10 +109,5 @@ If we were using `drycc.cc` as a hostname, we would need to create the following
 Once all of the pods are in the `READY` state, and `drycc.$host` resolves to the external IP found above, Workflow is up and running!
 
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
-
-##### Feedback
-
-While this feature is experimental we welcome feedback on the issue. We would like to learn more about use cases, and user experience. Please [open a new issue](https://github.com/drycc/workflow/issues/new) for feedback.
-
 
 [builder]: ../understanding-workflow/components.md#builder

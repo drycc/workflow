@@ -13,11 +13,11 @@ Drycc Workflow will automatically provision and attach a Elastic Loadbalancer to
 component. This component is responsible for routing HTTP and HTTPS requests from the public
 internet to applications that are deployed and managed by Drycc Workflow.
 
-By describing the `drycc-router` service, you can see what IP hostname has been allocated by AWS for
+By describing the nginx `Ingress` service, you can see what IP hostname has been allocated by AWS for
 your Drycc Workflow cluster:
 
 ```
-$ kubectl --namespace=drycc describe svc drycc-router | egrep LoadBalancer
+$ kubectl --namespace=ingress-nginx describe svc | egrep LoadBalancer
 Type:                   LoadBalancer
 LoadBalancer Ingress:   abce0d48217d311e69a470643b4d9062-2074277678.us-west-1.elb.amazonaws.com
 ```

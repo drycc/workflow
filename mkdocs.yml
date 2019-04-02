@@ -32,12 +32,12 @@ nav:
     - Components: understanding-workflow/components.md
   - Installing Workflow:
     - System Requirements: installing-workflow/system-requirements.md
+    - Installing Ingress: installing-workflow/ingress.md
     - Installing Workflow: installing-workflow/index.md
     - Configuring Object Storage: installing-workflow/configuring-object-storage.md
     - Configuring Postgres: installing-workflow/configuring-postgres.md
     - Configuring the Registry: installing-workflow/configuring-registry.md
     - Chart Provenance: installing-workflow/chart-provenance.md
-    - Use Kubernetes Ingress: installing-workflow/ingress.md
   - Users:
     - Command Line Interface: users/cli.md
     - Users and Registration: users/registration.md
@@ -56,14 +56,11 @@ nav:
     - SSL Certificates: applications/ssl-certificates.md
   - Managing Workflow:
     - Tuning Component Settings: managing-workflow/tuning-component-settings.md
-    - Configuring Load Balancers: managing-workflow/configuring-load-balancers.md
     - Configuring DNS: managing-workflow/configuring-dns.md
     - Deploy Hooks: managing-workflow/deploy-hooks.md
     - Platform Logging: managing-workflow/platform-logging.md
     - Platform Monitoring: managing-workflow/platform-monitoring.md
     - Production Deployments: managing-workflow/production-deployments.md
-    - Security Considerations: managing-workflow/security-considerations.md
-    - Platform SSL: managing-workflow/platform-ssl.md
     - Upgrading Workflow: managing-workflow/upgrading-workflow.md
     - Extending Workflow: managing-workflow/extending-workflow.md
   - Troubleshooting:
@@ -85,7 +82,6 @@ nav:
     - Conduct: contributing/conduct.md
     - Maintainers: contributing/maintainers.md
   - Reference Guide:
-    - Migrating from Drycc v1: reference-guide/migration.md
     - Creating a Self-Signed SSL Certificate: reference-guide/creating-a-self-signed-ssl-certificate.md
     - Terms: reference-guide/terms.md
     # FIXME (bacongobbler): our custom drycc theme only supports a toctree depth of 2 due to css issues
@@ -94,29 +90,8 @@ nav:
     - Controller API v2.2: reference-guide/controller-api/v2.2.md
     - Controller API v2.3: reference-guide/controller-api/v2.3.md
   - Changelogs:
-    - v2.20.0: changelogs/v2.20.0.md
-    - v2.19.0: changelogs/v2.19.0.md
-    - v2.17.0: changelogs/v2.17.0.md
-    - v2.16.0: changelogs/v2.16.0.md
-    - v2.15.0: changelogs/v2.15.0.md
-    - v2.14.0: changelogs/v2.14.0.md
-    - v2.13.0: changelogs/v2.13.0.md
-    - v2.12.0: changelogs/v2.12.0.md
-    - v2.11.0: changelogs/v2.11.0.md
-    - v2.10.0: changelogs/v2.10.0.md
-    - v2.9.1: changelogs/v2.9.1.md
-    - v2.9.0: changelogs/v2.9.0.md
-    - v2.8.0: changelogs/v2.8.0.md
-    - v2.7.0: changelogs/v2.7.0.md
-    - v2.6.0: changelogs/v2.6.0.md
-    - v2.5.0: changelogs/v2.5.0.md
-    - v2.4.2: changelogs/v2.4.2.md
-    - v2.4.1: changelogs/v2.4.1.md
-    - v2.4.0: changelogs/v2.4.0.md
-    - v2.3.0: changelogs/v2.3.0.md
-    - v2.2.0: changelogs/v2.2.0.md
-    - v2.1.0: changelogs/v2.1.0.md
-    - v2.0.0: changelogs/v2.0.0.md
+    - v1.1.0: changelogs/v1.1.0.md
+    - v1.0.1: changelogs/v1.0.1.md
 theme:
   name: null
   custom_dir: 'themes/drycc'

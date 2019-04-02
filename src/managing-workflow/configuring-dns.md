@@ -23,7 +23,7 @@ DNS for any applications using a "custom domain" (a fully-qualified domain name 
 Although it is dependent upon your distribution of Kubernetes and your underlying infrastructure, in many cases, the IP(s) or existing fully-qualified domain name of a load balancer can be determined directly using the `kubectl` tool:
 
 ```
-$ kubectl --namespace=drycc describe service drycc-router | grep "LoadBalancer Ingress"
+$ kubectl --namespace=ingress-nginx describe service | grep "LoadBalancer Ingress"
 LoadBalancer Ingress:	a493e4e58ea0511e5bb390686bc85da3-1558404688.us-west-2.elb.amazonaws.com
 ```
 
@@ -40,7 +40,7 @@ In general, for any IP, `a.b.c.d`, the fully-qualified domain name `any-subdomai
 To begin, find the node(s) hosting router instances using `kubectl`:
 
 ```
-$ kubectl --namespace=drycc describe pod drycc-router | grep Node
+$ kubectl --namespace=ingress-nginx describe pod | grep Node
 Node:       ip-10-0-0-199.us-west-2.compute.internal/10.0.0.199
 Node:       ip-10-0-0-198.us-west-2.compute.internal/10.0.0.198
 ```
@@ -64,7 +64,7 @@ In this section, we'll describe how to configure Google Cloud DNS for routing yo
 
 We'll assume the following in this section:
 
-- Your Drycc router service has a load balancer in front of it.
+- Your Ingress service has a load balancer in front of it.
   - The load balancer need not be cloud based, it just needs to provide a stable IP address or a stable domain name
 - You have the `mystuff.com` domain name registered with a registrar
   - Replace your domain name with `mystuff.com` in the instructions to follow
@@ -73,7 +73,7 @@ We'll assume the following in this section:
 Here are the steps for configuring cloud DNS to route to your drycc cluster:
 
 1. Get the load balancer IP or domain name
-  - If you are on Google Container Engine, you can run `kubectl get svc drycc-router` and look for the `LoadBalancer Ingress` column to get the IP address
+  - If you are on Google Container Engine, you can run `kubectl get svc -n ingress-nginx` and look for the `LoadBalancer Ingress` column to get the IP address
 2. Create a new Cloud DNS Zone (on the console: `Networking` => `Cloud DNS`, then click on `Create Zone`)
 3. Name your zone, and set the DNS name to `mystuff.com.` (note the `.` at the end
 4. Click on the `Create` button
@@ -126,6 +126,5 @@ Since such requests require authentication, a response such as the following sho
 ```
 
 [AWS recommends]: https://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/using-domain-names-with-elb.html
-[load balancer]: configuring-load-balancers.md
 [xip]: http://xip.io/
 [cloud dns]: https://cloud.google.com/dns/docs

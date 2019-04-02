@@ -48,19 +48,6 @@ Please see the following documentation to learn about disabling Grafana signups:
 
  - [Customizing Monitor][]
 
-
-## Enable TLS
-
-Using TLS to encrypt traffic (including Workflow client traffic, such as login credentials) is
-crucial. See [Platform SSL][] for the platform.
-
-## Scale Routers
-
-If all router pods in your cluster become unavailable then you will be unable to access the workflow API or
-any deployed applications. To reduce the potential of this happening it is recommended that you scale the
-drycc-router Deployment to run more than one router pod. This can be accomplished by running
-`kubectl --namespace=drycc scale --replicas=2 deployment/drycc-router`
-
 ## Using on-cluster registry with CNI
 
 If you are using [CNI](https://github.com/containernetworking/cni) for managing container network, you cannot use `hostPort` notation due to [this issue](https://github.com/kubernetes/kubernetes/issues/23920).
@@ -86,5 +73,4 @@ RBAC support was announced in Kubernetes-1.5 and is enabled by default if:
 [minio]: ../understanding-workflow/components.md#minio
 [platform ssl]: platform-ssl.md
 [registry]: ../understanding-workflow/components.md#registry
-[security considerations]: security-considerations.md
 [helm specific permissions]: ../installing-workflow/index.md#check-your-authorization

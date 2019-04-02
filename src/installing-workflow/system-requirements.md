@@ -8,6 +8,13 @@ Drycc Workflow requires Kubernetes v1.3.4 or later, or Kubernetes v1.6.2 or late
 and v1.6.1 have [a bug](https://github.com/kubernetes/kubernetes/pull/44406) that can prevent
 `git push drycc master` from completing successfully.
 
+## Components Requirements
+
+Drycc uses ingress as a routing implementation, so you have to choose an ingress.
+We recommend using [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress) or [traefik-ingress](https://github.com/helm/charts/tree/master/stable/traefik), which we have adapted to whitelist and force TLS functions.
+
+Workflow supports the use of ACME to manage automatic certificates, [cert-manager](https://github.com/helm/charts/tree/master/stable/cert-manager) is also one of the necessary components.
+
 ## Storage Requirements
 
 A variety of Drycc Workflow components rely on an object storage system to do their work, including storing application

@@ -48,13 +48,13 @@ More rigorous installations would benefit from using outside sources for the fol
 * [Redis](../managing-workflow/platform-logging.md#configuring-off-cluster-redis) - Such as AWS Elasticache
 * [InfluxDB](../managing-workflow/platform-monitoring.md#configuring-off-cluster-influxdb) and [Grafana](../managing-workflow/platform-monitoring.md#off-cluster-grafana)
 
-#### (Experimental) Kubernetes Native Ingress
+#### Ingress
 
-Workflow now offers [experimental native ingress](ingress.md) to take advantage of native Kubernetes routing. Any compatible Kubernetes ingress controller can be used in place of Workflow's nginx-based drycc-router. Follow [this guide](ingress.md) to enable experimental native ingress.
+Now, workflow requires that ingress and cert-manager must be installed. Any compatible Kubernetes entry controller can be used, but only ingress-nginx and ingress-traefik currently support enforced HTTPS and whitelist. Enable entries in accordance with [this guide] (entress.md).
 
 ## Add the Drycc Chart Repository
 
-The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc` command.
+The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc --set controller.platform_domain=yourdomain.com` command.
 
 Add this repository to Helm:
 
@@ -67,7 +67,9 @@ $ helm repo add drycc http://charts.drycc.cc/stable
 Now that Helm is installed and the repository has been added, install Workflow by running:
 
 ```
-$ helm install drycc/workflow --namespace drycc
+$ helm install --namespace drycc \
+    --set controller.platform_domain=drycc.cc \
+    drycc/workflow
 ```
 
 Helm will install a variety of Kubernetes resources in the `drycc` namespace.
@@ -105,7 +107,6 @@ drycc-monitor-telegraf-wmcmn              1/1       Running   1          4m
 drycc-nsqd-3597503299-6mn2x               1/1       Running   0          4m
 drycc-registry-756475849-lwc6b            1/1       Running   1          4m
 drycc-registry-proxy-96c4p                1/1       Running   0          4m
-drycc-router-2126433040-6sl6z             1/1       Running   0          4m
 drycc-workflow-manager-2528409207-jkz2r   1/1       Running   0          4m
 ```
 
