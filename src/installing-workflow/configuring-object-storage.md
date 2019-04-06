@@ -29,7 +29,7 @@ If you are using AWS S3 and your Kubernetes nodes are configured with appropriat
 
 ### Step 3: Add Drycc Repo
 
-If you haven't already added the Helm repo, do so with `helm repo add drycc http://charts.drycc.cc/stable`
+If you haven't already added the Helm repo, do so with `helm repo add drycc https://charts.drycc.cc/stable`
 
 ### Step 4: Configure Workflow Chart
 

@@ -19,7 +19,7 @@ The Drycc Chart Repository contains everything needed to install Drycc Workflow 
 Add this repository to Helm:
 
 ```
-$ helm repo add drycc http://charts.drycc.cc/stable
+$ helm repo add drycc https://charts.drycc.cc/stable
 ```
 
 ## Install Drycc Workflow
