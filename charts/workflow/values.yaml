@@ -47,8 +47,6 @@ global:
   # Valid values are:
   # - on-cluster: Run registry within the Kubernetes cluster
   # - off-cluster: Use registry outside the Kubernetes cluster (example: dockerhub,quay.io,self-hosted)
-  # - ecr: Use Amazon's ECR
-  # - gcr: Use Google's GCR
   registry_location: "on-cluster"
   # The host port to which registry proxy binds to
   registry_service_port: 5555
