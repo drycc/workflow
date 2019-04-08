@@ -151,10 +151,10 @@ and set `BUILDPACK_URL` to the URL:
 
 Which way to build a project conforms to the following principles:
 
-- If Dockerfile exists in the project, the builder uses `dockerbuilder`
-- If Procfile exists in the project, the builder uses `slugbuilder`
-- If both exist, dockerfile is used by default
-- You can also set the `DRYCC_BUILDER` to determine which builder to use.
+- If Dockerfile exists in the project, the stack uses `container`
+- If Procfile exists in the project, the stack uses `heroku-18`
+- If both exist, `container` is used by default
+- You can also set the `DRYCC_STACK` to determine which stack to use.
 
 
 [pods]: http://kubernetes.io/v1.1/docs/user-guide/pods.html
