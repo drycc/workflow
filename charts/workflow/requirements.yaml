@@ -41,9 +41,6 @@ dependencies:
   - name: registry-proxy
     version: <registry-proxy-tag>
     repository: https://charts.drycc.cc/stable/registry-proxy
-  - name: registry-token-refresher
-    version: <registry-token-refresher-tag>
-    repository: https://charts.drycc.cc/stable/registry-token-refresher
   - name: workflow-manager
     version: <workflow-manager-tag>
     repository: https://charts.drycc.cc/stable/workflow-manager

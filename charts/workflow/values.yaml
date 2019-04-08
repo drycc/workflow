@@ -204,27 +204,11 @@ monitor:
       enabled: false # Set to true to enable persistence
       size: 20Gi # PVC size
 
-registry-token-refresher:
-  # Time in minutes after which the token should be refreshed.
-  # Leave it empty to use the default provider time.
-  token_refresh_time: ""
-  off_cluster_registry:
-    hostname: ""
-    organization: ""
-    username: ""
-    password: ""
-  ecr:
-    # Your AWS access key. Leave it empty if you want to use IAM credentials.
-    accesskey: ""
-    # Your AWS secret key. Leave it empty if you want to use IAM credentials.
-    secretkey: ""
-    # Any S3 region
-    region: "us-west-2"
-    registryid: ""
-    hostname: ""
-  gcr:
-    key_json: <base64-encoded JSON data>
-    hostname: ""
+registry:
+  hostname: ""
+  organization: ""
+  username: ""
+  password: ""
 
 router:
   dhparam: ""
