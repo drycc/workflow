@@ -48,8 +48,10 @@ global:
   # - on-cluster: Run registry within the Kubernetes cluster
   # - off-cluster: Use registry outside the Kubernetes cluster (example: dockerhub,quay.io,self-hosted)
   registry_location: "on-cluster"
+  # Prefix for the imagepull secret created when using private registry
+  registry_secret_prefix: "private-registry"
   # The host port to which registry proxy binds to
-  registry_service_port: 5555
+  registry_proxy_port: 5555
   # If the Kubernetes cluster uses CNI
   # use_cni: true
   # Set the `listen` variable for registry-proxy's NGINX
