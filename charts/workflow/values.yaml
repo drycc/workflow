@@ -51,7 +51,7 @@ global:
   # The host port to which registry proxy binds to
   registry_service_port: 5555
   # Prefix for the imagepull secret created when using private registry
-  secret_prefix: "private-registry"
+  registry_secret_prefix: "private-registry"
   # If the Kubernetes cluster uses CNI
   # use_cni: true
   # Set the `listen` variable for registry-proxy's NGINX
