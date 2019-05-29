@@ -2,8 +2,6 @@
 
 **Drycc Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
 
-Drycc Workflow is the second major release (v2) of the Drycc PaaS. If you are looking for the CoreOS-based PaaS visit [https://github.com/drycc/drycc](https://github.com/drycc/drycc).
-
 To **get started** with **Drycc Workflow** please read the [Quick Start Guide](https://drycc.cc/docs/workflow/quickstart/).
 
 Visit [https://drycc.cc](https://drycc.cc) for more information on [why you should use Drycc Workflow](https://drycc.cc/why-drycc/) or [learn about its features](https://drycc.cc/how-it-works/).
@@ -22,7 +20,6 @@ Please see below for links and descriptions of each component:
 - [registry](https://github.com/drycc/registry) - The Docker registry
 - [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
 - [monitor](https://github.com/drycc/monitor) - The platform monitoring components
-- [router](https://github.com/drycc/router) - The HTTP/s edge router
 - [minio](https://github.com/drycc/minio) - The in-cluster, ephemeral, development-only object storage system
 - [nsq](https://github.com/drycc/nsq) - Realtime distributed messaging platform
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`
