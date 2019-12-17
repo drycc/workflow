@@ -48,7 +48,7 @@ Builder currently supports both buildpack and Dockerfile based builds.
 
 For Buildpack-based deploys, the builder component will launch a one-shot Pod
 in the `drycc` namespace. This pod runs `slugbuilder` component which handles
-default and custom buildpacks (specified by `BUILDPACK_URL`). The "compiled"
+default and custom buildpacks (specified by `.buildpacks`). The "compiled"
 application results in a slug, consisting of your application code and all of
 its dependencies as determined by the buildpack. The slug is pushed to the
 cluster-configured object storage for later execution. For more information
