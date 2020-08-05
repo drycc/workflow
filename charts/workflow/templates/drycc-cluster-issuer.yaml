@@ -1,0 +1,15 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metadata:
+  name: drycc-cluster-issuer
+spec:
+  acme:
+    # The ACME server URL
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # Email address used for ACME registration
+    email: "{{ .Values.global.email }}"
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: drycc-cluster-issuer
+    # Enable HTTP01 validations
+    http01: {}
