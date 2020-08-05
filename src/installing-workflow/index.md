@@ -107,7 +107,6 @@ drycc-monitor-telegraf-wmcmn              1/1       Running   1          4m
 drycc-nsqd-3597503299-6mn2x               1/1       Running   0          4m
 drycc-registry-756475849-lwc6b            1/1       Running   1          4m
 drycc-registry-proxy-96c4p                1/1       Running   0          4m
-drycc-workflow-manager-2528409207-jkz2r   1/1       Running   0          4m
 ```
 
 Once all of the pods are in the `READY` state, Drycc Workflow is up and running!

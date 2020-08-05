@@ -73,7 +73,6 @@ drycc-registry-proxy-4m3o4                1/1       Running   0          5m
 drycc-registry-proxy-no3r1                1/1       Running   0          5m
 drycc-registry-proxy-ou8is                1/1       Running   0          5m
 drycc-registry-proxy-zyajl                1/1       Running   0          5m
-drycc-workflow-manager-2654760652-kitf9   1/1       Running   0          5m
 ```
 
 ### Step 3: Upgrade the Drycc Client

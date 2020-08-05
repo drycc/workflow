@@ -150,17 +150,6 @@ provides a robust engine for creating dashboards on top of timeseries data. Work
 dashboards out of the box for monitoring Drycc Workflow and Kubernetes. The dashboards can be used
 as a starting point for creating more custom dashboards to suit a user's needs.
 
-## Workflow Manager
-
-**Project Location:** [drycc/workflow-manager](https://github.com/drycc/workflow-manager)
-
-`Workflow Manager` will regularly check your cluster against the latest stable
-components. If components are missing due to failure or are simply out of date,
-Workflow operators will know at a glance. By default, this submits component
-and version information to Drycc' version service. If you prefer, you may
-disable the function by setting `WORKFLOW_MANAGER_CHECKVERSIONS` to false in
-Workflow Manager's Deployment.
-
 ## See Also
 
 * [Workflow Concepts][concepts]

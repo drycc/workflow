@@ -63,7 +63,7 @@ Setting                                         | Description
 ----------------------------------------------- | ---------------------------------
 REGISTRATION_MODE                               | set registration to "enabled", "disabled", or "admin_only" (default: "admin_only")
 GUNICORN_WORKERS                                | number of [gunicorn][] workers spawned to process requests (default: CPU cores * 4 + 1)
-RESERVED_NAMES                                  | a comma-separated list of names which applications cannot reserve for routing (default: "drycc, drycc-builder, drycc-workflow-manager")
+RESERVED_NAMES                                  | a comma-separated list of names which applications cannot reserve for routing (default: "drycc, drycc-builder")
 SLUGRUNNER_IMAGE_NAME                           | the image used to run buildpack application slugs (default: "quay.io/drycc/slugrunner:canary")
 DRYCC_DEPLOY_HOOK_URLS                           | a comma-separated list of URLs to send [deploy hooks][] to.
 DRYCC_DEPLOY_HOOK_SECRET_KEY                     | a private key used to compute the HMAC signature for deploy hooks.
@@ -202,5 +202,3 @@ API_VERSION       | The version number Workflow Manager sends to the versions AP
 [pull-policy]: http://kubernetes.io/docs/user-guide/images/
 [registry]: ../understanding-workflow/components.md#registry
 [ReplicationControllers]: http://kubernetes.io/docs/user-guide/replication-controller/
-[router]: ../understanding-workflow/components.md#router
-[workflow manager]: ../understanding-workflow/components.md#workflow-manager

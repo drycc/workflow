@@ -231,7 +231,3 @@ router:
       http: ""
       https: ""
       healthz: ""
-
-workflow-manager:
-  versions_api_url: https://versions.drycc.cc
-  doctor_api_url: https://doctor.drycc.cc
