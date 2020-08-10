@@ -1,4 +1,4 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
   name: drycc-cluster-issuer
@@ -12,4 +12,8 @@ spec:
     privateKeySecretRef:
       name: drycc-cluster-issuer
     # Enable HTTP01 validations
-    http01: {}
+    # http01: {}
+    solvers:
+      - http01:
+        ingress:
+          class: "{{ .Values.global.ingress_class }}"
