@@ -14,6 +14,6 @@ spec:
     # Enable HTTP01 validations
     # http01: {}
     solvers:
-      - http01:
+    - http01:
         ingress:
           class: "{{ .Values.global.ingress_class }}"
