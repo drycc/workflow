@@ -50,7 +50,7 @@ Alternatively, the chart can also be verified at install time:
 
 ```
 $ helm install --verify drycc/workflow --namespace drycc \
-    --set controller.platform_domain=yourdomain.com
+    --set global.platform_domain=yourdomain.com
 NAME:   exiled-mink
 LAST DEPLOYED: Wed Aug  9 08:22:16 2017
 NAMESPACE: drycc

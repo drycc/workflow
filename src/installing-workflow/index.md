@@ -54,7 +54,7 @@ Now, workflow requires that ingress and cert-manager must be installed. Any comp
 
 ## Add the Drycc Chart Repository
 
-The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc --set controller.platform_domain=yourdomain.com` command.
+The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc --set global.platform_domain=yourdomain.com` command.
 
 Add this repository to Helm:
 
@@ -68,7 +68,7 @@ Now that Helm is installed and the repository has been added, install Workflow b
 
 ```
 $ helm install --namespace drycc \
-    --set controller.platform_domain=drycc.cc \
+    --set global.platform_domain=drycc.cc \
     drycc/workflow
 ```
 

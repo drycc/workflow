@@ -7,7 +7,7 @@ Now that Helm is installed and the repository has been added, install Workflow w
 ```
 $ helm install drycc/workflow --namespace drycc \
     --set global.ingress_class=nginx \
-    --set controller.platform_domain=drycc.cc \
+    --set global.platform_domain=drycc.cc \
     --set builder.service.type=LoadBalancer
 ```
 
@@ -15,14 +15,14 @@ Of course, if you deploy it on a bare machine, you probably don't have Load Bala
 ```
 $ helm install drycc/workflow --namespace drycc \
     --set global.ingress_class=nginx \
-    --set controller.platform_domain=drycc.cc \
+    --set global.platform_domain=drycc.cc \
     --set builder.service.type=NodePort \
     --set builder.service.nodePort=32222
 ``` 
 
 If you want to use Load Balancer on a bare machine, you can look at [metallb](https://github.com/danderson/metallb)
 
-Where `controller.platform_domain` is a **required** parameter that is traditionally not required for Workflow that is explained in the next section. In this example we are using `drycc.cc` for `$hostname`.
+Where `global.platform_domain` is a **required** parameter that is traditionally not required for Workflow that is explained in the next section. In this example we are using `drycc.cc` for `$hostname`.
  
 Helm will install a variety of Kubernetes resources in the `drycc` namespace.
 Wait for the pods that Helm launched to be ready. Monitor their status by running:
