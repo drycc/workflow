@@ -76,6 +76,8 @@ global:
   # - traefik
   # Only the above options have been supported so far
   ingress_class: ""
+  # Whether cert_manager is enabled to automatically generate drycc certificates
+  cert_manager_enabled: "true"
 
 s3:
   # Your AWS access key. Leave it empty if you want to use IAM credentials.
@@ -150,8 +152,6 @@ controller:
   #
   # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
   platform_domain: ""
-  # Whether cert_manager is enabled to automatically generate controller certificates
-  cert_manager_enabled: "true"
 
 database:
   # The username and password to be used by the on-cluster database.
