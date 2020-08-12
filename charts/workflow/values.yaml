@@ -76,6 +76,10 @@ global:
   # - traefik
   # Only the above options have been supported so far
   ingress_class: ""
+  # The publicly resolvable hostname to build your cluster with.
+  #
+  # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
+  platform_domain: ""
   # Whether cert_manager is enabled to automatically generate drycc certificates
   cert_manager_enabled: "true"
 
@@ -148,10 +152,6 @@ controller:
   # disabled - turns off open registration
   # admin_only - allows for registration by an admin only.
   registration_mode: "admin_only"
-  # The publicly resolvable hostname to build your cluster with.
-  #
-  # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
-  platform_domain: ""
 
 database:
   # The username and password to be used by the on-cluster database.
