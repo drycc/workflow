@@ -98,22 +98,6 @@ From drycc-controller.local:peachy-waxworks
  * [new branch]      master     -> drycc/master
 ```
 
-
-## Application Maintenance
-
-Maintenance mode for applications is useful to perform certain migrations or upgrades during which we don't want to serve client requests. Drycc Workflow supports maintenance mode for an app during which the access to the app is blocked. Blocking access to the application means all the requests to the app are served with an error code of `503` and a static maintenance page by the router but the app will still be running and one-off commands can still be run. Currently the maintenance page is not configurable and is present as part of the router component.
-
-To enable maintenance mode for app, use `drycc maintenance`:
-
-    $ drycc maintenance:on
-    Enabling maintenance for drafty-zaniness... done
-
-This will make the [router][] answer all requests to the application with a 503, although the app is still running. To disable maintenance mode:
-
-    $ drycc maintenance:off
-    Disabling maintenance for drafty-zaniness... done
-
-
 ## Application Troubleshooting
 
 Applications deployed on Drycc Workflow [treat logs as event streams][]. Drycc Workflow aggregates `stdout` and `stderr`

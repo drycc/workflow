@@ -22,7 +22,6 @@ Please see below for links and descriptions of each component:
 - [monitor](https://github.com/drycc/monitor) - The platform monitoring components
 - [minio](https://github.com/drycc/minio) - The in-cluster, ephemeral, development-only object storage system
 - [nsq](https://github.com/drycc/nsq) - Realtime distributed messaging platform
-- [maintenance-proxy](https://github.com/drycc/maintenance-proxy) - Workflow maintenance proxy
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`
 
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Working on Documentation" section below and [submit a pull request][prs].

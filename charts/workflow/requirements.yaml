@@ -41,6 +41,3 @@ dependencies:
   - name: registry-proxy
     version: <registry-proxy-tag>
     repository: https://charts.drycc.cc/stable/registry-proxy
-  - name: maintenance-proxy
-    version: <maintenance-proxy-tag>
-    repository: https://charts.drycc.cc/stable/maintenance-proxy
