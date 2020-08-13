@@ -76,7 +76,7 @@ If you wish to have persistence for Grafana you can set `enabled` to `true` in t
 If you wish to provide your own Grafana instance you can set `grafana_location` in the `values.yaml` file before running `helm install`.
 
 ## [InfluxDB](https://docs.influxdata.com/influxdb)
-InfluxDB writes data to the host disk; however, if the InfluxDB pod dies and comes back on another host, the data will not be recovered. The InfluxDB Admin UI is also exposed through the router allowing users to access the query engine by going to `influx.mydomain.com`. You will need to configure where to find the `influx-api` endpoint by clicking the "gear" icon at the top right and changing the host to `influxapi.mydomain.com` and port to `80`.
+InfluxDB writes data to the host disk; however, if the InfluxDB pod dies and comes back on another host, the data will not be recovered. The InfluxDB Admin UI is also exposed through the router allowing users to access the query engine by going to `influx.mydomain.com`. You will need to configure where to find the `influx-api` endpoint by clicking the "gear" icon at the top right and changing the host to `influx-api.mydomain.com` and port to `80`.
 
 ### On Cluster Persistence
 If you wish to have persistence for InfluxDB you can set `enabled` to `true` in the `values.yaml` file before running `helm install`.
