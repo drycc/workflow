@@ -128,6 +128,22 @@ minio:
   builder_bucket: "0fad60517a9e4225a07d77d7b9b58629"
   registry_bucket: "c2da53f11c7a455db35797c3ba625d80"
   database_bucket: "e95eb5c54c3a4047abe5269a68fa9a67"
+  # Configure the following ONLY if you want persistence for on-cluster minio
+  persistence:
+    enabled: false # Set to true to enable persistence
+    accessMode: ReadWriteOnce
+    size: 5Gi # PVC size
+    ## minio data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## Storage class of PV to bind. By default it looks for standard storage class.
+    ## If the PV uses a different storage class, specify that here.
+    storageClass: ""
+    volumeName: ""
 
 # Set the default (global) way of how Application (your own) images are
 # pulled from within the Controller.
@@ -190,7 +206,19 @@ monitor:
     # GCP PDs and EBS volumes are supported only
     persistence:
       enabled: false # Set to true to enable persistence
+      accessMode: ReadWriteOnce
       size: 5Gi # PVC size
+      ## influxdb data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      ## Storage class of PV to bind. By default it looks for standard storage class.
+      ## If the PV uses a different storage class, specify that here.
+      storageClass: default
+      volumeName: ""
 
   influxdb:
     # Configure the following ONLY if using an off-cluster Influx database
@@ -202,7 +230,19 @@ monitor:
     # GCP PDs and EBS volumes are supported only
     persistence:
       enabled: false # Set to true to enable persistence
-      size: 20Gi # PVC size
+      accessMode: ReadWriteOnce
+      size: 5Gi # PVC size
+      ## influxdb data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      ## Storage class of PV to bind. By default it looks for standard storage class.
+      ## If the PV uses a different storage class, specify that here.
+      storageClass: ""
+      volumeName: ""
 
 registry:
   hostname: ""
