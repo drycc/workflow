@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
   name: drycc-cluster-issuer
-  namespace: {{ .Release.Namespace }}
 spec:
   acme:
     # The ACME server URL
