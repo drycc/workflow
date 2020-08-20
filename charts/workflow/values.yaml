@@ -182,6 +182,11 @@ database:
     host: "database host"
     port: "database port"
 
+nsqd:
+  replicas: 1
+  tcp_port: 4150
+  http_port: 4151
+
 redis:
   # Configure the following ONLY if using an off-cluster Redis instance for logger
   db: "0"
@@ -249,25 +254,3 @@ registry:
   organization: ""
   username: ""
   password: ""
-
-router:
-  dhparam: ""
-  # Any custom router annotations(https://github.com/drycc/router#annotations)
-  # which need to be applied can be specified as key-value pairs under "deployment_annotations"
-  deployment_annotations:
-    #<example-key>: <example-value>
-
-  # Any custom annotations for k8s services like http://kubernetes.io/docs/user-guide/services/#ssl-support-on-aws
-  # which need to be applied can be specified as key-value pairs under "service_annotations"
-  service_annotations:
-    #<example-key>: <example-value>
-
-  service:
-    # Service type default to LoadBalancer
-    type: LoadBalancer
-    # If service.type is not set to NodePort, the following statement will be ignored.
-    nodePort:
-      builder: ""
-      http: ""
-      https: ""
-      healthz: ""
