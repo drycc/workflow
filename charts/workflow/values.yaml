@@ -168,6 +168,8 @@ controller:
   # disabled - turns off open registration
   # admin_only - allows for registration by an admin only.
   registration_mode: "admin_only"
+  # Set storageClassName, It is used for application mount.
+  app_storage_class: ""
 
 database:
   # The username and password to be used by the on-cluster database.
