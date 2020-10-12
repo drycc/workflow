@@ -50,6 +50,8 @@ nav:
     - Managing App Processes: applications/managing-app-processes.md
     - Managing App Configuration: applications/managing-app-configuration.md
     - Managing App Lifecycle: applications/managing-app-lifecycle.md
+    - Managing App Volumes: applications/managing-app-volumes.md
+    - Managing App Resources: applications/managing-app-resources.md
     - Inter-app Communication: applications/inter-app-communication.md
     - Resource Limits: applications/managing-resource-limits.md
     - Domains and Routing: applications/domains-and-routing.md
