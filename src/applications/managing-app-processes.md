@@ -90,9 +90,9 @@ $ drycc scale sleeper=1 -a steely-mainsail
 Scaling processes... but first, coffee!
 done in 0s
 === steely-mainsail Processes
---- cmd:
+--- cmd (started): 1
 steely-mainsail-cmd-3291896318-nyrim up (v3)
---- sleeper:
+--- sleeper (started): 1
 steely-mainsail-sleeper-3291896318-oq1jr up (v3)
 ```
 
@@ -107,8 +107,9 @@ $ drycc scale sleeper=0 -a steely-mainsail
 Scaling processes... but first, coffee!
 done in 3s
 === steely-mainsail Processes
---- cmd:
+--- cmd (started): 1
 steely-mainsail-cmd-3291896318-nyrim up (v3)
+--- sleeper (started): 0
 ```
 
 ## Scaling Processes
@@ -121,7 +122,7 @@ $ drycc scale cmd=5 -a iciest-waggoner
 Scaling processes... but first, coffee!
 done in 3s
 === iciest-waggoner Processes
---- cmd:
+--- cmd (started): 5
 iciest-waggoner-web-3291896318-09j0o up (v2)
 iciest-waggoner-web-3291896318-3r7kp up (v2)
 iciest-waggoner-web-3291896318-gc4xv up (v2)
@@ -140,13 +141,13 @@ $ drycc scale web=5
 Scaling processes... but first, coffee!
 done in 4s
 === scenic-icehouse Processes
---- web:
+--- web (started): 5
 scenic-icehouse-web-3291896318-7lord up (v2)
 scenic-icehouse-web-3291896318-jn957 up (v2)
 scenic-icehouse-web-3291896318-rsekj up (v2)
 scenic-icehouse-web-3291896318-vwhnh up (v2)
 scenic-icehouse-web-3291896318-vokg7 up (v2)
---- background:
+--- background (started): 1
 scenic-icehouse-web-3291896318-background-yf8kh up (v2)
 ```
 
@@ -164,12 +165,53 @@ $ drycc scale web=3
 Scaling processes... but first, coffee!
 done in 1s
 === scenic-icehouse Processes
---- background:
+--- background (started): 1
 scenic-icehouse-web-3291896318-background-yf8kh up (v2)
---- web:
+--- web (started): 3
 scenic-icehouse-web-3291896318-7lord up (v2)
 scenic-icehouse-web-3291896318-rsekj up (v2)
 scenic-icehouse-web-3291896318-vokg7 up (v2)
+```
+
+## Stop or Start Processes
+
+Applications deployed on Drycc Workflow,we can stop or start processes via the [process model][].
+Use `drycc ps:stop` to stop the processes, and `drycc ps:start` to start the processes
+
+```
+$ drycc ps -a echoed-lollipop
+===  echoed-lollipop Processes
+--- background (started): 1
+echoed-lollipop-background-794c749dc4-yf8kh up (v2)
+--- web (started): 3
+echoed-lollipop-web-67cfc78bdc-7lord up (v2)
+echoed-lollipop-web-67cfc78bdc-rsekj up (v2)
+echoed-lollipop-web-67cfc78bdc-vokg7 up (v2)
+```
+
+In this example, we are stopping the process type `background` and `web`.
+
+```
+$ drycc ps:stop background web -a echoed-lollipop
+Scaling processes... but first, coffee!
+done in 3s
+=== echoed-lollipop Processes
+--- background (stopped): 1
+--- web (stopped): 3
+```
+
+In this example, we are starting the process `web`, and keep the process `background` stopping.
+
+```
+$ drycc ps:start web
+Scaling processes... but first, coffee!
+done in 4s
+=== echoed-lollipop Processes
+--- background (stopped): 1
+--- web (started): 3
+echoed-lollipop-web-67cfc78bdc-4z2hw up (v2)
+echoed-lollipop-web-67cfc78bdc-fdx4n up (v2)
+echoed-lollipop-web-67cfc78bdc-h2vxf up (v2)
 ```
 
 ## Autoscale
@@ -232,17 +274,17 @@ Kubernetes to terminate the old process and launch a new one in its place.
 ```
 $ drycc ps
 === scenic-icehouse Processes
---- web:
+--- web (started): 3
 scenic-icehouse-web-3291896318-7lord up (v2)
 scenic-icehouse-web-3291896318-rsekj up (v2)
 scenic-icehouse-web-3291896318-vokg7 up (v2)
---- background:
+--- background (started): 1
 scenic-icehouse-background-3291896318-yf8kh up (v2)
 $ drycc ps:restart scenic-icehouse-background-3291896318-yf8kh
 Restarting processes... but first, coffee!
 done in 6s
 === scenic-icehouse Processes
---- background:
+--- background (started): 1
 scenic-icehouse-background-3291896318-yd87g up (v2)
 ```
 

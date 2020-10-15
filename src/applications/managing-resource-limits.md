@@ -105,7 +105,7 @@ You can verify the CPU and memory limits by inspecting the application process P
 ```
 $ drycc ps
 === indoor-whitecap Processes
---- web:
+--- web (started): 1
 indoor-whitecap-v14-web-8slcj up (v14)
 $ kubectl --namespace=indoor-whitecap describe po indoor-whitecap-v14-web-8slcj
 Name:       indoor-whitecap-v14-web-8slcj
