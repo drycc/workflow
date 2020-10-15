@@ -95,7 +95,7 @@ $ drycc scale cmd=2 -a proper-barbecue
 Scaling processes... but first, coffee!
 done in 36s
 === proper-barbecue Processes
---- cmd:
+--- cmd (started): 2
 proper-barbecue-v18-cmd-rk644 up (v18)
 proper-barbecue-v18-cmd-0ag04 up (v18)
 ```
