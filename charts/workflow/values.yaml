@@ -76,6 +76,11 @@ global:
   # - traefik
   # Only the above options have been supported so far
   ingress_class: ""
+  # A domain name consists of one or more parts.
+  # Periods (.) are used to separate these parts.
+  # Each part must be 1 to 63 characters in length and can contain lowercase letters, digits, and hyphens (-).
+  # It must start and end with a lowercase letter or digit.
+  cluster_domain: "cluster.local"
   # The publicly resolvable hostname to build your cluster with.
   #
   # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
