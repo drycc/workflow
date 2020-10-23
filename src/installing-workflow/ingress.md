@@ -11,7 +11,7 @@ $ helm install drycc/workflow --namespace drycc \
     --set builder.service.type=LoadBalancer
 ```
 
-Of course, if you deploy it on a bare machine, you probably don't have Load Balancer. You need to use NodePort:
+Of course, if you deploy it on a bare machine, you probably do not have Load Balancer. You need to use NodePort:
 ```
 $ helm install drycc/workflow --namespace drycc \
     --set global.ingress_class=nginx \

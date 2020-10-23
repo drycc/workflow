@@ -1,6 +1,6 @@
 # Installing Drycc Workflow
 
-This document is aimed at those who have already provisioned a [Kubernetes v1.3.4+][] cluster
+This document is aimed at those who have already provisioned a [Kubernetes v1.12+][] cluster
 and want to install Drycc Workflow. If help is required getting started with Kubernetes and
 Drycc Workflow, follow the [quickstart guide](../quickstart/index.md) for assistance.
 
@@ -19,21 +19,6 @@ Client: &version.Version{SemVer:"v2.5.0", GitCommit:"012cb0ac1a1b2f888144ef5a67b
 Server: &version.Version{SemVer:"v2.5.0", GitCommit:"012cb0ac1a1b2f888144ef5a67b8dab6c2d45be6", GitTreeState:"clean"}
 ```
 
-### Check Your Authorization
-
-If your cluster uses [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) for authorization, `helm` will need to be granted the necessary permissions to create Workflow resources.
-This can be done with the following commands:
-
-```
-$ kubectl create sa tiller-deploy -n kube-system
-$ kubectl create clusterrolebinding helm --clusterrole=cluster-admin --serviceaccount=kube-system:tiller-deploy
-$ helm init --service-account=tiller-deploy
-```
-
-If `helm` is already installed in cluster without sufficient rights, simply add `--upgrade` to the `init` command above.
-
-**Note**: Specific `helm` permissions haven't been sorted yet and details may change (watch `helm` [docs](https://github.com/kubernetes/helm/tree/master/docs))
-
 ## Choose Your Deployment Strategy
 
 Drycc Workflow includes everything it needs to run out of the box. However, these defaults are aimed at simplicity rather than
@@ -50,7 +35,7 @@ More rigorous installations would benefit from using outside sources for the fol
 
 #### Ingress
 
-Now, workflow requires that ingress and cert-manager must be installed. Any compatible Kubernetes entry controller can be used, but only ingress-nginx and ingress-traefik currently support enforced HTTPS and whitelist. Enable entries in accordance with [this guide] (entress.md).
+Now, workflow requires that ingress and cert-manager must be installed. Any compatible Kubernetes entry controller can be used, but only ingress-nginx and ingress-traefik currently support enforced HTTPS and whitelist. Enable entries in accordance with [this guide](./ingress.md).
 
 ## Add the Drycc Chart Repository
 
@@ -63,6 +48,12 @@ $ helm repo add drycc https://charts.drycc.cc/stable
 ```
 
 ## Install Drycc Workflow
+
+If the version of helm is 3.0 +; you need to create the namespace in advance:
+
+```
+kubectl create ns drycc
+```
 
 Now that Helm is installed and the repository has been added, install Workflow by running:
 
