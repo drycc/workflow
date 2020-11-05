@@ -28,7 +28,7 @@ We welcome your input! If you have feedback, please [submit an issue][issues]. I
 
 # Working on Documentation
 
-[![Build Status](https://travis-ci.org/drycc/workflow.svg?branch=master)](https://travis-ci.org/drycc/workflow)
+[![Build Status](https://travis-ci.org/drycc/workflow.svg?branch=main)](https://travis-ci.org/drycc/workflow)
 [![Latest Docs](http://img.shields.io/badge/docs-latest-fc1e5e.svg)](http://docs-v2.readthedocs.org/en/latest/)
 
 The Drycc project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.

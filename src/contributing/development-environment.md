@@ -95,7 +95,7 @@ $ cd <component>
 !!! note
     By checking out the forked copy into the namespace `github.com/drycc/<component>`, we are tricking the Go toolchain into seeing our fork as the "official" source tree.
 
-If you are going to be issuing pull requests to the upstream repository from which you forked, we suggest configuring Git such that you can easily rebase your code to the upstream repository's master branch. There are various strategies for doing this, but the [most common](https://help.github.com/articles/fork-a-repo/) is to add an `upstream` remote:
+If you are going to be issuing pull requests to the upstream repository from which you forked, we suggest configuring Git such that you can easily rebase your code to the upstream repository's main branch. There are various strategies for doing this, but the [most common](https://help.github.com/articles/fork-a-repo/) is to add an `upstream` remote:
 
 ```
 $ git remote add upstream https://github.com/drycc/<component>.git
