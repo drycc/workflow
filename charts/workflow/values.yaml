@@ -71,7 +71,7 @@ global:
   use_rbac: true
   # Please check `kubernetes.io/ingress.class`
   # The cert-manager component must be installed
-  # If you want to use HTTPSEnforced or whitelist functions, you must specify:
+  # If you want to use HTTPSEnforced or allowlist functions, you must specify:
   # - nginx
   # - traefik
   # Only the above options have been supported so far

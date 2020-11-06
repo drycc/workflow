@@ -204,7 +204,7 @@ it if it has not done so already.
 Each component already updated its release notes on GitHub with CHANGELOG content. We'll now
 generate the master changelog for the Workflow chart, consisting of all component and auxilliary repo changes.
 
-We'll employ the `requirements.lock` file from the `WORKFLOW_PREV_RELEASE` chart, as well as a repo-to-chart-name [mapping file](https://github.com/drycc/dryccrel/blob/master/map.json), this time invoking `dryccrel changelog global` to get all component changes between
+We'll employ the `requirements.lock` file from the `WORKFLOW_PREV_RELEASE` chart, as well as a repo-to-chart-name [mapping file](https://github.com/drycc/dryccrel/blob/main/map.json), this time invoking `dryccrel changelog global` to get all component changes between
 the chart versions existing in the `WORKFLOW_PREV_RELEASE` chart and the _most recent_ releases existing in GitHub.
 (Therefore, if there are any unreleased commits in a component repo, they will not appear here):
 
@@ -252,7 +252,7 @@ Kick off https://ci.drycc.info/job/workflow-cli-build-stable/ with the `TAG` bui
 and then verify `stable` artifacts are available and appropriately updated after the job completes:
 
 ```
-$ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/master/install-v2.sh | bash -s v2.20.0
+$ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install-v2.sh | bash -s v2.20.0
 $ ./drycc version
 # (Should show $WORKFLOW_RELEASE)
 ```

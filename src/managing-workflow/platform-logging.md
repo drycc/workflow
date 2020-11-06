@@ -2,7 +2,7 @@
 
 The logging platform is made up of 2 components - [Fluentd](https://github.com/drycc/fluentd) and [Logger](https://github.com/drycc/logger).
 
-[Fluentd](https://github.com/drycc/fluentd) runs on every worker node of the cluster and is deployed as a [Daemon Set](http://kubernetes.io/v1.1/docs/admin/daemons.html). The Fluentd pods capture all of the stderr and stdout streams of every container running on the host (even those not hosted directly by kubernetes). Once the log message arrives in our [custom fluentd plugin](https://github.com/drycc/fluentd/tree/master/rootfs/opt/fluentd/drycc-output) we determine where the message originated.
+[Fluentd](https://github.com/drycc/fluentd) runs on every worker node of the cluster and is deployed as a [Daemon Set](http://kubernetes.io/v1.1/docs/admin/daemons.html). The Fluentd pods capture all of the stderr and stdout streams of every container running on the host (even those not hosted directly by kubernetes). Once the log message arrives in our [custom fluentd plugin](https://github.com/drycc/fluentd/tree/main/rootfs/opt/fluentd/drycc-output) we determine where the message originated.
 
 If the message was from the [Workflow Controller](https://github.com/drycc/controller) or from an application deployed via workflow we send it to the logs topic on the local [NSQD](http://nsq.io) instance.
 
