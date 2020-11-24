@@ -9,12 +9,12 @@ Drycc Workflow requires Kubernetes v1.16.15 or later.
 ## Components Requirements
 
 Drycc uses ingress as a routing implementation, so you have to choose an ingress.
-We recommend using [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress) or [traefik-ingress](https://github.com/helm/charts/tree/master/stable/traefik), which we have adapted to whitelist and force TLS functions.
+We recommend using [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress) or [traefik-ingress](https://github.com/helm/charts/tree/master/stable/traefik), which we have adapted to allowlist and force TLS functions.
 
 Workflow supports the use of ACME to manage automatic certificates, [cert-manager](https://github.com/helm/charts/tree/master/stable/cert-manager) is also one of the necessary components.
 
 Workflow supports stateful apps. You can create and use them through the 'drycc volumes' command. If you want to use this feature, you must have a `StorageClass` that supports `ReadWriteMany`.
- 
+
 Workflow also supports the [OSB](https://github.com/openservicebrokerapi/servicebroker) API through the 'drycc resources' command. If you want to use this function, you need to install [service-catalog](https://svc-cat.io).
 
 ## Storage Requirements

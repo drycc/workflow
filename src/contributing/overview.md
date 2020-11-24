@@ -38,7 +38,7 @@ Interact with the community on our user mailing list or live in our [Drycc #comm
 [dd]: design-documents.md
 [dev-environment]: development-environment.md
 [easy fix]: https://github.com/pulls?utf8=%E2%9C%93&q=user%3Adrycc+label%3A%22easy+fix%22+is%3Aopen
-[dco]: https://github.com/drycc/workflow/blob/master/DCO
+[dco]: https://github.com/drycc/workflow/blob/main/DCO
 [help wanted]: https://github.com/pulls?utf8=%E2%9C%93&q=user%3Adrycc+label%3A%22help+wanted%22+is%3Aopen
 [troubleshooting]: ../troubleshooting/index.md
 [issues]: https://github.com/pulls?utf8=%E2%9C%93&q=user%3Adrycc+user%3Ahelm

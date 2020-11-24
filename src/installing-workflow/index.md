@@ -35,7 +35,7 @@ More rigorous installations would benefit from using outside sources for the fol
 
 #### Ingress
 
-Now, workflow requires that ingress and cert-manager must be installed. Any compatible Kubernetes entry controller can be used, but only ingress-nginx and ingress-traefik currently support enforced HTTPS and whitelist. Enable entries in accordance with [this guide](./ingress.md).
+Now, workflow requires that ingress and cert-manager must be installed. Any compatible Kubernetes entry controller can be used, but only ingress-nginx and ingress-traefik currently support enforced HTTPS and allowlist. Enable entries in accordance with [this guide](./ingress.md).
 
 ## Add the Drycc Chart Repository
 

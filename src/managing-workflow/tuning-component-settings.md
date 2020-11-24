@@ -112,7 +112,7 @@ BACKUPS_TO_RETAIN | number of base backups the backing store should retain (defa
 
 ## Customizing Fluentd
 
-The following values can be changed in the `values.yaml` file or by using the `--set` flag with the Helm CLI. 
+The following values can be changed in the `values.yaml` file or by using the `--set` flag with the Helm CLI.
 
 Key               | Default | Description
 ------------------| --------| ---------------------------------
@@ -129,7 +129,7 @@ output.disable_drycc | false | Disable the Drycc output plugin
 boot.install_build_tools | false | Install the build tools package. This is useful when using custom plugins
 daemon_environment | | Takes key-value pairs and turns them into environment variables.
 
-For more information about the various environment variables that can be set please see the [README](https://github.com/drycc/fluentd/blob/master/README.md)
+For more information about the various environment variables that can be set please see the [README](https://github.com/drycc/fluentd/blob/main/README.md)
 
 ## Customizing the Logger
 
@@ -151,18 +151,18 @@ user   | "admin" | The first user created in the database (this user has admin p
 password | "admin" | Password for the first user.
 allow_sign_up | "true" | Allows users to sign up for an account.
 
-For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/drycc/monitor/blob/master/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
+For a list of other options you can set by using environment variables please see the [configuration file](https://github.com/drycc/monitor/blob/main/grafana/rootfs/usr/share/grafana/grafana.ini.tpl) in Github.
 
 ### [Telegraf](https://docs.influxdata.com/telegraf)
-For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/drycc/monitor/blob/master/telegraf/rootfs/config.toml.tpl).
+For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/drycc/monitor/blob/main/telegraf/rootfs/config.toml.tpl).
 
 ### [InfluxDB](https://docs.influxdata.com/influxdb)
-You can find a list of values that can be set using environment variables [here](https://github.com/drycc/monitor/blob/master/influxdb/rootfs/home/influxdb/config.toml.tpl).
+You can find a list of values that can be set using environment variables [here](https://github.com/drycc/monitor/blob/main/influxdb/rootfs/home/influxdb/config.toml.tpl).
 
 ## Customizing the Registry
 
 The [Registry][] component can be tuned by following the
-[drycc/distribution config doc](https://github.com/drycc/distribution/blob/master/docs/configuration.md).
+[drycc/distribution config doc](https://github.com/drycc/distribution/blob/main/docs/configuration.md).
 
 ## Customizing the Router
 

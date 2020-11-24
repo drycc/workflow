@@ -80,10 +80,10 @@ drycc-registry-proxy-zyajl                1/1       Running   0          5m
 Users of Drycc Workflow should now upgrade their drycc client to avoid getting `WARNING: Client and server API versions do not match. Please consider upgrading.` warnings.
 
 ```
-curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/master/install-v2.sh | bash -s v2.20.0 && sudo mv drycc $(which drycc)
+curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install-v2.sh | bash -s v2.20.0 && sudo mv drycc $(which drycc)
 ```
 
 
 [minio]: https://github.com/drycc/minio
 [Configuring Object Storage]: ../installing-workflow/configuring-object-storage.md
-[Workflow-Migration]: https://github.com/drycc/workflow-migration/blob/master/README.md
+[Workflow-Migration]: https://github.com/drycc/workflow-migration/blob/main/README.md
