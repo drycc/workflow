@@ -90,7 +90,7 @@ drycc-controller-3953262871-pncgq         1/1       Running   2          4m
 drycc-database-83844344-47ld6             1/1       Running   0          4m
 drycc-logger-176328999-wjckx              1/1       Running   4          4m
 drycc-logger-fluentd-zxnqb                1/1       Running   0          4m
-drycc-logger-redis-304849759-1f35p        1/1       Running   0          4m
+drycc-redis-304849759-1f35p               1/1       Running   0          4m
 drycc-minio-676004970-nxqgt               1/1       Running   0          4m
 drycc-monitor-grafana-432627134-lnl2h     1/1       Running   0          4m
 drycc-monitor-influxdb-2729788615-m9b5n   1/1       Running   0          4m

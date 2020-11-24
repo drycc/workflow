@@ -60,7 +60,7 @@ drycc-logger-fluentd-45h7j                1/1       Running   0          5m
 drycc-logger-fluentd-4z7lw                1/1       Running   0          5m
 drycc-logger-fluentd-k2wsw                1/1       Running   0          5m
 drycc-logger-fluentd-skdw4                1/1       Running   0          5m
-drycc-logger-redis-8nazu                  1/1       Running   0          5m
+drycc-redis-8nazu                         1/1       Running   0          5m
 drycc-monitor-grafana-tm266               1/1       Running   0          5m
 drycc-monitor-influxdb-ah8io              1/1       Running   0          5m
 drycc-monitor-telegraf-51zel              1/1       Running   1          5m
