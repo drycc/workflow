@@ -157,7 +157,7 @@ For a list of other options you can set by using environment variables please se
 For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/drycc/monitor/blob/main/telegraf/rootfs/config.toml.tpl).
 
 ### [InfluxDB](https://docs.influxdata.com/influxdb)
-You can find a list of values that can be set using environment variables [here](https://github.com/drycc/monitor/blob/main/influxdb/rootfs/home/influxdb/config.toml.tpl).
+You can find a list of values that can be set using environment variables [here](https://github.com/drycc/influxdb/blob/main/rootfs/home/influxdb/config.toml.tpl).
 
 ## Customizing the Registry
 
