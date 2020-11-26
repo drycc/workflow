@@ -55,6 +55,7 @@ NAME                                     READY     STATUS    RESTARTS   AGE
 drycc-builder-2448122224-3cibz            1/1       Running   0          5m
 drycc-controller-1410285775-ipc34         1/1       Running   3          5m
 drycc-database-e7c5z                      1/1       Running   0          5m
+drycc-influxdb-ah8io                      1/1       Running   0          5m
 drycc-logger-cgjup                        1/1       Running   3          5m
 drycc-logger-fluentd-45h7j                1/1       Running   0          5m
 drycc-logger-fluentd-4z7lw                1/1       Running   0          5m
@@ -62,7 +63,6 @@ drycc-logger-fluentd-k2wsw                1/1       Running   0          5m
 drycc-logger-fluentd-skdw4                1/1       Running   0          5m
 drycc-redis-8nazu                         1/1       Running   0          5m
 drycc-monitor-grafana-tm266               1/1       Running   0          5m
-drycc-monitor-influxdb-ah8io              1/1       Running   0          5m
 drycc-monitor-telegraf-51zel              1/1       Running   1          5m
 drycc-monitor-telegraf-cdasg              1/1       Running   0          5m
 drycc-monitor-telegraf-hea6x              1/1       Running   0          5m
