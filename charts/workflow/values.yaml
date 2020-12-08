@@ -235,9 +235,9 @@ monitor:
 
   influxdb:
     # Configure the following ONLY if using an off-cluster Influx database
-    url: "my.influx.url"
+    url: "http://my.influx.url:8086"
     database: "kubernetes"
-    user: "user"
+    username: "username"
     password: "password"
     # Configure the following ONLY if you want persistence for on-cluster influxdb
     # GCP PDs and EBS volumes are supported only
