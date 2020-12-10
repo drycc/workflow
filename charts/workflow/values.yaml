@@ -167,7 +167,7 @@ builder:
     nodePort: ""
 
 controller:
-  app_pull_policy: "IfNotPresent"
+  app_image_pull_policy: "IfNotPresent"
   # Possible values are:
   # enabled - allows for open registration
   # disabled - turns off open registration
