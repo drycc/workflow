@@ -231,5 +231,5 @@ environ  prod
 [pods-to-nodes]: http://kubernetes.io/docs/user-guide/node-selection/
 [release]: ../reference-guide/terms.md#release
 [router]:  ../understanding-workflow/components.md#router
-[Slugbuilder]: ../understanding-workflow/components.md#builder-builder-slugbuilder-and-dockerbuilder
+[Slugbuilder]: ../understanding-workflow/components.md#builder-builder-slugbuilder-and-imagebuilder
 [stores config in environment variables]: http://12factor.net/config

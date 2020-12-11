@@ -54,11 +54,11 @@ its dependencies as determined by the buildpack. The slug is pushed to the
 cluster-configured object storage for later execution. For more information
 about buildpacks see [using buildpacks][using-buildpacks].
 
-**Project Location:** [drycc/dockerbuilder](https://github.com/drycc/dockerbuilder)
+**Project Location:** [drycc/imagebuilder](https://github.com/drycc/imagebuilder)
 
 For Applications which contain a `Dockerfile` in the root of the repository,
-`builder` will instead launch the `dockerbuilder` to package your application.
-Instead of generating a slug, `dockerbuilder` generates a Docker image (using
+`builder` will instead launch the `imagebuilder` to package your application.
+Instead of generating a slug, `imagebuilder` generates a Docker image (using
 the underlying Docker engine). The completed image is pushed to the managed
 Docker registry on cluster. For more information see [using Dockerfiles][using-dockerfiles].
 

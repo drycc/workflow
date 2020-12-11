@@ -12,7 +12,7 @@ Please see below for links and descriptions of each component:
 
 - [controller](https://github.com/drycc/controller) - Workflow API server
 - [builder](https://github.com/drycc/builder) - Git server and source-to-image component
-- [dockerbuilder](https://github.com/drycc/dockerbuilder) - The builder for [Docker](https://www.docker.com/) based applications
+- [imagebuilder](https://github.com/drycc/imagebuilder) - The builder for [Docker](https://www.docker.com/) based applications
 - [slugbuilder](https://github.com/drycc/slugbuilder) - The builder for [slug/buildpack](https://devcenter.heroku.com/articles/slug-compiler) based applications
 - [slugrunner](https://github.com/drycc/slugrunner) - The runner for slug/buildpack based applications
 - [fluentd](https://github.com/drycc/fluentd) - Backend log shipping mechanism for `drycc logs`
