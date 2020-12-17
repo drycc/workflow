@@ -211,6 +211,7 @@ influxdb:
   # Configure the following is only available in on-cluster Influx database
   user: "admin"
   password: "admin123"
+  retention: "30d"
   # GCP PDs and EBS volumes are supported only
   persistence:
     enabled: false # Set to true to enable persistence
