@@ -202,6 +202,32 @@ redis:
   addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
   password: "redis password" # "" == no password
 
+influxdb:
+  # URL configuration is only available in off-cluster Influx database
+  url: "http://my.influx.url:8086"
+  bucket: "kubernetes"
+  org: "org"
+  token: "token"
+  # Configure the following is only available in on-cluster Influx database
+  user: "admin"
+  password: "admin123"
+  # GCP PDs and EBS volumes are supported only
+  persistence:
+    enabled: false # Set to true to enable persistence
+    accessMode: ReadWriteOnce
+    size: 5Gi # PVC size
+    ## influxdb data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## Storage class of PV to bind. By default it looks for standard storage class.
+    ## If the PV uses a different storage class, specify that here.
+    storageClass: ""
+    volumeName: ""
+
 fluentd:
   syslog:
     # Configure the following ONLY if using Fluentd to send log messages to both
@@ -231,30 +257,6 @@ monitor:
       ## Storage class of PV to bind. By default it looks for standard storage class.
       ## If the PV uses a different storage class, specify that here.
       storageClass: default
-      volumeName: ""
-
-  influxdb:
-    # Configure the following ONLY if using an off-cluster Influx database
-    url: "http://my.influx.url:8086"
-    database: "kubernetes"
-    user: "user"
-    password: "password"
-    # Configure the following ONLY if you want persistence for on-cluster influxdb
-    # GCP PDs and EBS volumes are supported only
-    persistence:
-      enabled: false # Set to true to enable persistence
-      accessMode: ReadWriteOnce
-      size: 5Gi # PVC size
-      ## influxdb data Persistent Volume Storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      ## Storage class of PV to bind. By default it looks for standard storage class.
-      ## If the PV uses a different storage class, specify that here.
-      storageClass: ""
       volumeName: ""
 
 registry:
