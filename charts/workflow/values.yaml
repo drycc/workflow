@@ -175,6 +175,10 @@ controller:
   registration_mode: "admin_only"
   # Set storageClassName, It is used for application mount.
   app_storage_class: ""
+  # Set controller deployment  replicas
+  replicas: 1
+  # Set celery replicas
+  celery_replicas: 1
 
 database:
   # The username and password to be used by the on-cluster database.
