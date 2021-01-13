@@ -41,3 +41,9 @@ dependencies:
   - name: registry-proxy
     version: <registry-proxy-tag>
     repository: https://charts.drycc.cc/stable/registry-proxy
+  - name: influxdb
+    version: <influxdb-tag>
+    repository: https://charts.drycc.cc/stable/influxdb
+  - name: rabbitmq
+    version: <rabbitmq-tag>
+    repository: https://charts.drycc.cc/stable/rabbitmq
