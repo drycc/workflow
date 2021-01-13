@@ -28,7 +28,11 @@ global:
   # - on-cluster: Run Redis within the Kubernetes cluster
   # - off-cluster: Run Redis outside the Kubernetes cluster (configure in redis section)
   redis_location: "on-cluster"
-
+    # Set the location of Workflow's rabbitmq instance
+  # Valid values are:
+  # - on-cluster: Run Rabbitmq within the Kubernetes cluster
+  # - off-cluster: Run Rabbitmq outside the Kubernetes cluster (configure in controller section)
+  rabbitmq_location: "on-cluster"
   # Set the location of Workflow's influxdb cluster
   #
   # Valid values are:
@@ -269,3 +273,21 @@ registry:
   organization: ""
   username: ""
   password: ""
+
+rabbitmq:
+  username: "rabbit"
+  password: "rabbit"
+  vhost: "drycc"
+  persistence:
+      enabled: false # Set to true to enable persistence
+      ## rabbitmq data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: default
+      volumeName: ""
+      accessMode: ReadWriteOnce
+      size: 8Gi # PVC size
