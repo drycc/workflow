@@ -63,7 +63,7 @@ $ helm install --namespace drycc \
     drycc/workflow
 ```
 
-By default, registry uses docker hub, at present, we support three registries. They are: 
+By default, registry uses docker hub, at present, we support three registries. They are:
 
 * redhat quay `quay.io`
 * docker hub `docker.io`
@@ -82,6 +82,7 @@ $ helm install --namespace drycc \
     --set fluentd.image_registry=quay.io \
     --set redis.image_registry=quay.io \
     --set influxdb.image_registry=quay.io \
+    --set rabbitmq.image_registry=quay.io \
     --set logger.image_registry=quay.io \
     --set minio.image_registry=quay.io \
     --set monitor.image_registry=quay.io \
@@ -116,6 +117,7 @@ $ kubectl --namespace=drycc get pods
 NAME                                     READY     STATUS    RESTARTS   AGE
 drycc-builder-574483744-l15zj             1/1       Running   0          4m
 drycc-controller-3953262871-pncgq         1/1       Running   2          4m
+drycc-controller-celery-cmxxn             3/3       Running   0          4m
 drycc-database-83844344-47ld6             1/1       Running   0          4m
 drycc-influxdb-2729788615-m9b5n           1/1       Running   0          4m
 drycc-logger-176328999-wjckx              1/1       Running   4          4m
@@ -127,6 +129,7 @@ drycc-monitor-telegraf-wmcmn              1/1       Running   1          4m
 drycc-nsqd-3597503299-6mn2x               1/1       Running   0          4m
 drycc-registry-756475849-lwc6b            1/1       Running   1          4m
 drycc-registry-proxy-96c4p                1/1       Running   0          4m
+drycc-rabbitmq-0                          1/1       Running   0          4m
 ```
 
 Once all of the pods are in the `READY` state, Drycc Workflow is up and running!

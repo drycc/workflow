@@ -54,6 +54,7 @@ $ kubectl --namespace=drycc get pods
 NAME                                     READY     STATUS    RESTARTS   AGE
 drycc-builder-2448122224-3cibz            1/1       Running   0          5m
 drycc-controller-1410285775-ipc34         1/1       Running   3          5m
+drycc-controller-celery-694f75749b-cmxxn  3/3       Running   0          5m
 drycc-database-e7c5z                      1/1       Running   0          5m
 drycc-influxdb-ah8io                      1/1       Running   0          5m
 drycc-logger-cgjup                        1/1       Running   3          5m
@@ -73,6 +74,7 @@ drycc-registry-proxy-4m3o4                1/1       Running   0          5m
 drycc-registry-proxy-no3r1                1/1       Running   0          5m
 drycc-registry-proxy-ou8is                1/1       Running   0          5m
 drycc-registry-proxy-zyajl                1/1       Running   0          5m
+drycc-rabbitmq-0                          1/1       Running   0          5m
 ```
 
 ### Step 3: Upgrade the Drycc Client

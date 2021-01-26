@@ -12,8 +12,9 @@ running, run:
 	NAME                          READY     STATUS              RESTARTS   AGE
 	drycc-builder-gqum7            0/1       ContainerCreating   0          4s
 	drycc-controller-h6lk6         0/1       ContainerCreating   0          4s
+	drycc-controller-celery-cmxxn  0/3       ContainerCreating   0          4s
 	drycc-database-56v39           0/1       ContainerCreating   0          4s
-        drycc-influxdb-f9ftm           0/1       Pending             0          3s
+    drycc-influxdb-f9ftm           0/1       Pending             0          3s
 	drycc-logger-fluentd-xihr1     0/1       Pending             0          2s
 	drycc-logger-grupg             0/1       ContainerCreating   0          3s
 	drycc-minio-c2exb              0/1       Pending             0          3s
@@ -21,6 +22,7 @@ running, run:
 	drycc-monitor-stdout-novxs     0/1       Pending             0          3s
 	drycc-monitor-telegraf-dc3y3   0/1       Pending             0          2s
 	drycc-registry-5bor6           0/1       Pending             0          3s
+	drycc-rabbitmq-0               0/1       ContainerCreating   0          3s
 
 !!! tip
 	To save precious keystrokes, alias `kubectl --namespace=drycc` to `kd` so it is easier to type

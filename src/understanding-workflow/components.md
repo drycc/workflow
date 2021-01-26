@@ -97,20 +97,6 @@ images generated from the builder component. Registry persists the Docker image
 images to either local storage (in development mode) or to object storage
 configured for the cluster.
 
-## Router
-
-**Project Location:** [drycc/router](https://github.com/drycc/router)
-
-The router component is based on [Nginx][] and is responsible for routing
-inbound HTTP(S) traffic to your applications. The default workflow charts
-provision a Kubernetes service in the `drycc` namespace with a service type of
-`LoadBalancer`. Depending on your Kubernetes configuration, this may provision
-a cloud-based loadbalancer automatically.
-
-The router component uses Kubernetes annotations for both Application discovery
-as well as router configuration. For more detailed documentation and possible
-configuration view the router [project documentation][router-documentation].
-
 ## Logger: fluentd, logger
 
 The logging subsystem consists of two components. Fluentd handles log shipping
@@ -135,20 +121,31 @@ documentation][logger-documentation].
 
 **Project Location:** [drycc/monitor](https://github.com/drycc/monitor)
 
-The monitoring subsystem consists of three components: Telegraf, InfluxDB and Grafana.
+The monitoring subsystem consists of two components: Telegraf and Grafana.
 
 Telegraf is the is the metrics collection agent that runs using the daemon set API. It runs on
 every worker node in the cluster, fetches information about the pods currently running and ships it
 to InfluxDB.
 
-InfluxDB is a database that stores the metrics collected by Telegraf. Out of the box, it does not
-persist to disk, but you can set it up to back it with a persisitent volume or swap this out with
-a more robust InfluxDB setup in a production setting.
-
 Grafana is a standalone graphing application. It natively supports InfluxDB as a datasource and
 provides a robust engine for creating dashboards on top of timeseries data. Workflow provides a few
 dashboards out of the box for monitoring Drycc Workflow and Kubernetes. The dashboards can be used
 as a starting point for creating more custom dashboards to suit a user's needs.
+
+## InfluxDB
+
+**Project Location:** [drycc/influxdb](https://github.com/drycc/influxdb)
+
+InfluxDB is a database that stores the metrics collected by Telegraf. Out of the box, it does not
+persist to disk, but you can set it up to back it with a persisitent volume or swap this out with
+a more robust InfluxDB setup in a production setting.
+
+## Rabbitmq
+
+**Project Location:** [drycc/rabbitmq](https://github.com/drycc/rabbitmq)
+
+RabbitMQ is the most widely deployed open source message broker.
+Controller use celery with rabbitMQ to execute the asynchronous task.
 
 ## See Also
 
@@ -166,7 +163,5 @@ as a starting point for creating more custom dashboards to suit a user's needs.
 [configure-objectstorage]: ../installing-workflow/configuring-object-storage.md
 [logger-documentation]: https://github.com/drycc/logger
 [release]: ../reference-guide/terms.md#release
-[router-documentation]: https://github.com/drycc/router
-[router]: #router
 [using-buildpacks]: ../applications/using-buildpacks.md
 [using-dockerfiles]: ../applications/using-dockerfiles.md
