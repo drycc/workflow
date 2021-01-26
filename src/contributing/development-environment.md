@@ -158,7 +158,7 @@ export DRYCC_REGISTRY=<IP of the host machine>:5000
 In non-Linux environments:
 
 ```
-export DRYCC_REGISTRY=<IP of the drycc-docker Docker Machine VM>:5000/
+export DRYCC_REGISTRY=<IP of the drycc-docker Docker Machine VM>:5000
 ```
 
 If your development cluster runs on a cloud provider such as Google Container Engine, a local registry such as the one above will not be accessible to your Kubernetes nodes.  In such cases, a public registry such as [DockerHub][dh] or [quay.io][quay] will suffice.
@@ -166,14 +166,14 @@ If your development cluster runs on a cloud provider such as Google Container En
 To use DockerHub for this purpose, for instance:
 
 ```
-$ export DRYCC_REGISTRY=""
+$ export DRYCC_REGISTRY="docker.io"
 $ export IMAGE_PREFIX=<your DockerHub username>
 ```
 
 To use quay.io:
 
 ```
-$ export DRYCC_REGISTRY=quay.io/
+$ export DRYCC_REGISTRY=quay.io
 $ export IMAGE_PREFIX=<your quay.io username>
 ```
 

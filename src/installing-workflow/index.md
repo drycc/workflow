@@ -73,21 +73,21 @@ If you want to change it, set the variable when using helm.
 
 ```
 $ helm install --namespace drycc \
-    --set builder.image_registry=quay.io/ \
-    --set slugbuilder.image_registry=quay.io/ \
-    --set imagebuilder.image_registry=quay.io/ \
-    --set controller.image_registry=quay.io/ \
-    --set slugrunner.image_registry=quay.io/ \
-    --set database.image_registry=quay.io/ \
-    --set fluentd.image_registry=quay.io/ \
-    --set redis.image_registry=quay.io/ \
-    --set influxdb.image_registry=quay.io/ \
-    --set logger.image_registry=quay.io/ \
-    --set minio.image_registry=quay.io/ \
-    --set monitor.image_registry=quay.io/ \
-    --set nsqd.image_registry=quay.io/ \
-    --set registry.image_registry=quay.io/ \
-    --set registry-proxy.image_registry=quay.io/ \
+    --set builder.image_registry=quay.io \
+    --set slugbuilder.image_registry=quay.io \
+    --set imagebuilder.image_registry=quay.io \
+    --set controller.image_registry=quay.io \
+    --set slugrunner.image_registry=quay.io \
+    --set database.image_registry=quay.io \
+    --set fluentd.image_registry=quay.io \
+    --set redis.image_registry=quay.io \
+    --set influxdb.image_registry=quay.io \
+    --set logger.image_registry=quay.io \
+    --set minio.image_registry=quay.io \
+    --set monitor.image_registry=quay.io \
+    --set nsqd.image_registry=quay.io \
+    --set registry.image_registry=quay.io \
+    --set registry-proxy.image_registry=quay.io \
     --set global.platform_domain=drycc.cc \
     drycc/workflow
 ```
