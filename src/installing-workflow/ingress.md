@@ -18,12 +18,12 @@ $ helm install drycc/workflow --namespace drycc \
     --set global.platform_domain=drycc.cc \
     --set builder.service.type=NodePort \
     --set builder.service.nodePort=32222
-``` 
+```
 
 If you want to use Load Balancer on a bare machine, you can look at [metallb](https://github.com/danderson/metallb)
 
 Where `global.platform_domain` is a **required** parameter that is traditionally not required for Workflow that is explained in the next section. In this example we are using `drycc.cc` for `$hostname`.
- 
+
 Helm will install a variety of Kubernetes resources in the `drycc` namespace.
 Wait for the pods that Helm launched to be ready. Monitor their status by running:
 
@@ -48,12 +48,14 @@ $ kubectl --namespace=drycc get pods
 NAME                          READY     STATUS    RESTARTS   AGE
 drycc-builder-hy3xv            1/1       Running   5          5m
 drycc-controller-g3cu8         1/1       Running   5          5m
+drycc-controller-celery-cmxxn  3/3       Running   0          5m
 drycc-database-rad1o           1/1       Running   0          5m
 drycc-logger-fluentd-1v8uk     1/1       Running   0          5m
 drycc-logger-fluentd-esm60     1/1       Running   0          5m
 drycc-logger-sm8b3             1/1       Running   0          5m
 drycc-minio-4ww3t              1/1       Running   0          5m
 drycc-registry-asozo           1/1       Running   1          5m
+drycc-rabbitmq-0               1/1       Running   0          5m
 ```
 
 ## Install a Kubernetes Ingress Controller
