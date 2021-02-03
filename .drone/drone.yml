@@ -1,0 +1,58 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: build-docs
+  image: docker.io/library/docker:dind
+  privileged: true
+  commands:
+  - nohup dockerd &
+  - apk add make bash curl git
+  - make docker-build docker-build-docs 
+  - cd _build/html && echo "www.drycc.cc" > CNAME && git init
+  environment:
+    SSH_DEPLOY_KEY:
+      from_secret: ssh_deploy_key
+  when:
+    event:
+    - push
+    - tag
+
+- name: publish-docs
+  image: appleboy/drone-git-push
+  pull: if-not-exists
+  settings:
+    branch: main
+    remote: git@github.com:drycc/www.drycc.cc.git
+    path: _build/html
+    force: true
+    commit: true
+    commit_message: init repo
+    ssh_key:
+      from_secret: ssh_deploy_key
+  when:
+    event:
+    - push
+    - tag
+
+- name: publish-charts
+  image: docker.io/drycc/python-dev
+  privileged: true
+  commands:
+  - pip install -r requirements.txt
+  - python _scripts/dependency_update.py "$CHARTMUSEUM_API/$([ -z $DRONE_TAG ] && echo testing || echo stable)" "charts/workflow/requirements.yaml" 
+  - helm package charts/workflow -u --version ${DRONE_TAG:-v1.0.0}
+  - curl -u $CHARTMUSEUM_USERNAME:$CHARTMUSEUM_PASSWORD -F chart=@workflow-${DRONE_TAG:-v1.0.0}.tgz "$CHARTMUSEUM_API/api/$([ -z $DRONE_TAG ] && echo testing || echo stable)/charts"
+  environment:
+    CHARTMUSEUM_API:
+      from_secret: chartmuseum_api
+    CHARTMUSEUM_USERNAME:
+      from_secret: chartmuseum_username
+    CHARTMUSEUM_PASSWORD:
+      from_secret: chartmuseum_password
+  when:
+    event:
+    - push
+    - tag
+
