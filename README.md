@@ -27,8 +27,7 @@ Please see below for links and descriptions of each component:
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Working on Documentation" section below and [submit a pull request][prs].
 
 # Working on Documentation
-
-[![Build Status](https://travis-ci.org/drycc/workflow.svg?branch=main)](https://travis-ci.org/drycc/workflow)
+[![Build Status](https://drone.drycc.cc/api/badges/drycc/workflow/status.svg)](https://drone.drycc.cc/drycc/workflow)
 [![Latest Docs](http://img.shields.io/badge/docs-latest-fc1e5e.svg)](http://docs-v2.readthedocs.org/en/latest/)
 
 The Drycc project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
