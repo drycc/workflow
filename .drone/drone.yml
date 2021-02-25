@@ -4,11 +4,9 @@ name: default
 
 steps:
 - name: build-docs
-  image: docker.io/library/docker:dind
+  image: docker.io/drycc/go-dev
   privileged: true
   commands:
-  - nohup dockerd &
-  - apk add make bash curl git
   - make docker-build docker-build-docs 
   - cd _build/html && echo "www.drycc.cc" > CNAME && git init
   environment:
