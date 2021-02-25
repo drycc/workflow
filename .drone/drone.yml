@@ -16,6 +16,9 @@ steps:
     event:
     - push
     - tag
+  volumes:
+  - name: image_registries
+    path: /etc/containers/registries.conf
 
 - name: publish-docs
   image: docker.io/appleboy/drone-git-push
@@ -54,3 +57,7 @@ steps:
     - push
     - tag
 
+volumes:
+- name: image_registries
+  host:
+    path: /etc/containers/registries.conf
