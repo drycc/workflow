@@ -20,7 +20,7 @@ steps:
     - tag
 
 - name: publish-docs
-  image: appleboy/drone-git-push
+  image: docker.io/appleboy/drone-git-push
   pull: if-not-exists
   settings:
     branch: main
