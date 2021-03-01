@@ -1,6 +1,6 @@
 # Installing Drycc Workflow
 
-This document is aimed at those who have already provisioned a [Kubernetes v1.12+][] cluster
+This document is aimed at those who have already provisioned a [Kubernetes v1.16.15+][] cluster
 and want to install Drycc Workflow. If help is required getting started with Kubernetes and
 Drycc Workflow, follow the [quickstart guide](../quickstart/index.md) for assistance.
 
@@ -136,5 +136,5 @@ Once all of the pods are in the `READY` state, Drycc Workflow is up and running!
 
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
 
-[Kubernetes v1.3.4+]: system-requirements.md#kubernetes-versions
+[Kubernetes v1.16.15+]: system-requirements.md#kubernetes-versions
 [helm]: https://github.com/kubernetes/helm/blob/master/docs/install.md

@@ -7,7 +7,7 @@ with Drycc Workflow.
 
 Install the latest `drycc` client for Linux or Mac OS X with:
 
-    $ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install-v2.sh | bash -s v2.20.0
+    $ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install.tmpl | bash -s v1.1.0
 
 The installer puts `drycc` in your current directory, but you should move it
 somewhere in your $PATH:

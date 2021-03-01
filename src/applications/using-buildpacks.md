@@ -101,16 +101,14 @@ are pushing.
 
 ## Using a Custom Buildpack
 
-To use a custom buildpack, set the `BUILDPACK_URL` environment variable.
+To use a custom buildpack, you need create a `.buildpack` file in your root path app.
 
-    $ drycc config:set BUILDPACK_URL=https://github.com/dpiddy/heroku-buildpack-ruby-minimal
-    Creating config... done, v2
-
-    === humble-autoharp
-    BUILDPACK_URL: https://github.com/dpiddy/heroku-buildpack-ruby-minimal
+    $  tee > .buildpack << EOF
+       > https://github.com/dpiddy/heroku-buildpack-ruby-minimal
+       > EOF
 
 !!! note
-    If, however, you're unable to deploy using the latest version of the buildpack, You can set an exact version of a buildpack by using a git revision in your `BUILDPACK_URL`. For example: `BUILDPACK_URL=https://github.com/dpiddy/heroku-buildpack-ruby-minimal#v13`
+    If, however, you're unable to deploy using the latest version of the buildpack, You can set an exact version of a buildpack by using a git revision in your `.buildpack`. For example: `https://github.com/dpiddy/heroku-buildpack-ruby-minimal#v13`
 
 On your next `git push`, the custom buildpack will be used.
 
@@ -141,10 +139,13 @@ which has access. Use either the path of a private key file or the raw key mater
 
 For example, to use a custom buildpack hosted at a private GitHub URL, ensure that an SSH public
 key exists in your [GitHub settings][]. Then set `SSH_KEY` to the corresponding SSH private key
-and set `BUILDPACK_URL` to the URL:
+and set `.buildpack` to the URL:
 
-    $ drycc config:set SSH_KEY=/home/user/.ssh/github_id_rsa
-    $ drycc config:set BUILDPACK_URL=git@github.com:user/private_buildpack.git
+    $  tee > .buildpack << EOF
+       > https://github.com/dpiddy/heroku-buildpack-ruby-minimal
+       > EOF
+    $ git add .buildpack
+    $ git commit -m "chore(buildpack): modify the buildpack url"
     $ git push drycc master
 
 ## Builder selector

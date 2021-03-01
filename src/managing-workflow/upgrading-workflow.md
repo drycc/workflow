@@ -82,7 +82,7 @@ drycc-rabbitmq-0                          1/1       Running   0          5m
 Users of Drycc Workflow should now upgrade their drycc client to avoid getting `WARNING: Client and server API versions do not match. Please consider upgrading.` warnings.
 
 ```
-curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install-v2.sh | bash -s v2.20.0 && sudo mv drycc $(which drycc)
+curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install.tmpl | bash -s v1.1.0 && sudo mv drycc $(which drycc)
 ```
 
 
