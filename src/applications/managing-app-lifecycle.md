@@ -80,7 +80,7 @@ $ drycc perms:create otheruser
 Adding otheruser to peachy-waxworks collaborators... done
 ```
 
-Use `drycc perms` to see who an application is currently shared with, and `drycc perms:remove` to remove a collaborator.
+Use `drycc perms` to see who an application is currently shared with, and `drycc perms:delete` to remove a collaborator.
 
 !!! note
     Collaborators can do anything with an application that its owner can do, except delete the application.

@@ -58,7 +58,7 @@ A production install of Grafana should have the following configuration values c
 
 
 ### On Cluster Persistence
-Enabling persistence will allow your custom configuration to persist across pod restarts. This means that the default sqllite database (which stores things like sessions and user data) will not disappear if you upgrade the Workflow installation. 
+Enabling persistence will allow your custom configuration to persist across pod restarts. This means that the default sqllite database (which stores things like sessions and user data) will not disappear if you upgrade the Workflow installation.
 
 If you wish to have persistence for Grafana you can set `enabled` to `true` in the `values.yaml` file before running `helm install`.
 
@@ -92,13 +92,13 @@ If you wish to have persistence for InfluxDB you can set `enabled` to `true` in 
 
 ### Off Cluster Influxdb
 
-To use off-cluster Influx, please provide the following values in the `values.yaml` file before running `helm install`.
+To use off-cluster Influx v2, please provide the following values in the `values.yaml` file before running `helm install`.
 
 * `influxdb_location=off-cluster`
 * `url = "http://my-influxhost.com:8086"`
-* `database = "metrics"`
-* `user = "InfluxUser"`
-* `password = "MysuperSecurePassword"`
+* `bucket = "metrics"`
+* `org = "drycc"`
+* `token = "MysuperSecurePassword"`
 
 
 ## [Telegraf](https://docs.influxdata.com/telegraf)

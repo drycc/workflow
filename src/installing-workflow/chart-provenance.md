@@ -34,16 +34,16 @@ Charts signed with this key can then be verified when fetched:
 $ helm repo add drycc https://charts.drycc.cc/stable
 "drycc" has been added to your repositories
 
-$ helm fetch --verify drycc/workflow --version v2.17.0
-Verification: &{0xc420704c80 sha256:a2a140dca075a2eabe20422f1aa5bc1ce210b18a326472d6b2708e1a93afebea workflow-v2.17.0.tgz}
+$ helm fetch --verify drycc/workflow --version v1.0.0
+Verification: &{0xc420704c80 sha256:a2a140dca075a2eabe20422f1aa5bc1ce210b18a326472d6b2708e1a93afebea workflow-v1.0.0.tgz}
 ```
 
-One can then inspect the fetched `workflow-v2.17.0.tgz.prov` provenance file.
+One can then inspect the fetched `workflow-v1.0.0.tgz.prov` provenance file.
 
 If the chart was not signed, the command above would result in:
 
 ```
-Error: Failed to fetch provenance "https://charts.drycc.cc/stable/workflow/workflow-v2.17.0.tgz.prov"
+Error: Failed to fetch provenance "https://charts.drycc.cc/stable/workflow/workflow-v1.0.0.tgz.prov"
 ```
 
 Alternatively, the chart can also be verified at install time:
