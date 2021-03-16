@@ -89,6 +89,20 @@ LDAP_USER_FILTER   | The name of the login field in the users search base (defau
 LDAP_GROUP_BASEDN  | The distinguished name of the search base for user's groups names (default: "")
 LDAP_GROUP_FILTER  | The filter for user's groups (default: "", example: ```objectClass=person```)
 
+### OAuth 2.0 Password Grant settings
+
+The following environment variables are available for enabling OAuth 2.0 Password Grant.
+If you have configured both of LDAP authentication and OAuth 2.0, LDAP authentication first.
+authentication of user accounts in the [Controller][] component:
+
+Setting                  | Description
+-------------------------| ---------------------------------
+OAUTH_ACCESS_TOKEN_URL  | The URI of the OAuth 2.0 get token server. (default: ""). If not specified, OAuth 2.0 authentication is not enabled(default: "", example: ```http://hostname```).
+OAUTH_ACCESS_API_URL    | The URI of the OAuth 2.0 get resources server. (default: "")
+OAUTH_CLIENT_ID         | The client id.
+OAUTH_CLIENT_SECRET     | The client secret.
+OAUTH_CACHE_USER_TIME   | Cache user object, prevent too frequent request to the OAuth 2.0 authentication server.
+
 ### Global and per application settings
 
 Setting                                         | Description
