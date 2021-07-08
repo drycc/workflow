@@ -2,18 +2,12 @@ dependencies:
   - name: builder
     version: <builder-tag>
     repository: https://charts.drycc.cc/stable/builder
-  - name: slugbuilder
-    version: <slugbuilder-tag>
-    repository: https://charts.drycc.cc/stable/slugbuilder
   - name: imagebuilder
     version: <imagebuilder-tag>
     repository: https://charts.drycc.cc/stable/imagebuilder
   - name: controller
     version: <controller-tag>
     repository: https://charts.drycc.cc/stable/controller
-  - name: slugrunner
-    version: <slugrunner-tag>
-    repository: https://charts.drycc.cc/stable/slugrunner
   - name: database
     version: <database-tag>
     repository: https://charts.drycc.cc/stable/database

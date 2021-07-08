@@ -158,7 +158,7 @@ minio:
 # pulled from within the Controller.
 # This can be configured per Application as well in the Controller.
 #
-# This affects pull apps and git push (slugrunner images) apps
+# This affects pull apps and git push apps
 #
 # Values values are:
 # - Always
