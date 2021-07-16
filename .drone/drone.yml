@@ -22,7 +22,7 @@ steps:
 
 - name: publish-docs
   image: docker.io/appleboy/drone-git-push
-  pull: if-not-exists
+  pull: always
   settings:
     branch: main
     remote: git@github.com:drycc/www.drycc.cc.git
