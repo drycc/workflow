@@ -170,6 +170,13 @@ builder:
     # If service.type is not set to NodePort, the following statement will be ignored.
     nodePort: ""
 
+# Drycc single sign on system
+passport:
+  # Set passport deployment replicas
+  replicas: 1
+  # Configuring this will no longer use the built-in database component
+  database_url: ""
+
 controller:
   app_image_pull_policy: "IfNotPresent"
   # Possible values are:
@@ -183,14 +190,14 @@ controller:
   replicas: 1
   # Set celery replicas
   celery_replicas: 1
+  # Configuring this will no longer use the built-in database component
+  database_url: ""
 
 database:
   # The username and password to be used by the on-cluster database.
   # If left empty they will be generated using randAlphaNum
   username: ""
   password: ""
-  # Configure the following ONLY if using an off-cluster PostgreSQL database
-  url: "postgres://USER:PASSWORD@HOST:PORT/NAME"
 
 nsqd:
   replicas: 1
