@@ -28,7 +28,7 @@ global:
   # - on-cluster: Run Redis within the Kubernetes cluster
   # - off-cluster: Run Redis outside the Kubernetes cluster (configure in redis section)
   redis_location: "on-cluster"
-    # Set the location of Workflow's rabbitmq instance
+  # Set the location of Workflow's rabbitmq instance
   # Valid values are:
   # - on-cluster: Run Rabbitmq within the Kubernetes cluster
   # - off-cluster: Run Rabbitmq outside the Kubernetes cluster (configure in controller section)
@@ -91,6 +91,12 @@ global:
   platform_domain: ""
   # Whether cert_manager is enabled to automatically generate drycc certificates
   cert_manager_enabled: "true"
+  # Set the location of Workflow's passport
+  #
+  # Valid values are:
+  # - on-cluster: Run passport within the Kubernetes cluster
+  # - off-cluster: Use passport outside the Kubernetes cluster
+  passport_location: "on-cluster"
 
 s3:
   # Your AWS access key. Leave it empty if you want to use IAM credentials.

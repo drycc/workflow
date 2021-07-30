@@ -19,6 +19,12 @@ the `drycc` CLI. The controller provides all of the platform functionality as
 well as interfacing with your Kubernetes cluster. The controller persists all
 of its data to the database component.
 
+## Passport
+
+**Project Location:** [drycc/passport](https://github.com/drycc/passport)
+
+The passport component exposes a web API and provide OAuth2 authentication.
+
 ## Database
 
 **Project Location:** [drycc/postgres](https://github.com/drycc/postgres)
