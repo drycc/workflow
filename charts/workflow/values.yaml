@@ -170,7 +170,7 @@ builder:
     # If service.type is not set to NodePort, the following statement will be ignored.
     nodePort: ""
 
-# Drycc single sign on system
+# 
 passport:
   # Set passport deployment replicas
   replicas: 1
@@ -238,7 +238,9 @@ influxdb:
   url: "http://my.influx.url:8086"
   bucket: "kubernetes"
   org: "org"
-  token: "token"
+  # If it is off-cluster, it must be specified
+  # Otherwise, it is generated randomly, if it is empty
+  token: ""
   # Configure the following is only available in on-cluster Influx database
   user: "admin"
   password: "admin123"
