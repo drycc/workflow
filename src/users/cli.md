@@ -26,7 +26,6 @@ Use `drycc help` to explore the commands available to you:
 
     Auth commands::
 
-      register      register a new user with a controller
       login         login to a controller
       logout        logout from the current controller
 
@@ -45,6 +44,7 @@ To get help on subcommands, use `drycc help [subcommand]`:
     apps:logs          view aggregated application logs
     apps:run           run a command in an ephemeral app container
     apps:destroy       destroy an application
+    apps:transfer      transfer app ownership to another user
 
     Use `drycc help [command]` to learn more
 

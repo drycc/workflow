@@ -41,3 +41,6 @@ dependencies:
   - name: rabbitmq
     version: <rabbitmq-tag>
     repository: https://charts.drycc.cc/stable/rabbitmq
+  - name: passport
+    version: <passport-tag>
+    repository: https://charts.drycc.cc/stable/passport
