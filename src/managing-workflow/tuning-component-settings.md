@@ -39,9 +39,9 @@ limits set:
 
 ```
 builder:
-  org: "drycc"
-  pullPolicy: "Always"
-  dockerTag: "canary"
+  image_org: "drycc"
+  image_pull_policy: "Always"
+  image_tag: "canary"
   limits_cpu: "100m"
   limits_memory: "50Mi"
 ```
