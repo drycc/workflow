@@ -121,7 +121,7 @@ When using this method to install drycc, the following environment variables can
 ENVIRONMENT VARIABLE            | DESCRIPTION
 --------------------------------|------------------------------------------------------------------------------------------------
 PLATFORM_DOMAIN                 | Required item, specify drycc's domain name
-CHANNEL                         | By default, drycc of the `stable` channel will be installed. You can also specify `testing`
+CHANNEL                         | By default, `stable` channel will be installed. You can also specify `testing`
 INSTALL_K3S_MIRROR              | Specify the accelerated mirror location. Currently, only `cn` is supported
 MINIO_PERSISTENCE_SIZE          | The size of the persistence space allocated to `minio`, which is `5Gi` by default
 MONITOR_PERSISTENCE_SIZE        | The size of the persistence space allocated to `monitor`, which is `5Gi` by default
