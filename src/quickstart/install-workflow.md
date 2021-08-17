@@ -123,6 +123,10 @@ ENVIRONMENT VARIABLE            | DESCRIPTION
 PLATFORM_DOMAIN                 | Required item, specify drycc's domain name
 CHANNEL                         | By default, drycc of the `stable` channel will be installed. You can also specify `testing`
 INSTALL_K3S_MIRROR              | Specify the accelerated mirror location. Currently, only `cn` is supported
+MINIO_PERSISTENCE_SIZE          | The size of the persistence space allocated to `minio`, which is `5Gi` by default
+MONITOR_PERSISTENCE_SIZE        | The size of the persistence space allocated to `monitor`, which is `5Gi` by default
+INFLUXDB_PERSISTENCE_SIZE       | The size of the persistence space allocated to `influxdb`, which is `5Gi` by default
+RABBITMQ_PERSISTENCE_SIZE       | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default
 
 Since the installation script will install k3s, other environment variables can refer to k3s installation [environment variables](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
     
