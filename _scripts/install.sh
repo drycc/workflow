@@ -35,6 +35,7 @@ export INSTALL_K3S_EXEC='--no-flannel'
 alias install-k3s="curl -sfL "${k3s_install_url}" | sh - $@"
 
 install-k3s
+kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 
 curl -sfL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
 
@@ -68,16 +69,16 @@ helm install drycc drycc/workflow \
   --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
   --set controller.app_storage_class=longhorn \
   --set minio.persistence.enabled=true \
-  --set minio.persistence.size=50Gi \
+  --set minio.persistence.size=5Gi \
   --set minio.persistence.storageClass="longhorn" \
   --set rabbitmq.persistence.enabled=true \
   --set rabbitmq.persistence.size=5Gi \
   --set rabbitmq.persistence.storageClass="longhorn" \
   --set influxdb.persistence.enabled=true \
-  --set influxdb.persistence.size=20Gi \
+  --set influxdb.persistence.size=5Gi \
   --set influxdb.persistence.storageClass="longhorn" \
   --set monitor.grafana.persistence.enabled=true \
-  --set monitor.grafana.persistence.size=20Gi \
+  --set monitor.grafana.persistence.size=5Gi \
   --set monitor.grafana.persistence.storageClass="longhorn" \
   --namespace drycc \
   --create-namespace
