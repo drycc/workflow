@@ -35,7 +35,6 @@ export INSTALL_K3S_EXEC='--no-flannel'
 alias install-k3s="curl -sfL "${k3s_install_url}" | sh - $@"
 
 install-k3s
-kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 
 curl -sfL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
 
@@ -49,7 +48,7 @@ git clone --dept 1 https://github.com/kyma-project/helm-broker
 
 
 helm install cilium --set operator.replicas=1 cilium/cilium --namespace kube-system
-helm install longhorn --create-namespace --set persistence.defaultClassReplicaCount=1 longhorn/longhorn --namespace longhorn-system
+helm install longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 longhorn/longhorn --namespace longhorn-system
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
 helm install catalog svc-cat/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace
 helm install helm-broker --set global.helm_broker.dir=/ --set global.helm_controller.dir=/ helm-broker/charts/helm-broker/  --namespace helm-broker --create-namespace
