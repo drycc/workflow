@@ -25,26 +25,3 @@ Check your work by running `drycc version`:
 
 !!! note
     Note that version numbers may vary as new releases become available
-
-## Helm Installation
-
-We will install Drycc Workflow using Helm which is a tool for installing and managing software in a
-Kubernetes cluster.
-
-Install the latest `helm` cli for Linux or Mac OS X by following the
-[installation instructions][helm-install].
-
-## Step 2: Boot a Kubernetes Cluster and Install Drycc Workflow
-
-There are many ways to boot and run Kubernetes. You may choose to get up and running in cloud environments or locally on your laptop.
-
-Cloud-based options:
-
-* [Google Container Engine](provider/gke/boot.md): provides a managed Kubernetes environment, available with a few clicks.
-* [Amazon Web Services](provider/aws/boot.md): uses Kubernetes upstream [kops](https://github.com/kubernetes/kops) to boot a cluster on AWS EC2.
-* [Azure Container Service](provider/azure-acs/boot.md): provides a managed Kubernetes environment.
-
-If you would like to test on your local machine follow our guide for [Minikube](provider/minikube/boot.md).
-
-
-[helm-install]: https://github.com/kubernetes/helm#install
