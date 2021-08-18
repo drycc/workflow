@@ -20,6 +20,15 @@ function clean_before_exit {
 trap clean_before_exit EXIT
 
 if [[ "${INSTALL_K3S_MIRROR}"=="cn" ]] ; then
+  mkdir -p /etc/rancher/k3s
+  cat << EOF > "/etc/rancher/k3s/registries.yaml"
+mirrors:
+  "docker.io":
+    endpoint:
+      - "docker.mirrors.ustc.edu.cn"
+      - "http://hub-mirror.c.163.com"
+      - "https://registry-1.docker.io"
+EOF
   k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
 else
   k3s_install_url="https://get.k3s.io"
