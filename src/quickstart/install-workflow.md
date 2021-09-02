@@ -55,18 +55,18 @@ For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image
 $ yum install nfs-utils
 ```
 
-### Installing curl and git
+### Installing curl
 
 For Debian and Ubuntu, use this command:
 
 ```
-$ apt-get install curl git
+$ apt-get install curl
 ```
 
 For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image, use this command:
 
 ```
-$ yum install curl git
+$ yum install curl
 ```
 
 ## Hardware
@@ -121,12 +121,15 @@ When using this method to install drycc, the following environment variables can
 ENVIRONMENT VARIABLE            | DESCRIPTION
 --------------------------------|------------------------------------------------------------------------------------------------
 PLATFORM_DOMAIN                 | Required item, specify drycc's domain name
+DRYCC_ADMIN_USERNAME            | Required item, specify drycc's admin username
+DRYCC_ADMIN_PASSWORD            | Required item, specify drycc's admin password
 CHANNEL                         | By default, `stable` channel will be installed. You can also specify `testing`
 INSTALL_K3S_MIRROR              | Specify the accelerated mirror location. Currently, only `cn` is supported
 MINIO_PERSISTENCE_SIZE          | The size of the persistence space allocated to `minio`, which is `5Gi` by default
 MONITOR_PERSISTENCE_SIZE        | The size of the persistence space allocated to `monitor`, which is `5Gi` by default
 INFLUXDB_PERSISTENCE_SIZE       | The size of the persistence space allocated to `influxdb`, which is `5Gi` by default
 RABBITMQ_PERSISTENCE_SIZE       | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default
+HELMBROKER_PERSISTENCE_SIZE     | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
 
 Since the installation script will install k3s, other environment variables can refer to k3s installation [environment variables](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
     
