@@ -42,9 +42,9 @@ else
   k3s_install_url="https://get.k3s.io"
 fi
 if [[ -z "${K3S_URL}" ]] ; then
-  INSTALL_K3S_EXEC="server --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server --no-flannel --cluster-cidr=10.233.0.0/16"
 else
-  INSTALL_K3S_EXEC="agent"
+  INSTALL_K3S_EXEC="agent --no-flannel"
 fi
 
 alias install-k3s="curl -sfL "${k3s_install_url}" | sh - $@"
@@ -53,12 +53,14 @@ install-k3s
 
 curl -sfL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
 
+helm repo add cilium https://helm.cilium.io/
 helm repo add longhorn https://charts.longhorn.io
 helm repo add jetstack https://charts.jetstack.io
 helm repo add svc-cat https://kubernetes-sigs.github.io/service-catalog
 helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
 helm repo update
 
+helm install cilium --set operator.replicas=1 --set cni.chainingMode=portmap cilium/cilium --namespace kube-system
 helm install longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 longhorn/longhorn --namespace longhorn-system
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
 helm install catalog svc-cat/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
@@ -93,7 +95,8 @@ helm install drycc drycc/workflow \
   --set influxdb.persistence.enabled=true \
   --set influxdb.persistence.size=${INFLUXDB_PERSISTENCE_SIZE:-5Gi} \
   --set influxdb.persistence.storageClass="longhorn" \
-  --set monitor.grafana.persistence.enabled=true \ --set monitor.grafana.persistence.size=${MONITOR_PERSISTENCE_SIZE:-5Gi} \
+  --set monitor.grafana.persistence.enabled=true \
+  --set monitor.grafana.persistence.size=${MONITOR_PERSISTENCE_SIZE:-5Gi} \
   --set monitor.grafana.persistence.storageClass="longhorn" \
   --set passport.admin_username=${DRYCC_ADMIN_USERNAME} \
   --set passport.admin_password=${DRYCC_ADMIN_PASSWORD} \
