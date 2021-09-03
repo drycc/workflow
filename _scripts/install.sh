@@ -42,25 +42,37 @@ else
   k3s_install_url="https://get.k3s.io"
 fi
 if [[ -z "${K3S_URL}" ]] ; then
-  INSTALL_K3S_EXEC="server --no-flannel --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16"
 else
-  INSTALL_K3S_EXEC="agent --no-flannel"
+  INSTALL_K3S_EXEC="agent --flannel-backend=none"
 fi
 
-alias install-k3s="curl -sfL "${k3s_install_url}" | sh - $@"
-
+alias install-k3s="curl -sfL "${k3s_install_url}" |sh - $@"
+export INSTALL_K3S_EXEC
 install-k3s
+mount bpffs -t bpf /sys/fs/bpf
 
 curl -sfL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
 
 helm repo add cilium https://helm.cilium.io/
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo add longhorn https://charts.longhorn.io
 helm repo add jetstack https://charts.jetstack.io
 helm repo add svc-cat https://kubernetes-sigs.github.io/service-catalog
 helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
 helm repo update
 
-helm install cilium --set operator.replicas=1 --set cni.chainingMode=portmap cilium/cilium --namespace kube-system
+helm install cilium --set operator.replicas=1 cilium/cilium --namespace kube-system
+helm install metallb bitnami/metallb --namespace kube-system -f - <<EOF
+configInline:
+  address-pools:
+   - name: default
+     protocol: layer2
+     addresses:
+     - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
+EOF
+helm install ingress-nginx ingress-nginx/ingress-nginx --namespace kube-system
 helm install longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 longhorn/longhorn --namespace longhorn-system
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
 helm install catalog svc-cat/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
@@ -81,7 +93,7 @@ helm install drycc drycc/workflow \
   --set builder.service.type=LoadBalancer \
   --set global.cluster_domain="cluster.local" \
   --set global.platform_domain="${PLATFORM_DOMAIN}" \
-  --set global.ingress_class=traefik \
+  --set global.ingress_class=nginx \
   --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
   --set controller.app_storage_class=longhorn \
   --set minio.persistence.enabled=true \
