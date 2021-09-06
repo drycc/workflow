@@ -128,6 +128,7 @@ HELMBROKER_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
 echo -e "\\033[32m---> Start installing helmbroker...\\033[0m"
 
 helm install helmbroker drycc/helmbroker \
+  --set ingress_class="nginx" \
   --set platform_domain="cluster.local" \
   --set persistence.storageClass="longhorn" \
   --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
@@ -151,7 +152,7 @@ metadata:
 spec:
   relistBehavior: Duration
   relistRequests: 5
-  url: http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}
+  url: https://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}
 EOF
 
 BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
