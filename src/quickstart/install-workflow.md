@@ -55,6 +55,24 @@ For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image
 $ yum install nfs-utils
 ```
 
+### Installing haproxy
+We use metallb as the loadblance component.
+If the host managed by metallb has a public IP, we don't need to install haproxy.
+Otherwise, we need to use haproxy to expose ports such as `80` and `443 `.
+Ensure that ports `80`, `443` and `2222` cannot be occupied by other applications on the host, and focus on services such as httpd and nginx.
+
+For Debian and Ubuntu, use this command:
+
+```
+$ apt-get install haproxy
+```
+
+For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image, use this command:
+
+```
+$ yum install haproxy
+```
+
 ### Installing curl
 
 For Debian and Ubuntu, use this command:
@@ -124,7 +142,8 @@ PLATFORM_DOMAIN                 | Required item, specify drycc's domain name
 DRYCC_ADMIN_USERNAME            | Required item, specify drycc's admin username
 DRYCC_ADMIN_PASSWORD            | Required item, specify drycc's admin password
 CHANNEL                         | By default, `stable` channel will be installed. You can also specify `testing`
-METALLB_ADDRESS_POOLS           | IP pool for LoadBalancer, it can be a public IP pool. The default is `172.16.0.0/12`
+USE_HAPROXY                     | Haproxy is enabled by default. If you want to turn it off, this value is false
+METALLB_ADDRESS_POOLS           | IP pool for LoadBalancer. The default is `172.16.0.0/12`
 INSTALL_K3S_MIRROR              | Specify the accelerated mirror location. Currently, only `cn` is supported
 MINIO_PERSISTENCE_SIZE          | The size of the persistence space allocated to `minio`, which is `5Gi` by default
 MONITOR_PERSISTENCE_SIZE        | The size of the persistence space allocated to `monitor`, which is `5Gi` by default

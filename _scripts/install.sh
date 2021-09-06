@@ -34,8 +34,20 @@ if [[ "${INSTALL_K3S_MIRROR}" == "cn" ]] ; then
 mirrors:
   "docker.io":
     endpoint:
-      - "http://hub-mirror.c.163.com"
+      - "https://docker-mirror.drycc.cc"
       - "https://registry-1.docker.io"
+  "quay.io":
+    endpoint:
+      - "https://quay-mirror.drycc.cc"
+      - "https://quay.io"
+  "gcr.io":
+    endpoint:
+      - "https://gcr-mirror.drycc.cc"
+      - "https://gcr.io"
+  "k8s.gcr.io":
+    endpoint:
+      - "https://k8s-mirror.drycc.cc"
+      - "https://k8s.gcr.io"
 EOF
   k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
 else
@@ -63,8 +75,10 @@ helm repo add svc-cat https://kubernetes-sigs.github.io/service-catalog
 helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
 helm repo update
 
-helm install cilium --set operator.replicas=1 cilium/cilium --namespace kube-system
-helm install metallb bitnami/metallb --namespace kube-system -f - <<EOF
+echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
+
+helm install cilium --set operator.replicas=1 cilium/cilium --namespace kube-system --wait
+helm install metallb bitnami/metallb --namespace kube-system --wait -f - <<EOF
 configInline:
   address-pools:
    - name: default
@@ -72,17 +86,10 @@ configInline:
      addresses:
      - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
 EOF
-helm install ingress-nginx ingress-nginx/ingress-nginx --namespace kube-system
-helm install longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 longhorn/longhorn --namespace longhorn-system
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
+helm install ingress-nginx ingress-nginx/ingress-nginx --namespace kube-system --wait
+helm install longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 longhorn/longhorn --namespace longhorn-system --wait
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
 helm install catalog svc-cat/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
-
-echo -e "\\033[32m---> Waiting cert-manager...\\033[0m"
-while [ $(kubectl get pods -n cert-manager|grep Running|wc -l) -le 2 ]
-do
-    kubectl get pods -n cert-manager
-    sleep 10
-done
 
 echo -e "\\033[32m---> Start installing workflow...\\033[0m"
 
@@ -146,6 +153,49 @@ spec:
   relistRequests: 5
   url: http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}
 EOF
+
+BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
+INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n kube-system -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
+
+if [[ "${USE_HAPROXY:-true}" == "true" ]] ; then
+  cat << EOF > "/etc/haproxy/haproxy.cfg"
+global
+   log /dev/log    local0
+   log /dev/log    local1 notice
+   chroot /var/lib/haproxy
+   stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+   stats timeout 30s
+   user haproxy
+   group haproxy
+   daemon
+listen http-80
+   bind *:80
+   mode tcp
+   maxconn 100000
+   timeout connect 60s
+   timeout client  30000
+   timeout server  30000
+   server ingress ${INGRESS_IP}:80 check
+listen http-443
+   bind *:443
+   mode tcp
+   maxconn 100000
+   timeout connect 60s
+   timeout client  30000
+   timeout server  30000
+   server ingress ${INGRESS_IP}:443 check
+listen builder
+   bind *:2222
+   mode tcp
+   maxconn 100000
+   timeout connect 60s
+   timeout client  30000
+   timeout server  30000
+   server builder ${BUILDER_IP}:2222 check
+EOF
+fi
+systemctl enable haproxy
+systemctl restart haproxy
 
 echo -e "\\033[32m---> Please save the following information for future use.\\033[0m"
 echo -e "\\033[32m---> Rabbitmq username: $RABBITMQ_USERNAME\\033[0m"
