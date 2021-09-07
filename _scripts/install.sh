@@ -58,6 +58,8 @@ if [[ "${INSTALL_K3S_MIRROR}" == "cn" ]] ; then
 mirrors:
   "docker.io":
     endpoint:
+      - "https://hub-mirror.c.163.com"
+      - "https://mirror.baidubce.com"
       - "https://docker-mirror.drycc.cc"
       - "https://registry-1.docker.io"
   "quay.io":
