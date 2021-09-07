@@ -22,11 +22,35 @@ if [[ -z "${DRYCC_ADMIN_USERNAME}" || -z "${DRYCC_ADMIN_PASSWORD}" ]] ; then
   exit 1
 fi
 
+# initArch discovers the architecture for this system.
+initArch() {
+  ARCH=$(uname -m)
+  case $ARCH in
+    armv5*) ARCH="armv5";;
+    armv6*) ARCH="armv6";;
+    armv7*) ARCH="arm";;
+    aarch64) ARCH="arm64";;
+    x86) ARCH="386";;
+    x86_64) ARCH="amd64";;
+    i686) ARCH="386";;
+    i386) ARCH="386";;
+  esac
+}
+
 function clean_before_exit {
     # delay before exiting, so stdout/stderr flushes through the logging system
     sleep 3
 }
 trap clean_before_exit EXIT
+initArch
+
+function get_helm {
+  tar_name="helm-canary-linux-${ARCH}.tar.gz"
+  curl -fsSL -o "${tar_name}" "https://get.helm.sh/${tar_name}"
+  tar -zxvf "${tar_name}"
+  mv "linux-${ARCH}/helm" /usr/local/bin/helm
+  rm -rf "${tar_name}" "linux-${ARCH}"
+}
 
 if [[ "${INSTALL_K3S_MIRROR}" == "cn" ]] ; then
   mkdir -p /etc/rancher/k3s
@@ -64,21 +88,15 @@ export INSTALL_K3S_EXEC
 install-k3s
 mount bpffs -t bpf /sys/fs/bpf
 
-curl -sfL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
+get_helm
 
-helm repo add cilium https://helm.cilium.io/
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo add longhorn https://charts.longhorn.io
-helm repo add jetstack https://charts.jetstack.io
-helm repo add svc-cat https://kubernetes-sigs.github.io/service-catalog
 helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
 helm repo update
 
 echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
 
-helm install cilium --set operator.replicas=1 cilium/cilium --namespace kube-system --wait
-helm install metallb bitnami/metallb --namespace kube-system --wait -f - <<EOF
+helm install cilium drycc/cilium --set operator.replicas=1 --namespace kube-system --wait
+helm install metallb drycc/metallb --namespace kube-system --wait -f - <<EOF
 configInline:
   address-pools:
    - name: default
@@ -86,10 +104,10 @@ configInline:
      addresses:
      - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
 EOF
-helm install ingress-nginx ingress-nginx/ingress-nginx --namespace kube-system --wait
-helm install longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 longhorn/longhorn --namespace longhorn-system --wait
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
-helm install catalog svc-cat/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
+helm install ingress-nginx drycc/ingress-nginx --namespace kube-system --wait
+helm install longhorn drycc/longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 --namespace longhorn-system --wait
+helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
+helm install catalog drycc/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
 
 echo -e "\\033[32m---> Start installing workflow...\\033[0m"
 

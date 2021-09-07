@@ -46,6 +46,7 @@ steps:
   - python _scripts/dependency_update.py "$CHARTMUSEUM_API/$([ -z $DRONE_TAG ] && echo testing || echo stable)" "charts/workflow/requirements.yaml" 
   - helm package charts/workflow -u --version ${DRONE_TAG:-v1.0.0}
   - curl -u $CHARTMUSEUM_USERNAME:$CHARTMUSEUM_PASSWORD -F chart=@workflow-${DRONE_TAG:-v1.0.0}.tgz "$CHARTMUSEUM_API/api/$([ -z $DRONE_TAG ] && echo testing || echo stable)/charts"
+  - bash _scripts/generate_cache.sh 
   environment:
     CHARTMUSEUM_API:
       from_secret: chartmuseum_api
