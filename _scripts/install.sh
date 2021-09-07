@@ -52,7 +52,7 @@ function get_helm {
   rm -rf "${tar_name}" "linux-${ARCH}"
 }
 
-if [[ "${INSTALL_K3S_MIRROR}" == "cn" ]] ; then
+if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
   mkdir -p /etc/rancher/k3s
   cat << EOF > "/etc/rancher/k3s/registries.yaml"
 mirrors:
@@ -75,8 +75,10 @@ mirrors:
       - "https://k8s-mirror.drycc.cc"
       - "https://k8s.gcr.io"
 EOF
+  INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
+  export INSTALL_K3S_MIRROR
   k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
-  addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/addons/latest/index.yaml"
+  addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/drycc/addons/releases/download/latest/index.yaml"
 else
   k3s_install_url="https://get.k3s.io"
   addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
