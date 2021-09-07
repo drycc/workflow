@@ -215,6 +215,8 @@ listen builder
    server builder ${BUILDER_IP}:2222 check
 EOF
 fi
+
+mkdir -p /run/haproxy
 systemctl enable haproxy
 systemctl restart haproxy
 
