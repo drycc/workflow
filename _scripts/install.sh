@@ -76,8 +76,10 @@ mirrors:
       - "https://k8s.gcr.io"
 EOF
   k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
+  addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/addons/latest/index.yaml"
 else
   k3s_install_url="https://get.k3s.io"
+  addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
 fi
 if [[ -z "${K3S_URL}" ]] ; then
   INSTALL_K3S_EXEC="server --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16"
@@ -156,7 +158,11 @@ helm install helmbroker drycc/helmbroker \
   --set username=${HELMBROKER_USERNAME} \
   --set password=${HELMBROKER_PASSWORD} \
   --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq-0.drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
-  --namespace drycc --create-namespace --wait
+  --namespace drycc --create-namespace --wait -f - <<EOF
+repositories:
+- name: drycc-helm-broker
+  url: ${addons_url}
+EOF
 
 kubectl apply -f - <<EOF
 apiVersion: servicecatalog.k8s.io/v1beta1
