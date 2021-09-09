@@ -65,9 +65,9 @@ EOF
     addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
   fi
   if [[ -z "${K3S_URL}" ]] ; then
-    INSTALL_K3S_EXEC="server --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16 ${INSTALL_K3S_EXEC}"
+    INSTALL_K3S_EXEC="${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16"
   else
-    INSTALL_K3S_EXEC="agent --flannel-backend=none ${INSTALL_K3S_EXEC}"
+    INSTALL_K3S_EXEC="${INSTALL_K3S_EXEC}"
   fi
 }
 
