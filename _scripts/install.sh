@@ -2,26 +2,6 @@
 set -eo pipefail
 shopt -s expand_aliases
 
-if [[ -z "${PLATFORM_DOMAIN}" ]] ; then
-  echo -e "\\033[31m---> Please set the PLATFORM_DOMAIN variable.\\033[0m"
-  echo -e "\\033[31m---> For example:\\033[0m"
-  echo -e "\\033[31m---> export PLATFORM_DOMAIN=drycc.cc\\033[0m"
-  echo -e "\\033[31m---> And confirm that wildcard domain name resolution has been set.\\033[0m"
-  echo -e "\\033[31m---> For example, the current server IP is 8.8.8.8\\033[0m"
-  echo -e "\\033[31m---> Please point *.drycc.cc to 8.8.8.8\\033[0m"
-  exit 1
-fi	
-
-if [[ -z "${DRYCC_ADMIN_USERNAME}" || -z "${DRYCC_ADMIN_PASSWORD}" ]] ; then
-  echo -e "\\033[31m---> Please set the DRYCC_ADMIN_USERNAME and DRYCC_ADMIN_PASSWORD variable.\\033[0m"
-  echo -e "\\033[31m---> For example:\\033[0m"
-  echo -e "\\033[31m---> export DRYCC_ADMIN_USERNAME=admin\\033[0m"
-  echo -e "\\033[31m---> export DRYCC_ADMIN_PASSWORD=admin\\033[0m"
-  echo -e "\\033[31m---> This password is used by end users to log in and manage drycc.\\033[0m"
-  echo -e "\\033[31m---> Please set a high security string!!!\\033[0m"
-  exit 1
-fi
-
 # initArch discovers the architecture for this system.
 init_arch() {
   ARCH=$(uname -m)
@@ -84,9 +64,9 @@ else
   addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
 fi
 if [[ -z "${K3S_URL}" ]] ; then
-  INSTALL_K3S_EXEC="server --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16 ${INSTALL_K3S_EXEC}"
 else
-  INSTALL_K3S_EXEC="agent --flannel-backend=none"
+  INSTALL_K3S_EXEC="agent --flannel-backend=none ${INSTALL_K3S_EXEC}"
 fi
 
 function install_k3s {
@@ -123,7 +103,30 @@ function install_longhorn {
     --namespace longhorn-system --wait
 }
 
+function check_drycc_env {
+  if [[ -z "${PLATFORM_DOMAIN}" ]] ; then
+    echo -e "\\033[31m---> Please set the PLATFORM_DOMAIN variable.\\033[0m"
+    echo -e "\\033[31m---> For example:\\033[0m"
+    echo -e "\\033[31m---> export PLATFORM_DOMAIN=drycc.cc\\033[0m"
+    echo -e "\\033[31m---> And confirm that wildcard domain name resolution has been set.\\033[0m"
+    echo -e "\\033[31m---> For example, the current server IP is 8.8.8.8\\033[0m"
+    echo -e "\\033[31m---> Please point *.drycc.cc to 8.8.8.8\\033[0m"
+    exit 1
+  fi	
+
+  if [[ -z "${DRYCC_ADMIN_USERNAME}" || -z "${DRYCC_ADMIN_PASSWORD}" ]] ; then
+    echo -e "\\033[31m---> Please set the DRYCC_ADMIN_USERNAME and DRYCC_ADMIN_PASSWORD variable.\\033[0m"
+    echo -e "\\033[31m---> For example:\\033[0m"
+    echo -e "\\033[31m---> export DRYCC_ADMIN_USERNAME=admin\\033[0m"
+    echo -e "\\033[31m---> export DRYCC_ADMIN_PASSWORD=admin\\033[0m"
+    echo -e "\\033[31m---> This password is used by end users to log in and manage drycc.\\033[0m"
+    echo -e "\\033[31m---> Please set a high security string!!!\\033[0m"
+    exit 1
+  fi
+}
+
 function install_drycc {
+  check_drycc_env
   echo -e "\\033[32m---> Start installing workflow...\\033[0m"
 
   RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
