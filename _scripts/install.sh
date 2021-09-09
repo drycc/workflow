@@ -32,9 +32,10 @@ function install_helm {
   rm -rf "${tar_name}" "linux-${ARCH}"
 }
 
-if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-  mkdir -p /etc/rancher/k3s
-  cat << EOF > "/etc/rancher/k3s/registries.yaml"
+function pre_install_k3s {
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    mkdir -p /etc/rancher/k3s
+    cat << EOF > "/etc/rancher/k3s/registries.yaml"
 mirrors:
   "docker.io":
     endpoint:
@@ -55,21 +56,23 @@ mirrors:
       - "https://k8s-mirror.drycc.cc"
       - "https://k8s.gcr.io"
 EOF
-  INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
-  export INSTALL_K3S_MIRROR
-  k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
-  addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/drycc/addons/releases/download/latest/index.yaml"
-else
-  k3s_install_url="https://get.k3s.io"
-  addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
-fi
-if [[ -z "${K3S_URL}" ]] ; then
-  INSTALL_K3S_EXEC="server --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16 ${INSTALL_K3S_EXEC}"
-else
-  INSTALL_K3S_EXEC="agent --flannel-backend=none ${INSTALL_K3S_EXEC}"
-fi
+    INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
+    export INSTALL_K3S_MIRROR
+    k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
+    addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/drycc/addons/releases/download/latest/index.yaml"
+  else
+    k3s_install_url="https://get.k3s.io"
+    addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
+  fi
+  if [[ -z "${K3S_URL}" ]] ; then
+    INSTALL_K3S_EXEC="server --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16 ${INSTALL_K3S_EXEC}"
+  else
+    INSTALL_K3S_EXEC="agent --flannel-backend=none ${INSTALL_K3S_EXEC}"
+  fi
+}
 
 function install_k3s {
+  pre_install_k3s
   export INSTALL_K3S_EXEC
   curl -sfL "${k3s_install_url}" |sh -
 }
