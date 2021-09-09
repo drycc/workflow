@@ -134,6 +134,8 @@ drycc-rabbitmq-0                          1/1       Running   0          4m
 
 Once all of the pods are in the `READY` state, Drycc Workflow is up and running!
 
+For more installation parameters, please check the [values.yaml](https://github.com/drycc/workflow/blob/main/charts/workflow/values.yaml) file of workflow.
+
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
 
 [Kubernetes v1.16.15+]: system-requirements.md#kubernetes-versions
