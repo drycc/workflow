@@ -142,9 +142,9 @@ After installing Workflow, [register a user and deploy an application](../quicks
 
 ## Configure DNS
 
-User must to set up a hostname, and assumes the `drycc.$host` convention.
+User must to set up a hostname, and assumes the `drycc-builder.$host` convention.
 
-We need to point the `drycc.$host` record to the public IP address of your builder. You can get the public IP using the following command. A wildcard entry is necessary here as apps will use the same rule after they are deployed.
+We need to point the `drycc-builder.$host` record to the public IP address of your builder. You can get the public IP using the following command. A wildcard entry is necessary here as apps will use the same rule after they are deployed.
 
 ```
 $ kubectl get svc drycc-builder --namespace drycc
@@ -159,7 +159,7 @@ If we were using `drycc.cc` as a hostname, we would need to create the following
 | ---------------------------- |:-------------:| --------------:|
 | drycc-builder.drycc.cc       | A             | 138.91.243.152 |
 
-Once all of the pods are in the `READY` state, and `drycc.$host` resolves to the external IP found above, Workflow is up and running!
+Once all of the pods are in the `READY` state, and `drycc-builder.$host` resolves to the external IP found above, Workflow is up and running!
 
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
 
