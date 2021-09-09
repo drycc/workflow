@@ -29,7 +29,7 @@ Workflow supports Amazon Simple Storage Service (S3), Google Cloud Storage (GCS)
 Storage. See [configuring object storage](configuring-object-storage) for setup instructions.
 
 In addition, workflow needs to use RWX block storage services, such as cloud native [longhorn](https://longhorn.io/), 
-[openebs](https://openebs.io/), or external (glusterfs)[https://www.gluster.org/] or [ceph](https://ceph.io/).
+[openebs](https://openebs.io/), or external [glusterfs](https://www.gluster.org/) or [ceph](https://ceph.io/).
 
 ## Resource Requirements
 

@@ -2,7 +2,7 @@
 set -eo pipefail
 shopt -s expand_aliases
 
-checkPlatformArch() {
+check_platform_arch() {
   local supported="darwin-amd64 darwin-arm64 linux-amd64 linux-386 linux-arm linux-arm64 windows-386 windows-amd64"
 
   if ! echo "${supported}" | tr ' ' '\n' | grep -q "${PLATFORM}-${ARCH}"; then
@@ -24,7 +24,7 @@ else
 fi
 
 # initArch discovers the architecture for this system.
-initArch() {
+init_arch() {
   ARCH=$(uname -m)
   case $ARCH in
     armv5*) ARCH="armv5";;
@@ -38,13 +38,13 @@ initArch() {
   esac
 }
 
-initLatestVersion() {
+init_latest_version() {
   VERSION=$(curl -Ls $DRYCC_BIN_URL_BASE|grep /drycc/workflow-cli/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
 }
 
-initArch
-initLatestVersion
-checkPlatformArch
+init_arch
+init_latest_version
+check_platform_arch
 
 DRYCC_CLI="drycc-${VERSION}-${PLATFORM}-${ARCH}"
 DRYCC_CLI_PATH="${DRYCC_CLI}"

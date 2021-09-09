@@ -139,4 +139,29 @@ For more installation parameters, please check the [values.yaml](https://github.
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
 
 [Kubernetes v1.16.15+]: system-requirements.md#kubernetes-versions
-[helm]: https://github.com/kubernetes/helm/blob/master/docs/install.md
+
+## Configure DNS
+
+User must to set up a hostname, and assumes the `drycc.$host` convention.
+
+We need to point the `drycc.$host` record to the public IP address of your builder. You can get the public IP using the following command. A wildcard entry is necessary here as apps will use the same rule after they are deployed.
+
+```
+$ kubectl get svc drycc-builder --namespace drycc
+NAME              CLUSTER-IP   EXTERNAL-IP      PORT(S)                      AGE
+drycc-builder     10.0.25.3    138.91.243.152   2222:31625/TCP               33m
+```
+
+
+If we were using `drycc.cc` as a hostname, we would need to create the following A DNS records.
+
+| Name                         | Type          | Value          |
+| ---------------------------- |:-------------:| --------------:|
+| drycc-builder.drycc.cc       | A             | 138.91.243.152 |
+
+Once all of the pods are in the `READY` state, and `drycc.$host` resolves to the external IP found above, Workflow is up and running!
+
+After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
+
+If your k8s does not provide public network loadblance, you need to install TCP proxy services such as haproxy on machines that can 
+access both internal and external networks, and then expose `80` and `443`.

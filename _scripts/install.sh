@@ -23,7 +23,7 @@ if [[ -z "${DRYCC_ADMIN_USERNAME}" || -z "${DRYCC_ADMIN_PASSWORD}" ]] ; then
 fi
 
 # initArch discovers the architecture for this system.
-initArch() {
+init_arch() {
   ARCH=$(uname -m)
   case $ARCH in
     armv5*) ARCH="armv5";;
@@ -42,9 +42,9 @@ function clean_before_exit {
     sleep 3
 }
 trap clean_before_exit EXIT
-initArch
+init_arch
 
-function get_helm {
+function install_helm {
   tar_name="helm-canary-linux-${ARCH}.tar.gz"
   curl -fsSL -o "${tar_name}" "https://get.helm.sh/${tar_name}"
   tar -zxvf "${tar_name}"
@@ -89,20 +89,21 @@ else
   INSTALL_K3S_EXEC="agent --flannel-backend=none"
 fi
 
-alias install-k3s="curl -sfL "${k3s_install_url}" |sh - $@"
-export INSTALL_K3S_EXEC
-install-k3s
-mount bpffs -t bpf /sys/fs/bpf
+function install_k3s {
+  export INSTALL_K3S_EXEC
+  curl -sfL "${k3s_install_url}" |sh -
+}
 
-get_helm
+function install_components {
+  mount bpffs -t bpf /sys/fs/bpf
+  install_helm
+  helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
+  helm repo update
 
-helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
-helm repo update
+  echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
 
-echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
-
-helm install cilium drycc/cilium --set operator.replicas=1 --namespace kube-system --wait
-helm install metallb drycc/metallb --namespace kube-system --wait -f - <<EOF
+  helm install cilium drycc/cilium --set operator.replicas=1 --namespace kube-system --wait
+  helm install metallb drycc/metallb --namespace kube-system --wait -f - <<EOF
 configInline:
   address-pools:
    - name: default
@@ -110,63 +111,75 @@ configInline:
      addresses:
      - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
 EOF
-helm install ingress-nginx drycc/ingress-nginx --namespace kube-system --wait
-helm install longhorn drycc/longhorn --create-namespace --set persistence.defaultClass=false --set persistence.defaultClassReplicaCount=1 --namespace longhorn-system --wait
-helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
-helm install catalog drycc/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
+  helm install ingress-nginx drycc/ingress-nginx --namespace kube-system --wait
+  helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
+  helm install catalog drycc/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
+}
 
-echo -e "\\033[32m---> Start installing workflow...\\033[0m"
+function install_longhorn {
+  helm install longhorn drycc/longhorn --create-namespace \
+    --set persistence.defaultClass=false \
+    --set persistence.defaultClassReplicaCount=1 \
+    --namespace longhorn-system --wait
+}
 
-RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
-RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+function install_drycc {
+  echo -e "\\033[32m---> Start installing workflow...\\033[0m"
 
-helm install drycc drycc/workflow \
-  --set builder.service.type=LoadBalancer \
-  --set global.cluster_domain="cluster.local" \
-  --set global.platform_domain="${PLATFORM_DOMAIN}" \
-  --set global.ingress_class=nginx \
-  --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
-  --set controller.app_storage_class=longhorn \
-  --set minio.persistence.enabled=true \
-  --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-5Gi} \
-  --set minio.persistence.storageClass="longhorn" \
-  --set rabbitmq.username="${RABBITMQ_USERNAME}" \
-  --set rabbitmq.password="${RABBITMQ_PASSWORD}" \
-  --set rabbitmq.persistence.enabled=true \
-  --set rabbitmq.persistence.size=${RABBITMQ_PERSISTENCE_SIZE:-5Gi} \
-  --set rabbitmq.persistence.storageClass="longhorn" \
-  --set influxdb.persistence.enabled=true \
-  --set influxdb.persistence.size=${INFLUXDB_PERSISTENCE_SIZE:-5Gi} \
-  --set influxdb.persistence.storageClass="longhorn" \
-  --set monitor.grafana.persistence.enabled=true \
-  --set monitor.grafana.persistence.size=${MONITOR_PERSISTENCE_SIZE:-5Gi} \
-  --set monitor.grafana.persistence.storageClass="longhorn" \
-  --set passport.admin_username=${DRYCC_ADMIN_USERNAME} \
-  --set passport.admin_password=${DRYCC_ADMIN_PASSWORD} \
-  --namespace drycc \
-  --create-namespace --wait --timeout 30m0s
+  RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
+  RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
 
-HELMBROKER_USERNAME=$(cat /proc/sys/kernel/random/uuid)
-HELMBROKER_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+  helm install drycc drycc/workflow \
+    --set builder.service.type=LoadBalancer \
+    --set global.cluster_domain="cluster.local" \
+    --set global.platform_domain="${PLATFORM_DOMAIN}" \
+    --set global.ingress_class=nginx \
+    --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
+    --set controller.app_storage_class=longhorn \
+    --set minio.persistence.enabled=true \
+    --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-5Gi} \
+    --set minio.persistence.storageClass="longhorn" \
+    --set rabbitmq.username="${RABBITMQ_USERNAME}" \
+    --set rabbitmq.password="${RABBITMQ_PASSWORD}" \
+    --set rabbitmq.persistence.enabled=true \
+    --set rabbitmq.persistence.size=${RABBITMQ_PERSISTENCE_SIZE:-5Gi} \
+    --set rabbitmq.persistence.storageClass="longhorn" \
+    --set influxdb.persistence.enabled=true \
+    --set influxdb.persistence.size=${INFLUXDB_PERSISTENCE_SIZE:-5Gi} \
+    --set influxdb.persistence.storageClass="longhorn" \
+    --set monitor.grafana.persistence.enabled=true \
+    --set monitor.grafana.persistence.size=${MONITOR_PERSISTENCE_SIZE:-5Gi} \
+    --set monitor.grafana.persistence.storageClass="longhorn" \
+    --set passport.admin_username=${DRYCC_ADMIN_USERNAME} \
+    --set passport.admin_password=${DRYCC_ADMIN_PASSWORD} \
+    --namespace drycc \
+    --create-namespace --wait --timeout 30m0s
+  echo -e "\\033[32m---> Rabbitmq username: $RABBITMQ_USERNAME\\033[0m"
+  echo -e "\\033[32m---> Rabbitmq password: $RABBITMQ_PASSWORD\\033[0m"
+}
 
-echo -e "\\033[32m---> Start installing helmbroker...\\033[0m"
+function install_helmbroker {
+  HELMBROKER_USERNAME=$(cat /proc/sys/kernel/random/uuid)
+  HELMBROKER_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
 
-helm install helmbroker drycc/helmbroker \
-  --set ingress_class="nginx" \
-  --set platform_domain="cluster.local" \
-  --set persistence.storageClass="longhorn" \
-  --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
-  --set platform_domain=${PLATFORM_DOMAIN} \
-  --set username=${HELMBROKER_USERNAME} \
-  --set password=${HELMBROKER_PASSWORD} \
-  --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq-0.drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
-  --namespace drycc --create-namespace --wait -f - <<EOF
+  echo -e "\\033[32m---> Start installing helmbroker...\\033[0m"
+
+  helm install helmbroker drycc/helmbroker \
+    --set ingress_class="nginx" \
+    --set platform_domain="cluster.local" \
+    --set persistence.storageClass="longhorn" \
+    --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
+    --set platform_domain=${PLATFORM_DOMAIN} \
+    --set username=${HELMBROKER_USERNAME} \
+    --set password=${HELMBROKER_PASSWORD} \
+    --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq-0.drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
+    --namespace drycc --create-namespace --wait -f - <<EOF
 repositories:
 - name: drycc-helm-broker
   url: ${addons_url}
 EOF
 
-kubectl apply -f - <<EOF
+  kubectl apply -f - <<EOF
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ClusterServiceBroker
 metadata:
@@ -183,11 +196,16 @@ spec:
   url: https://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}
 EOF
 
-BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
-INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n kube-system -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
+  echo -e "\\033[32m---> Helmbroker username: $HELMBROKER_USERNAME\\033[0m"
+  echo -e "\\033[32m---> Helmbroker password: $HELMBROKER_PASSWORD\\033[0m"
+}
 
-if [[ "${USE_HAPROXY:-true}" == "true" ]] ; then
-  cat << EOF > "/etc/haproxy/haproxy.cfg"
+function config_haproxy {
+  BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
+  INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n kube-system -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
+
+  if [[ "${USE_HAPROXY:-true}" == "true" ]] ; then
+    cat << EOF > "/etc/haproxy/haproxy.cfg"
 global
    log /dev/log    local0
    log /dev/log    local1 notice
@@ -222,15 +240,40 @@ listen builder
    timeout server  30000
    server builder ${BUILDER_IP}:2222 check
 EOF
+  fi
+
+  mkdir -p /run/haproxy
+  systemctl enable haproxy
+  systemctl restart haproxy
+}
+
+# --- add quotes to command arguments ---
+quote() {
+    for arg in "$@"; do
+        printf '%s\n' "$arg" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
+    done
+}
+
+# --- escape most punctuation characters, except quotes, forward slash, and space ---
+escape() {
+    printf '%s' "$@" | sed -e 's/\([][!#$%&()*;<=>?\_`{|}]\)/\\\1/g;'
+}
+
+# --- re-evaluate args to include env command ---
+eval set -- $(escape "${INSTALL_DRYCC_EXEC}") $(quote "$@")
+
+if [[ -z "$@" ]] ; then
+  install_k3s
+  install_components
+  install_longhorn
+  install_drycc
+  install_helmbroker
+  config_haproxy
+  echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
+else
+  for command in "$@"
+  do
+      $command
+      echo -e "\\033[32m---> Installation $command complete, enjoy life...\\033[0m"
+  done
 fi
-
-mkdir -p /run/haproxy
-systemctl enable haproxy
-systemctl restart haproxy
-
-echo -e "\\033[32m---> Please save the following information for future use.\\033[0m"
-echo -e "\\033[32m---> Rabbitmq username: $RABBITMQ_USERNAME\\033[0m"
-echo -e "\\033[32m---> Rabbitmq password: $RABBITMQ_PASSWORD\\033[0m"
-echo -e "\\033[32m---> Helmbroker username: $HELMBROKER_USERNAME\\033[0m"
-echo -e "\\033[32m---> Helmbroker password: $HELMBROKER_PASSWORD\\033[0m"
-echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"

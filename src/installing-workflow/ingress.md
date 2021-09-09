@@ -70,7 +70,7 @@ $ helm install stable/traefik --name ingress --namespace kube-system --set ssl.e
 
 ## Configure DNS
 
-User must to set up a hostname, and assumes the `drycc.$host` convention.
+User must to set up a hostname, and assumes the `*.$host` convention.
 
 We need to point the `*.$host` record to the public IP address of your ingress controller. You can get the public IP using the following command. A wildcard entry is necessary here as apps will use the same rule after they are deployed.
 
@@ -80,35 +80,16 @@ NAME              CLUSTER-IP   EXTERNAL-IP      PORT(S)                      AGE
 ingress-traefik   10.0.25.3    138.91.243.152   80:31625/TCP,443:30871/TCP   33m
 ```
 
-Additionally, we need to point the `drycc-builder.$host` record to the public IP address of the [Builder][].
-
-```
-$ kubectl get svc drycc-builder --namespace drycc
-NAME           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
-drycc-builder   10.0.165.140   40.86.182.187   2222:32488/TCP   33m
-```
-
-If ingress-nginx is used, ports can be exposed in the following ways.
-
-```
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: tcp-services
-  namespace: ingress-nginx
-data:
-  2222: "drycc/drycc-builder:2222"
-```
 
 If we were using `drycc.cc` as a hostname, we would need to create the following A DNS records.
 
 | Name                         | Type          | Value          |
 | ---------------------------- |:-------------:| --------------:|
 | *.drycc.cc                   | A             | 138.91.243.152 |
-| drycc-builder.drycc.cc        | A             | 40.86.182.187  |
 
-Once all of the pods are in the `READY` state, and `drycc.$host` resolves to the external IP found above, Workflow is up and running!
+Once all of the pods are in the `READY` state, and `*.$host` resolves to the external IP found above, the preparation of ingress has been completed!
 
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
 
-[builder]: ../understanding-workflow/components.md#builder
+If your k8s does not provide public network loadblance, you need to install TCP proxy services such as haproxy on machines that can 
+access both internal and external networks, and then expose `80` and `443`.
