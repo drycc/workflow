@@ -126,11 +126,51 @@ $ curl -sfL https://www.drycc.cc/install.sh | bash -
 ```
 
 !!! important
-    Users in Chinese mainland can use the following methods to speed up installation:
+    If you are in China, you need to use mirror acceleration:
 
     ```
     $ curl -sfL https://www.drycc.cc/install.sh | INSTALL_DRYCC_MIRROR=cn bash -
     ```
+
+### Install Node
+
+Node can be a simple agent or a server; Server has the function of agent. Multiple servers have high availability, but the number of servers should not 
+exceed 7 at most. There is no limit to the number of agents.
+
+* First, check the cluster token of the master.
+
+```
+$ cat /var/lib/rancher/k3s/server/node-token
+K1078e7213ca32bdaabb44536f14b9ce7926bb201f41c3f3edd39975c16ff4901ea::server:33bde27f-ac49-4483-b6ac-f4eec2c6dbfa
+```
+
+We assume that the IP address of the cluster master is `192.168.6.240`, in that way.
+
+* Then, Set the environment variable:
+
+```
+$ export K3S_URL=https://192.168.6.240:6443
+$ export K3S_TOKEN="K1078e7213ca32bdaabb44536f14b9ce7926bb201f41c3f3edd39975c16ff4901ea::server:33bde27f-ac49-4483-b6ac-f4eec2c6dbfa"
+```
+
+!!! important
+    If you are in China, you need to use mirror acceleration:
+
+    ```
+    $ export INSTALL_DRYCC_MIRROR=cn
+    ```
+
+* Join the cluster as server:
+
+```
+$ curl -sfL https://www.drycc.cc/install.sh | INSTALL_K3S_EXEC=server INSTALL_DRYCC_EXEC=install_k3s bash -
+```
+
+* Join the cluster as agent:
+
+```
+$ curl -sfL https://www.drycc.cc/install.sh | INSTALL_K3S_EXEC=agent INSTALL_DRYCC_EXEC=install_k3s bash -
+```
 
 ### Install Options
 
