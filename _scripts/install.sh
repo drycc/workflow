@@ -64,16 +64,22 @@ EOF
     k3s_install_url="https://get.k3s.io"
     addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
   fi
-  if [[ -z "${K3S_URL}" ]] ; then
-    INSTALL_K3S_EXEC="${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16 --cluster-init"
-  fi
 }
 
-function install_k3s {
+function install_k3s_server {
   pre_install_k3s
-  export INSTALL_K3S_EXEC
-  curl -sfL "${k3s_install_url}" |sh -
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16"
+  if [[ -z "${K3S_URL}" ]] ; then
+    INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
+  fi
+  curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
+
+function install_k3s_agent {
+  pre_install_k3s
+  curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
+}
+
 
 function install_components {
   mount bpffs -t bpf /sys/fs/bpf
@@ -251,23 +257,8 @@ EOF
   systemctl restart haproxy
 }
 
-# --- add quotes to command arguments ---
-quote() {
-    for arg in "$@"; do
-        printf '%s\n' "$arg" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
-    done
-}
-
-# --- escape most punctuation characters, except quotes, forward slash, and space ---
-escape() {
-    printf '%s' "$@" | sed -e 's/\([][!#$%&()*;<=>?\_`{|}]\)/\\\1/g;'
-}
-
-# --- re-evaluate args to include env command ---
-eval set -- $(escape "${INSTALL_DRYCC_EXEC}") $(quote "$@")
-
 if [[ -z "$@" ]] ; then
-  install_k3s
+  install_k3s_server
   install_components
   install_longhorn
   install_drycc

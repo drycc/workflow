@@ -163,13 +163,13 @@ $ export K3S_TOKEN="K1078e7213ca32bdaabb44536f14b9ce7926bb201f41c3f3edd39975c16f
 * Join the cluster as server:
 
 ```
-$ curl -sfL https://www.drycc.cc/install.sh | INSTALL_K3S_EXEC=server INSTALL_DRYCC_EXEC=install_k3s bash -
+$ curl -sfL https://www.drycc.cc/install.sh | bash -s - install_k3s_server
 ```
 
 * Join the cluster as agent:
 
 ```
-$ curl -sfL https://www.drycc.cc/install.sh | INSTALL_K3S_EXEC=agent INSTALL_DRYCC_EXEC=install_k3s bash -
+$ curl -sfL https://www.drycc.cc/install.sh | bash -s - install_k3s_agent
 ```
 
 ### Install Options
