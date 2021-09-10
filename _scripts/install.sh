@@ -30,6 +30,7 @@ function install_helm {
   tar -zxvf "${tar_name}"
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
+  helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
 }
 
 function pre_install_k3s {
@@ -83,8 +84,6 @@ function install_k3s_agent {
 
 function install_components {
   mount bpffs -t bpf /sys/fs/bpf
-  install_helm
-  helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
   helm repo update
 
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
@@ -104,8 +103,9 @@ EOF
 }
 
 function install_longhorn {
+  kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
   helm install longhorn drycc/longhorn --create-namespace \
-    --set persistence.defaultClass=false \
+    --set persistence.defaultClass=true \
     --set persistence.defaultClassReplicaCount=1 \
     --namespace longhorn-system --wait
 }
@@ -145,21 +145,16 @@ function install_drycc {
     --set global.platform_domain="${PLATFORM_DOMAIN}" \
     --set global.ingress_class=nginx \
     --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
-    --set controller.app_storage_class=longhorn \
     --set minio.persistence.enabled=true \
-    --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-5Gi} \
-    --set minio.persistence.storageClass="longhorn" \
+    --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-20Gi} \
     --set rabbitmq.username="${RABBITMQ_USERNAME}" \
     --set rabbitmq.password="${RABBITMQ_PASSWORD}" \
     --set rabbitmq.persistence.enabled=true \
     --set rabbitmq.persistence.size=${RABBITMQ_PERSISTENCE_SIZE:-5Gi} \
-    --set rabbitmq.persistence.storageClass="longhorn" \
     --set influxdb.persistence.enabled=true \
     --set influxdb.persistence.size=${INFLUXDB_PERSISTENCE_SIZE:-5Gi} \
-    --set influxdb.persistence.storageClass="longhorn" \
     --set monitor.grafana.persistence.enabled=true \
     --set monitor.grafana.persistence.size=${MONITOR_PERSISTENCE_SIZE:-5Gi} \
-    --set monitor.grafana.persistence.storageClass="longhorn" \
     --set passport.admin_username=${DRYCC_ADMIN_USERNAME} \
     --set passport.admin_password=${DRYCC_ADMIN_PASSWORD} \
     --namespace drycc \
@@ -177,7 +172,6 @@ function install_helmbroker {
   helm install helmbroker drycc/helmbroker \
     --set ingress_class="nginx" \
     --set platform_domain="cluster.local" \
-    --set persistence.storageClass="longhorn" \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
     --set platform_domain=${PLATFORM_DOMAIN} \
     --set username=${HELMBROKER_USERNAME} \
@@ -259,6 +253,7 @@ EOF
 
 if [[ -z "$@" ]] ; then
   install_k3s_server
+  install_helm
   install_components
   install_longhorn
   install_drycc

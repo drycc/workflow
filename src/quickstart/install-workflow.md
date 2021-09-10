@@ -185,7 +185,7 @@ CHANNEL                         | By default, `stable` channel will be installed
 USE_HAPROXY                     | Haproxy is enabled by default. If you want to turn it off, this value is false
 METALLB_ADDRESS_POOLS           | IP pool for LoadBalancer. The default is `172.16.0.0/12`
 INSTALL_DRYCC_MIRROR              | Specify the accelerated mirror location. Currently, only `cn` is supported
-MINIO_PERSISTENCE_SIZE          | The size of the persistence space allocated to `minio`, which is `5Gi` by default
+MINIO_PERSISTENCE_SIZE          | The size of the persistence space allocated to `minio`, which is `20Gi` by default
 MONITOR_PERSISTENCE_SIZE        | The size of the persistence space allocated to `monitor`, which is `5Gi` by default
 INFLUXDB_PERSISTENCE_SIZE       | The size of the persistence space allocated to `influxdb`, which is `5Gi` by default
 RABBITMQ_PERSISTENCE_SIZE       | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default
