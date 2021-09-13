@@ -69,7 +69,7 @@ EOF
 
 function install_k3s_server {
   pre_install_k3s
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=servicelb --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=local-storage --disable=servicelb --cluster-cidr=10.233.0.0/16"
   if [[ -z "${K3S_URL}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
   fi
@@ -103,7 +103,6 @@ EOF
 }
 
 function install_longhorn {
-  kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
   helm install longhorn drycc/longhorn --create-namespace \
     --set persistence.defaultClass=true \
     --set persistence.defaultClassReplicaCount=1 \
