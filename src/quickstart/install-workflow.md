@@ -176,20 +176,26 @@ $ curl -sfL https://www.drycc.cc/install.sh | bash -s - install_k3s_agent
 
 When using this method to install drycc, the following environment variables can be used to configure the installation:
 
-ENVIRONMENT VARIABLE            | DESCRIPTION
---------------------------------|------------------------------------------------------------------------------------------------
-PLATFORM_DOMAIN                 | Required item, specify drycc's domain name
-DRYCC_ADMIN_USERNAME            | Required item, specify drycc's admin username
-DRYCC_ADMIN_PASSWORD            | Required item, specify drycc's admin password
-CHANNEL                         | By default, `stable` channel will be installed. You can also specify `testing`
-USE_HAPROXY                     | Haproxy is enabled by default. If you want to turn it off, this value is false
-METALLB_ADDRESS_POOLS           | IP pool for LoadBalancer. The default is `172.16.0.0/12`
-INSTALL_DRYCC_MIRROR              | Specify the accelerated mirror location. Currently, only `cn` is supported
-MINIO_PERSISTENCE_SIZE          | The size of the persistence space allocated to `minio`, which is `20Gi` by default
-MONITOR_PERSISTENCE_SIZE        | The size of the persistence space allocated to `monitor`, which is `5Gi` by default
-INFLUXDB_PERSISTENCE_SIZE       | The size of the persistence space allocated to `influxdb`, which is `5Gi` by default
-RABBITMQ_PERSISTENCE_SIZE       | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default
-HELMBROKER_PERSISTENCE_SIZE     | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
+ENVIRONMENT VARIABLE                       | DESCRIPTION
+-------------------------------------------|---------------------------------------------------------------------------------------------------------
+PLATFORM_DOMAIN                            | Required item, specify drycc's domain name
+DRYCC_ADMIN_USERNAME                       | Required item, specify drycc's admin username
+DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admin password
+CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
+USE_HAPROXY                                | Haproxy is enabled by default. If you want to turn it off, this value is false
+METALLB_ADDRESS_POOLS                      | IP pool for LoadBalancer. The default is `172.16.0.0/12`
+INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
+CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
+MINIO_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `minio`, which is `20Gi` by default
+MINIO_PERSISTENCE_STORAGE_CLASS            | StorangeClass of `minio`; default storangeclass is used by default
+MONITOR_GRAFANA_PERSISTENCE_SIZE           | The size of the persistence space allocated to `monitor.grafana`, which is `5Gi` by default
+MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS  | StorangeClass of `monitor` grafana; default storangeclass is used by default
+INFLUXDB_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `influxdb`, which is `5Gi` by default
+INFLUXDB_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `influxdb`; default storangeclass is used by default
+RABBITMQ_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default
+RABBITMQ_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `rabbitmq`; default storangeclass is used by default
+HELMBROKER_PERSISTENCE_SIZE                | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
+HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; default storangeclass is used by default
 
 Since the installation script will install k3s, other environment variables can refer to k3s installation [environment variables](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
     

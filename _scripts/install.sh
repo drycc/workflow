@@ -144,16 +144,21 @@ function install_drycc {
     --set global.platform_domain="${PLATFORM_DOMAIN}" \
     --set global.ingress_class=nginx \
     --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
+    --set controller.app_storage_class=${CONTROLLER_APP_STORAGE_CLASS:-""} \
     --set minio.persistence.enabled=true \
     --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-20Gi} \
+    --set minio.persistence.storageClass=${MINIO_PERSISTENCE_STORAGE_CLASS:-""} \
     --set rabbitmq.username="${RABBITMQ_USERNAME}" \
     --set rabbitmq.password="${RABBITMQ_PASSWORD}" \
     --set rabbitmq.persistence.enabled=true \
     --set rabbitmq.persistence.size=${RABBITMQ_PERSISTENCE_SIZE:-5Gi} \
+    --set rabbitmq.persistence.storageClass=${RABBITMQ_PERSISTENCE_STORAGE_CLASS:-""} \
     --set influxdb.persistence.enabled=true \
     --set influxdb.persistence.size=${INFLUXDB_PERSISTENCE_SIZE:-5Gi} \
+    --set influxdb.persistence.storageClass=${INFLUXDB_PERSISTENCE_STORAGE_CLASS:-""} \
     --set monitor.grafana.persistence.enabled=true \
-    --set monitor.grafana.persistence.size=${MONITOR_PERSISTENCE_SIZE:-5Gi} \
+    --set monitor.grafana.persistence.size=${MONITOR_GRAFANA_PERSISTENCE_SIZE:-5Gi} \
+    --set monitor.grafana.storageClass=${MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS:-""} \
     --set passport.admin_username=${DRYCC_ADMIN_USERNAME} \
     --set passport.admin_password=${DRYCC_ADMIN_PASSWORD} \
     --namespace drycc \
@@ -172,6 +177,7 @@ function install_helmbroker {
     --set ingress_class="nginx" \
     --set platform_domain="cluster.local" \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
+    --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:=""} \
     --set platform_domain=${PLATFORM_DOMAIN} \
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
