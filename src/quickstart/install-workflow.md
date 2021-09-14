@@ -16,6 +16,11 @@ If you want to add more Linux distribution support, please submit a issue on git
 
 Some basic software needs to be installed before installing drycc workflow.
 
+### OS configuration
+
+K8s requires a large number of ports. If you are not sure what they are, please close the local firewall or open these ports.
+At the same time, because k8s you need system time, you need to ensure that the system time is correct.
+
 ### Installing open-iscsi
 
 The command used to install open-iscsi differs depending on the Linux distribution.

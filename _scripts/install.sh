@@ -33,7 +33,19 @@ function install_helm {
   helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
 }
 
+function pre_system_config {
+  iptables -F
+  iptables -X
+  iptables -F -t nat
+  iptables -X -t nat
+  iptables -P FORWARD ACCEPT
+  swapoff -a
+  sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+  mount bpffs -t bpf /sys/fs/bpf
+}
+
 function pre_install_k3s {
+  pre_system_config
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     mkdir -p /etc/rancher/k3s
     cat << EOF > "/etc/rancher/k3s/registries.yaml"
@@ -83,7 +95,6 @@ function install_k3s_agent {
 
 
 function install_components {
-  mount bpffs -t bpf /sys/fs/bpf
   helm repo update
 
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
