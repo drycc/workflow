@@ -76,9 +76,26 @@ EOF
   fi
 }
 
+function install_cin_plugins {
+  mkdir -p /opt/cni/bin
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    cni_plugins_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/cni/plugins/releases"
+  else
+    addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
+    cni_plugins_url="https://github.com/containernetworking/plugins/releases"
+  fi
+  version=$(curl -Ls ${cni_plugins_url}|grep /containernetworking/plugins/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+  tar_name="cni-plugins-linux-${ARCH}-$version.tgz"
+  download_url="${cni_plugins_url}/download/${version}/${tar_name}"
+  curl -fsSL -o "${tar_name}" "${download_url}"
+  tar -zxvf "${tar_name}" -C /opt/cni/bin
+  rm -rf "${tar_name}"
+}
+
 function install_k3s_server {
   configure_os
   configure_mirrors
+  install_cin_plugins
   INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=local-storage --disable=servicelb --cluster-cidr=10.233.0.0/16"
   if [[ -z "${K3S_URL}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
@@ -89,6 +106,7 @@ function install_k3s_server {
 function install_k3s_agent {
   configure_os
   configure_mirrors
+  install_cin_plugins
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
 
@@ -98,7 +116,7 @@ function install_components {
 
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
 
-  helm install cilium drycc/cilium --set operator.replicas=1 --namespace kube-system --wait
+  helm install cilium drycc/cilium --set operator.replicas=1 --set cni.chainingMode=portmap --namespace kube-system --wait
   helm install metallb drycc/metallb --namespace kube-system --wait -f - <<EOF
 configInline:
   address-pools:
