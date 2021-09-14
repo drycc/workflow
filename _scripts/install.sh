@@ -33,7 +33,7 @@ function install_helm {
   helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
 }
 
-function pre_system_config {
+function configure_os {
   iptables -F
   iptables -X
   iptables -F -t nat
@@ -44,8 +44,7 @@ function pre_system_config {
   mount bpffs -t bpf /sys/fs/bpf
 }
 
-function pre_install_k3s {
-  pre_system_config
+function configure_mirrors {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     mkdir -p /etc/rancher/k3s
     cat << EOF > "/etc/rancher/k3s/registries.yaml"
@@ -72,15 +71,14 @@ EOF
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
     export INSTALL_K3S_MIRROR
     k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
-    addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/drycc/addons/releases/download/latest/index.yaml"
   else
     k3s_install_url="https://get.k3s.io"
-    addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
   fi
 }
 
 function install_k3s_server {
-  pre_install_k3s
+  configure_os
+  configure_mirrors
   INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=local-storage --disable=servicelb --cluster-cidr=10.233.0.0/16"
   if [[ -z "${K3S_URL}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
@@ -89,7 +87,8 @@ function install_k3s_server {
 }
 
 function install_k3s_agent {
-  pre_install_k3s
+  configure_os
+  configure_mirrors
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
 
@@ -179,6 +178,11 @@ function install_drycc {
 }
 
 function install_helmbroker {
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/drycc/addons/releases/download/latest/index.yaml"
+  else
+    addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
+  fi
   HELMBROKER_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   HELMBROKER_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
 
@@ -220,7 +224,7 @@ EOF
   echo -e "\\033[32m---> Helmbroker password: $HELMBROKER_PASSWORD\\033[0m"
 }
 
-function config_haproxy {
+function configure_haproxy {
   BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
   INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n kube-system -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
 
@@ -274,7 +278,7 @@ if [[ -z "$@" ]] ; then
   install_longhorn
   install_drycc
   install_helmbroker
-  config_haproxy
+  configure_haproxy
   echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
 else
   for command in "$@"
