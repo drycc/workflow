@@ -53,19 +53,19 @@ mirrors:
     endpoint:
       - "https://hub-mirror.c.163.com"
       - "https://mirror.baidubce.com"
-      - "https://docker-mirror.drycc.cc"
+      - "https://docker-mirror.drycc.cc:1443"
       - "https://registry-1.docker.io"
   "quay.io":
     endpoint:
-      - "https://quay-mirror.drycc.cc"
+      - "https://quay-mirror.drycc.cc:1443"
       - "https://quay.io"
   "gcr.io":
     endpoint:
-      - "https://gcr-mirror.drycc.cc"
+      - "https://gcr-mirror.drycc.cc:1443"
       - "https://gcr.io"
   "k8s.gcr.io":
     endpoint:
-      - "https://k8s-mirror.drycc.cc"
+      - "https://k8s-mirror.drycc.cc:1443"
       - "https://k8s.gcr.io"
 EOF
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
