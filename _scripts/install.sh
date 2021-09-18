@@ -19,6 +19,7 @@ init_arch() {
 
 function clean_before_exit {
     # delay before exiting, so stdout/stderr flushes through the logging system
+    rm -rf /tmp/drycc-values.yaml /etc/rancher/k3s/registries.yaml
     sleep 3
 }
 trap clean_before_exit EXIT
@@ -51,22 +52,20 @@ function configure_mirrors {
 mirrors:
   "docker.io":
     endpoint:
-      - "https://hub-mirror.c.163.com"
-      - "https://mirror.baidubce.com"
-      - "https://docker-mirror.drycc.cc:1443"
-      - "https://registry-1.docker.io"
+    - "https://docker-mirror.drycc.cc"
+    - "https://registry-1.docker.io"
   "quay.io":
     endpoint:
-      - "https://quay-mirror.drycc.cc:1443"
-      - "https://quay.io"
+    - "https://quay-mirror.drycc.cc"
+    - "https://quay.io"
   "gcr.io":
     endpoint:
-      - "https://gcr-mirror.drycc.cc:1443"
-      - "https://gcr.io"
+    - "https://gcr-mirror.drycc.cc"
+    - "https://gcr.io"
   "k8s.gcr.io":
     endpoint:
-      - "https://k8s-mirror.drycc.cc:1443"
-      - "https://k8s.gcr.io"
+    - "https://k8s-mirror.drycc.cc"
+    - "https://k8s.gcr.io"
 EOF
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
     export INSTALL_K3S_MIRROR
@@ -165,7 +164,33 @@ function install_drycc {
 
   RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
-
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    cat << EOF > "/tmp/drycc-values.yaml"
+imagebuilder:
+  container_registries: |
+    unqualified-search-registries = ["docker.io"]
+    short-name-mode="permissive"
+    [[registry]]
+    prefix = "docker.io"
+    location = "docker-mirror.drycc.cc"
+    [[registry]]
+    prefix = "quay.io"
+    location = "quay-mirror.drycc.cc"
+    [[registry]]
+    prefix = "gcr.io"
+    location = "gcr-mirror.drycc.cc"
+    [[registry]]
+    prefix = "k8s.gcr.io"
+    location = "k8s-mirror.drycc.cc"
+EOF
+  else
+    cat << EOF > "/tmp/drycc-values.yaml"
+imagebuilder:
+  container_registries: |
+    unqualified-search-registries = ["docker.io"]
+    short-name-mode="permissive"
+EOF
+  fi
   helm install drycc drycc/workflow \
     --set builder.service.type=LoadBalancer \
     --set global.cluster_domain="cluster.local" \
@@ -190,6 +215,7 @@ function install_drycc {
     --set passport.admin_username=${DRYCC_ADMIN_USERNAME} \
     --set passport.admin_password=${DRYCC_ADMIN_PASSWORD} \
     --namespace drycc \
+    --values /tmp/drycc-values.yaml \
     --create-namespace --wait --timeout 30m0s
   echo -e "\\033[32m---> Rabbitmq username: $RABBITMQ_USERNAME\\033[0m"
   echo -e "\\033[32m---> Rabbitmq password: $RABBITMQ_PASSWORD\\033[0m"
