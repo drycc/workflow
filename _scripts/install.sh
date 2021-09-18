@@ -27,7 +27,12 @@ init_arch
 
 function install_helm {
   tar_name="helm-canary-linux-${ARCH}.tar.gz"
-  curl -fsSL -o "${tar_name}" "https://get.helm.sh/${tar_name}"
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    helm_download_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/helm/${tar_name}"
+  else
+    helm_download_url="https://get.helm.sh/${tar_name}"
+  fi
+  curl -fsSL -o "${tar_name}" "${helm_download_url}"
   tar -zxvf "${tar_name}"
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
@@ -80,7 +85,6 @@ function install_cin_plugins {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     cni_plugins_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/cni/plugins/releases"
   else
-    addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
     cni_plugins_url="https://github.com/containernetworking/plugins/releases"
   fi
   version=$(curl -Ls ${cni_plugins_url}|grep /containernetworking/plugins/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
@@ -314,6 +318,8 @@ EOF
   systemctl enable haproxy
   systemctl restart haproxy
 }
+
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 if [[ -z "$@" ]] ; then
   install_k3s_server
