@@ -199,6 +199,7 @@ EOF
     --set builder.service.type=LoadBalancer \
     --set global.cluster_domain="cluster.local" \
     --set global.platform_domain="${PLATFORM_DOMAIN}" \
+    --set global.cert_manager_enabled=${CERT_MANAGER_ENABLED:-true} \
     --set global.ingress_class=nginx \
     --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
     --set controller.app_storage_class=${CONTROLLER_APP_STORAGE_CLASS:-""} \
@@ -242,6 +243,7 @@ function install_helmbroker {
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
     --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:=""} \
     --set platform_domain=${PLATFORM_DOMAIN} \
+    --set cert_manager_enabled=${CERT_MANAGER_ENABLED:-true} \
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
     --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq-0.drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
@@ -250,6 +252,11 @@ repositories:
 - name: drycc-helm-broker
   url: ${addons_url}
 EOF
+  if [[ "${CERT_MANAGER_ENABLED:-true}" == "true" ]] ; then
+    BROKER_URL="https://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}"
+  else
+    BROKER_URL="http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}"
+  fi
 
   kubectl apply -f - <<EOF
 apiVersion: servicecatalog.k8s.io/v1beta1
@@ -265,7 +272,7 @@ metadata:
 spec:
   relistBehavior: Duration
   relistRequests: 5
-  url: https://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}
+  url: ${BROKER_URL}
 EOF
 
   echo -e "\\033[32m---> Helmbroker username: $HELMBROKER_USERNAME\\033[0m"

@@ -124,7 +124,14 @@ $ export PLATFORM_DOMAIN=59.46.3.190.nip.io
 
 ## Install
 
-You can use the installation script available at https://www.drycc.cc/install.sh to install drycc as a service on systemd and openrc based systems.
+Before installation, please make sure whether your installation environment is a public network. 
+If it is an intranet environment and there is no public IP, you need to disable the automatic certificate.
+
+```
+$ export CERT_MANAGER_ENABLED=false
+```
+
+Then you can use the installation script available at https://www.drycc.cc/install.sh to install drycc as a service on systemd and openrc based systems.
 
 ```
 $ curl -sfL https://www.drycc.cc/install.sh | bash -
@@ -186,6 +193,7 @@ ENVIRONMENT VARIABLE                       | DESCRIPTION
 PLATFORM_DOMAIN                            | Required item, specify drycc's domain name
 DRYCC_ADMIN_USERNAME                       | Required item, specify drycc's admin username
 DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admin password
+CERT_MANAGER_ENABLED                       | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
 USE_HAPROXY                                | Haproxy is enabled by default. If you want to turn it off, this value is false
 METALLB_ADDRESS_POOLS                      | IP pool for LoadBalancer. The default is `172.16.0.0/12`
