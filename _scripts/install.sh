@@ -302,7 +302,7 @@ listen http-80
    timeout client  30000
    timeout server  30000
    server ingress ${INGRESS_IP}:80 check
-listen http-443
+listen https-443
    bind *:443
    mode tcp
    maxconn 100000
@@ -341,6 +341,6 @@ else
   for command in "$@"
   do
       $command
-      echo -e "\\033[32m---> Installation $command complete, enjoy life...\\033[0m"
+      echo -e "\\033[32m---> Execute $command complete, enjoy life...\\033[0m"
   done
 fi
