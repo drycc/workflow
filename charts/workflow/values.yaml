@@ -90,7 +90,7 @@ global:
   # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
   platform_domain: ""
   # Whether cert_manager is enabled to automatically generate drycc certificates
-  cert_manager_enabled: "true"
+  cert_manager_enabled: true
   # Set the location of Workflow's passport
   #
   # Valid values are:
@@ -176,7 +176,7 @@ builder:
     # If service.type is not set to NodePort, the following statement will be ignored.
     nodePort: ""
 
-# 
+#
 passport:
   # Set passport deployment replicas
   replicas: 1
