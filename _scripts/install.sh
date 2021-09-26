@@ -333,9 +333,9 @@ if [[ -z "$@" ]] ; then
   install_helm
   install_components
   install_longhorn
+  configure_haproxy
   install_drycc
   install_helmbroker
-  configure_haproxy
   echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
 else
   for command in "$@"
