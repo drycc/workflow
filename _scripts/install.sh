@@ -113,7 +113,6 @@ function install_k3s_agent {
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
 
-
 function install_components {
   helm repo update
 
@@ -130,7 +129,12 @@ configInline:
 EOF
   helm install ingress-nginx drycc/ingress-nginx --namespace kube-system --wait
   helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
-  helm install catalog drycc/catalog --set asyncBindingOperationsEnabled=true --namespace catalog --create-namespace --wait
+  # Use arm64 and amd64 arch of docker.io/drycc/service-catalog:canary, it will be deleted in the future.
+  helm install catalog drycc/catalog \
+    --set asyncBindingOperationsEnabled=true \
+    --set image=docker.io/drycc/service-catalog:canary \
+    --namespace catalog \
+    --create-namespace --wait
 }
 
 function install_longhorn {
@@ -333,8 +337,8 @@ if [[ -z "$@" ]] ; then
   install_helm
   install_components
   install_longhorn
-  configure_haproxy
   install_drycc
+  configure_haproxy
   install_helmbroker
   echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
 else
