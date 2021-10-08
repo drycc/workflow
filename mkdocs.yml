@@ -76,6 +76,7 @@ nav:
     - Controller API v2.2: reference-guide/controller-api/v2.2.md
     - Controller API v2.3: reference-guide/controller-api/v2.3.md
   - Changelogs:
+    - v1.5.0: changelogs/v1.5.0.md
     - v1.4.0: changelogs/v1.4.0.md
     - v1.3.0: changelogs/v1.3.0.md
     - v1.2.0: changelogs/v1.2.0.md
