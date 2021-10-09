@@ -195,6 +195,7 @@ DRYCC_ADMIN_USERNAME                       | Required item, specify drycc's admi
 DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admin password
 CERT_MANAGER_ENABLED                       | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
+REGISTRIES_FILE                            | The `registers.yaml` file used by k3s.
 USE_HAPROXY                                | Haproxy is enabled by default. If you want to turn it off, this value is false
 METALLB_ADDRESS_POOLS                      | IP pool for LoadBalancer. The default is `172.16.0.0/12`
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported

@@ -19,7 +19,9 @@ init_arch() {
 
 function clean_before_exit {
     # delay before exiting, so stdout/stderr flushes through the logging system
-    rm -rf /tmp/drycc-values.yaml /etc/rancher/k3s/registries.yaml
+    rm -rf /tmp/drycc-values.yaml
+    configure_registries runtime
+    systemctl restart k3s
     sleep 3
 }
 trap clean_before_exit EXIT
@@ -50,14 +52,28 @@ function configure_os {
   mount bpffs -t bpf /sys/fs/bpf
 }
 
-function configure_mirrors {
-  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    mkdir -p /etc/rancher/k3s
+function configure_registries {
+  mkdir -p /etc/rancher/k3s
+  if [[ "$1" == "runtime" ]] ; then
+    if [[ -f "${REGISTRIES_FILE}" ]] ; then
+      cat "${REGISTRIES_FILE}" > /etc/rancher/k3s/registries.yaml
+    elif [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+      cat << EOF > "/etc/rancher/k3s/registries.yaml"
+mirrors:
+  "docker.io":
+    endpoint:
+    - "https://mirror.baidubce.com"
+    - "https://docker.mirrors.ustc.edu.cn"
+    - "https://hub-mirror.c.163.com"
+    - "https://registry-1.docker.io"
+EOF
+    fi
+  else
     cat << EOF > "/etc/rancher/k3s/registries.yaml"
 mirrors:
   "docker.io":
     endpoint:
-    - "https://docker-mirror.drycc.cc"
+    - "https://gcr-mirror.drycc.cc"
     - "https://registry-1.docker.io"
   "quay.io":
     endpoint:
@@ -72,6 +88,12 @@ mirrors:
     - "https://k8s-mirror.drycc.cc"
     - "https://k8s.gcr.io"
 EOF
+  fi
+}
+
+function configure_mirrors {
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    configure_registries
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
     export INSTALL_K3S_MIRROR
     k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
