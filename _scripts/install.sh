@@ -19,7 +19,7 @@ init_arch() {
 
 function clean_before_exit {
     # delay before exiting, so stdout/stderr flushes through the logging system
-    rm -rf /tmp/drycc-values.yaml
+    rm -rf /tmp/drycc-values.yaml /etc/rancher/k3s/registries.yaml
     configure_registries runtime
     systemctl restart k3s
     sleep 3
@@ -62,8 +62,6 @@ function configure_registries {
 mirrors:
   "docker.io":
     endpoint:
-    - "https://mirror.baidubce.com"
-    - "https://docker.mirrors.ustc.edu.cn"
     - "https://hub-mirror.c.163.com"
     - "https://registry-1.docker.io"
 EOF
@@ -202,16 +200,10 @@ imagebuilder:
     short-name-mode="permissive"
     [[registry]]
     prefix = "docker.io"
-    location = "docker-mirror.drycc.cc"
-    [[registry]]
-    prefix = "quay.io"
-    location = "quay-mirror.drycc.cc"
-    [[registry]]
-    prefix = "gcr.io"
-    location = "gcr-mirror.drycc.cc"
-    [[registry]]
-    prefix = "k8s.gcr.io"
-    location = "k8s-mirror.drycc.cc"
+    location = "registry-1.docker.io"
+    [[registry.mirror]]
+    prefix = "docker.io"
+    location = "hub-mirror.c.163.com"
 EOF
   else
     cat << EOF > "/tmp/drycc-values.yaml"
