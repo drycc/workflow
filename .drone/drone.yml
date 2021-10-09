@@ -9,7 +9,7 @@ steps:
   commands:
   - make docker-build docker-build-docs 
   - cp _scripts/* _build/html
-  - cd _build/html && echo "www.drycc.cc" > CNAME && git init
+  - cd _build/html && echo "drycc.cc" > CNAME  && echo "www.drycc.cc" >> CNAME && git init
   environment:
     SSH_DEPLOY_KEY:
       from_secret: ssh_deploy_key

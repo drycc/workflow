@@ -18,7 +18,7 @@ EOF
 
 PLATFORM="$(uname | tr '[:upper:]' '[:lower:]')"
 if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    DRYCC_BIN_URL_BASE="https://drycc-mirrors.oss-accelerate.aliyuncs.com/drycc/workflow-cli/releases"
+    DRYCC_BIN_URL_BASE="https://drycc-mirrors.drycc.cc/drycc/workflow-cli/releases"
 else
     DRYCC_BIN_URL_BASE="https://github.com/drycc/workflow-cli/releases"
 fi

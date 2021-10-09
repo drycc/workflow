@@ -131,17 +131,17 @@ If it is an intranet environment and there is no public IP, you need to disable 
 $ export CERT_MANAGER_ENABLED=false
 ```
 
-Then you can use the installation script available at https://www.drycc.cc/install.sh to install drycc as a service on systemd and openrc based systems.
+Then you can use the installation script available at https://drycc.cc/install.sh to install drycc as a service on systemd and openrc based systems.
 
 ```
-$ curl -sfL https://www.drycc.cc/install.sh | bash -
+$ curl -sfL https://drycc.cc/install.sh | bash -
 ```
 
 !!! important
     If you are in China, you need to use mirror acceleration:
 
     ```
-    $ curl -sfL https://www.drycc.cc/install.sh | INSTALL_DRYCC_MIRROR=cn bash -
+    $ curl -sfL https://drycc.cc/install.sh | INSTALL_DRYCC_MIRROR=cn bash -
     ```
 
 ### Install Node
@@ -175,13 +175,13 @@ $ export K3S_TOKEN="K1078e7213ca32bdaabb44536f14b9ce7926bb201f41c3f3edd39975c16f
 * Join the cluster as server:
 
 ```
-$ curl -sfL https://www.drycc.cc/install.sh | bash -s - install_k3s_server
+$ curl -sfL https://drycc.cc/install.sh | bash -s - install_k3s_server
 ```
 
 * Join the cluster as agent:
 
 ```
-$ curl -sfL https://www.drycc.cc/install.sh | bash -s - install_k3s_agent
+$ curl -sfL https://drycc.cc/install.sh | bash -s - install_k3s_agent
 ```
 
 ### Install Options
@@ -195,7 +195,7 @@ DRYCC_ADMIN_USERNAME                       | Required item, specify drycc's admi
 DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admin password
 CERT_MANAGER_ENABLED                       | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
-REGISTRIES_FILE                            | The `registers.yaml` file used by k3s.
+REGISTRIES_FILE                            | The `registers.yaml` file path used by k3s.
 USE_HAPROXY                                | Haproxy is enabled by default. If you want to turn it off, this value is false
 METALLB_ADDRESS_POOLS                      | IP pool for LoadBalancer. The default is `172.16.0.0/12`
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
@@ -218,5 +218,5 @@ Since the installation script will install k3s, other environment variables can 
 If you installed drycc using an installation script, you can uninstall the entire drycc using this script.
 
 ```
-$ curl -sfL https://www.drycc.cc/uninstall.sh | bash -
+$ curl -sfL https://drycc.cc/uninstall.sh | bash -
 ```

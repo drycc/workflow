@@ -6,14 +6,14 @@ Use the CLI to create and configure and manage applications.
 Install the `drycc` client for Linux or Mac OS X with:
 
 ```
-$ curl -sfL https://www.drycc.cc/install-cli.sh | bash -
+$ curl -sfL https://drycc.cc/install-cli.sh | bash -
 ```
 
 !!! important
     Users in Chinese mainland can use the following methods to speed up installation:
 
     ```
-    $ curl -sfL https://www.drycc.cc/install-cli.sh | INSTALL_DRYCC_MIRROR=cn bash -
+    $ curl -sfL https://drycc.cc/install-cli.sh | INSTALL_DRYCC_MIRROR=cn bash -
     ```
 
 Others please visit: https://github.com/drycc/workflow-cli/releases

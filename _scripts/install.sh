@@ -30,7 +30,7 @@ init_arch
 function install_helm {
   tar_name="helm-canary-linux-${ARCH}.tar.gz"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    helm_download_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/helm/${tar_name}"
+    helm_download_url="https://drycc-mirrors.drycc.cc/helm/${tar_name}"
   else
     helm_download_url="https://get.helm.sh/${tar_name}"
   fi
@@ -105,7 +105,7 @@ function configure_mirrors {
 function install_cin_plugins {
   mkdir -p /opt/cni/bin
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    cni_plugins_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/cni/plugins/releases"
+    cni_plugins_url="https://drycc-mirrors.drycc.cc/cni/plugins/releases"
   else
     cni_plugins_url="https://github.com/containernetworking/plugins/releases"
   fi
@@ -254,7 +254,7 @@ EOF
 
 function install_helmbroker {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    addons_url="https://drycc-mirrors.oss-accelerate.aliyuncs.com/drycc/addons/releases/download/latest/index.yaml"
+    addons_url="https://drycc-mirrors.drycc.cc/drycc/addons/releases/download/latest/index.yaml"
   else
     addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
   fi
