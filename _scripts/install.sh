@@ -120,6 +120,9 @@ function install_k3s_server {
   configure_mirrors
   install_cin_plugins
   INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=local-storage --disable=servicelb --cluster-cidr=10.233.0.0/16"
+  if [[ -n "${K3S_DATA_DIR}" ]] ; then
+    INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
+  fi
   if [[ -z "${K3S_URL}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
   fi
@@ -130,6 +133,9 @@ function install_k3s_agent {
   configure_os
   configure_mirrors
   install_cin_plugins
+  if [[ -n "${K3S_DATA_DIR}" ]] ; then
+    INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
+  fi
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
 
@@ -158,9 +164,13 @@ EOF
 }
 
 function install_longhorn {
+  if [[ -n "${LONGHORN_DATA_PATH}" ]] ; then
+    LONGHORN_DATA_PATH="${LONGHORN_DATA_PATH}/longhorn"
+  fi
   helm install longhorn drycc/longhorn --create-namespace \
     --set persistence.defaultClass=true \
     --set persistence.defaultClassReplicaCount=1 \
+    --set defaultSettings.defaultDataPath=${LONGHORN_DATA_PATH:-""} \
     --namespace longhorn-system --wait
 }
 
@@ -173,7 +183,7 @@ function check_drycc_env {
     echo -e "\\033[31m---> For example, the current server IP is 8.8.8.8\\033[0m"
     echo -e "\\033[31m---> Please point *.drycc.cc to 8.8.8.8\\033[0m"
     exit 1
-  fi	
+  fi
 
   if [[ -z "${DRYCC_ADMIN_USERNAME}" || -z "${DRYCC_ADMIN_PASSWORD}" ]] ; then
     echo -e "\\033[31m---> Please set the DRYCC_ADMIN_USERNAME and DRYCC_ADMIN_PASSWORD variable.\\033[0m"
