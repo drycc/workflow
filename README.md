@@ -2,9 +2,9 @@
 
 **Drycc Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
 
-To **get started** with **Drycc Workflow** please read the [Quick Start Guide](https://drycc.cc/docs/workflow/quickstart/).
+To **get started** with **Drycc Workflow** please read the [Quick Start Guide](https://drycc.cc/quickstart/).
 
-Visit [https://drycc.cc](https://drycc.cc) for more information on [why you should use Drycc Workflow](https://drycc.cc/why-drycc/) or [learn about its features](https://drycc.cc/how-it-works/).
+Visit [https://drycc.cc](https://drycc.cc) for more information on [why you should use Drycc Workflow](https://drycc.cc/understanding-workflow/concepts/) or [learn about its features](https://drycc.cc/understanding-workflow/architecture/).
 
 This repository contains the source code for Drycc Workflow documentation. If you're looking for individual components, they live in their own repositories.
 
@@ -13,9 +13,7 @@ Please see below for links and descriptions of each component:
 - [passport](https://github.com/drycc/passport) - Workflow single sign on system
 - [controller](https://github.com/drycc/controller) - Workflow API server
 - [builder](https://github.com/drycc/builder) - Git server and source-to-image component
-- [imagebuilder](https://github.com/drycc/imagebuilder) - The builder for [Docker](https://www.docker.com/) based applications
-- [slugbuilder](https://github.com/drycc/slugbuilder) - The builder for [slug/buildpack](https://devcenter.heroku.com/articles/slug-compiler) based applications
-- [slugrunner](https://github.com/drycc/slugrunner) - The runner for slug/buildpack based applications
+- [imagebuilder](https://github.com/drycc/imagebuilder) - The builder for [Docker](https://www.docker.com/) and [CNCF Buildpacks](https://buildpacks.io/) based applications
 - [fluentd](https://github.com/drycc/fluentd) - Backend log shipping mechanism for `drycc logs`
 - [postgres](https://github.com/drycc/postgres) - The central database
 - [registry](https://github.com/drycc/registry) - The Docker registry
@@ -31,14 +29,13 @@ We welcome your input! If you have feedback, please [submit an issue][issues]. I
 
 # Working on Documentation
 [![Build Status](https://drone.drycc.cc/api/badges/drycc/workflow/status.svg)](https://drone.drycc.cc/drycc/workflow)
-[![Latest Docs](http://img.shields.io/badge/docs-latest-fc1e5e.svg)](http://docs-v2.readthedocs.org/en/latest/)
 
 The Drycc project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
 
 * Fork this repository.
 * Make your changes.
 * [Submit a pull request][prs] (PR) to this repository with your changes, and unit tests whenever possible.
-	* If your PR fixes any [issues][issues], make sure you write `Fixes #1234` in your PR description (where `#1234` is the number of the issue you're closing).
+    * If your PR fixes any [issues][issues], make sure you write `Fixes #1234` in your PR description (where `#1234` is the number of the issue you're closing).
 * The Drycc core contributors will review your code. After each of them sign off on your code, they'll label your PR with `LGTM1` and `LGTM2` (respectively). Once that happens, a contributor will merge it.
 
 ## Requirements

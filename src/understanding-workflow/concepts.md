@@ -44,10 +44,6 @@ a simple and straightforward "source to Docker image" capability. Supporting
 multiple language runtimes via community [buildpacks][], building your application
 in a container can be as easy as `git push drycc master`.
 
-Applications which are packaged via a buildpack are run in Docker containers as
-part of the `slugrunner` process. View the [slugrunner component][slugrunner]
-for more information.
-
 Applications which use either a Dockerfile or reference external Docker
 images are launched unmodified.
 
@@ -140,4 +136,3 @@ to external or third-party vendor services.
 [environment variables]: http://12factor.net/config
 [helm]: https://github.com/kubernetes/helm
 [release]: ../reference-guide/terms.md#release
-[slugrunner]: concepts.md#slugrunner

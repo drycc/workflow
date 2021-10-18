@@ -1,6 +1,6 @@
 # Using Buildpacks
 
-Drycc supports deploying applications via [Heroku Buildpacks][]. Buildpacks are useful if you're interested in following Heroku's best practices for building applications or if you are deploying an application that already runs on Heroku.
+Drycc supports deploying applications via [Cloud Native Buildpacks](https://buildpacks.io/). Cloud Native Buildpacks are useful if you want to follow [cnb's docs](https://buildpacks.io/docs/) for building applications.
 
 ## Add SSH Key
 
@@ -44,18 +44,43 @@ Use `git push drycc master` to deploy your application.
     Compressing objects: 100% (48/48), done.
     Writing objects: 100% (75/75), 18.28 KiB | 0 bytes/s, done.
     Total 75 (delta 30), reused 58 (delta 22)
+    remote: --->
     Starting build... but first, coffee!
-    -----> Go app detected
-    -----> Checking Godeps/Godeps.json file.
-    -----> Installing go1.4.2... done
-    -----> Running: godep go install -tags heroku ./...
-    -----> Discovering process types
-           Procfile declares types -> web
-    -----> Compiled slug size is 1.7M
+    ---> Waiting podman running.
+    ---> Process podman started.
+    ---> Waiting caddy running.
+    ---> Process caddy started.
+    ---> Building pack
+    ---> Using builder docker.io/drycc/buildpacks:20
+    Builder 'docker.io/drycc/buildpacks:20' is trusted
+    Pulling image 'index.docker.io/drycc/buildpacks:20'
+    Resolving "drycc/buildpacks" using unqualified-search registries (/etc/containers/registries.conf)
+    Trying to pull docker.io/drycc/buildpacks:20...
+    Getting image source signatures
+    ...
+    ---> Skip generate base layer
+    ---> Python Buildpack
+    ---> Downloading and extracting Python 3.10.0
+    ---> Installing requirements with pip
+    Collecting Django==3.2.8
+    Downloading Django-3.2.8-py3-none-any.whl (7.9 MB)
+    Collecting gunicorn==20.1.0
+    Downloading gunicorn-20.1.0-py3-none-any.whl (79 kB)
+    Collecting sqlparse>=0.2.2
+    Downloading sqlparse-0.4.2-py3-none-any.whl (42 kB)
+    Collecting pytz
+    Downloading pytz-2021.3-py2.py3-none-any.whl (503 kB)
+    Collecting asgiref<4,>=3.3.2
+    Downloading asgiref-3.4.1-py3-none-any.whl (25 kB)
+    Requirement already satisfied: setuptools>=3.0 in /layers/drycc_python/python/lib/python3.10/site-packages (from gunicorn==20.1.0->-r requirements.txt (line 2)) (57.5.0)
+    Installing collected packages: sqlparse, pytz, asgiref, gunicorn, Django
+    Successfully installed Django-3.2.8 asgiref-3.4.1 gunicorn-20.1.0 pytz-2021.3 sqlparse-0.4.2
+    ---> Generate Launcher
+    ...
     Build complete.
-    Launching app.
-    Launching...
-    Done, skiing-keypunch:v2 deployed to Drycc
+    Launching App...
+    ...
+    Done, skiing-keypunch:v2 deployed to Workflow
 
     Use 'drycc open' to view this application in your browser
 
@@ -68,7 +93,7 @@ Use `git push drycc master` to deploy your application.
     Powered by Drycc
     Release v2 on skiing-keypunch-v2-web-02zb9
 
-Because a Heroku-style application is detected, the `web` process type is automatically scaled to 1 on first deploy.
+Because a Buildpacks-style application is detected, the `web` process type is automatically scaled to 1 on first deploy.
 
 Use `drycc scale web=3` to increase `web` processes to 3, for example. Scaling a
 process type directly changes the number of [pods] running that process.
@@ -78,18 +103,13 @@ process type directly changes the number of [pods] running that process.
 
 For convenience, a number of buildpacks come bundled with Drycc:
 
- * [Ruby Buildpack][]
- * [Nodejs Buildpack][]
- * [Java Buildpack][]
- * [Gradle Buildpack][]
- * [Grails Buildpack][]
- * [Play Buildpack][]
- * [Python Buildpack][]
- * [PHP Buildpack][]
- * [Clojure Buildpack][]
- * [Scala Buildpack][]
  * [Go Buildpack][]
- * [Multi Buildpack][]
+ * [Java Buildpack][]
+ * [Nodejs Buildpack][]
+ * [PHP Buildpack][]
+ * [Python Buildpack][]
+ * [Ruby Buildpack][]
+ * [Rust Buildpack][]
 
 Drycc will cycle through the `bin/detect` script of each buildpack to match the code you
 are pushing.
@@ -101,31 +121,13 @@ are pushing.
 
 ## Using a Custom Buildpack
 
-To use a custom buildpack, you need create a `.buildpack` file in your root path app.
+To use a custom buildpack, you need create a `.pack_builder` file in your root path app.
 
-    $  tee > .buildpack << EOF
-       > https://github.com/dpiddy/heroku-buildpack-ruby-minimal
+    $  tee > .pack_builder << EOF
+       > docker.io/drycc/buildpacks:20
        > EOF
 
-!!! note
-    If, however, you're unable to deploy using the latest version of the buildpack, You can set an exact version of a buildpack by using a git revision in your `.buildpack`. For example: `https://github.com/dpiddy/heroku-buildpack-ruby-minimal#v13`
-
 On your next `git push`, the custom buildpack will be used.
-
-
-## Compile Hooks
-
-Sometimes, an application needs a way to stop or check if a service is running before building an
-app, which may require notifying a service that the [Builder][] has finished compiling the app. In
-order to do this, an app can provide two files in their `bin/` directory:
-
-```
-bin/pre-compile
-bin/post-compile
-```
-
-The builder will run these commands before and after the build process, respectively.
-
 
 ## Using Private Repositories
 
@@ -139,13 +141,13 @@ which has access. Use either the path of a private key file or the raw key mater
 
 For example, to use a custom buildpack hosted at a private GitHub URL, ensure that an SSH public
 key exists in your [GitHub settings][]. Then set `SSH_KEY` to the corresponding SSH private key
-and set `.buildpack` to the URL:
+and set `.pack_builder` to the builder image:
 
-    $  tee > .buildpack << EOF
-       > https://github.com/dpiddy/heroku-buildpack-ruby-minimal
+    $  tee > .pack_builder << EOF
+       > docker.io/drycc/buildpacks:20
        > EOF
     $ git add .buildpack
-    $ git commit -m "chore(buildpack): modify the buildpack url"
+    $ git commit -m "chore(buildpack): modify the pack_builder"
     $ git push drycc master
 
 ## Builder selector
@@ -153,25 +155,20 @@ and set `.buildpack` to the URL:
 Which way to build a project conforms to the following principles:
 
 - If Dockerfile exists in the project, the stack uses `container`
-- If Procfile exists in the project, the stack uses `heroku-18`
+- If Procfile exists in the project, the stack uses `buildpack`
 - If both exist, `container` is used by default
-- You can also set the `DRYCC_STACK` to determine which stack to use.
+- You can also set the `DRYCC_STACK` to `container` or `buildpack` determine which stack to use.
 
 
 [pods]: http://kubernetes.io/v1.1/docs/user-guide/pods.html
 [controller]: ../understanding-workflow/components.md#controller
 [builder]: ../understanding-workflow/components.md#builder
-[Ruby Buildpack]: https://github.com/heroku/heroku-buildpack-ruby
-[Nodejs Buildpack]: https://github.com/heroku/heroku-buildpack-nodejs
-[Java Buildpack]: https://github.com/heroku/heroku-buildpack-java
-[Gradle Buildpack]: https://github.com/heroku/heroku-buildpack-gradle
-[Grails Buildpack]: https://github.com/heroku/heroku-buildpack-grails
-[Play Buildpack]: https://github.com/heroku/heroku-buildpack-play
-[Python Buildpack]: https://github.com/heroku/heroku-buildpack-python
-[PHP Buildpack]: https://github.com/heroku/heroku-buildpack-php
-[Clojure Buildpack]: https://github.com/heroku/heroku-buildpack-clojure
-[Scala Buildpack]: https://github.com/heroku/heroku-buildpack-scala
-[Go Buildpack]: https://github.com/kr/heroku-buildpack-go
-[Multi Buildpack]: https://github.com/heroku/heroku-buildpack-multi
-[Heroku Buildpacks]: https://devcenter.heroku.com/articles/buildpacks
+[Go Buildpack]: https://github.com/drycc/pack-images/tree/main/buildpacks/go
+[Java Buildpack]: https://github.com/drycc/pack-images/tree/main/buildpacks/java
+[Nodejs Buildpack]: https://github.com/drycc/pack-images/tree/main/buildpacks/nodejs
+[PHP Buildpack]: https://github.com/drycc/pack-images/tree/main/buildpacks/php
+[Python Buildpack]: https://github.com/drycc/pack-images/tree/main/buildpacks/python
+[Ruby Buildpack]: https://github.com/drycc/pack-images/tree/main/buildpacks/ruby
+[Rust Buildpack]: https://github.com/drycc/pack-images/tree/main/buildpacks/rust
+[Cloud Native Buildpacks]: https://buildpacks.io/
 [GitHub settings]: https://github.com/settings/ssh

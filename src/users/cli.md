@@ -6,8 +6,7 @@ with Drycc Workflow.
 ## Installation
 
 Install the latest `drycc` client for Linux or Mac OS X with:
-
-    $ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install.tmpl | bash -s v1.1.0
+    $ curl -sfL https://drycc.cc/install-cli.sh | bash -
 
 The installer puts `drycc` in your current directory, but you should move it
 somewhere in your $PATH:
@@ -67,9 +66,13 @@ Examples:
 
     $ DRYCC_PROFILE=production drycc login drycc.production.com
     ...
+    Opening browser to http://drycc.example.com/v2/login/drycc/?key=4ccc81ee2dce4349ad5261ceffe72c71
+    Waiting for login... .o.Logged in as drycc
     Configuration saved to /home/testuser/.drycc/production.json
     $ DRYCC_PROFILE=~/config.json drycc login drycc.example.com
     ...
+    Opening browser to http://drycc.example.com/v2/login/drycc/?key=4ccc81ee2dce4349ad5261ceffe72c71
+    Waiting for login... .o.Logged in as drycc
     Configuration saved to /home/testuser/config.json
 
 The configuration flag works identically to and overrides `$DRYCC_PROFILE`:

@@ -48,7 +48,6 @@ nav:
     - Platform Monitoring: managing-workflow/platform-monitoring.md
     - Production Deployments: managing-workflow/production-deployments.md
     - Upgrading Workflow: managing-workflow/upgrading-workflow.md
-    - Extending Workflow: managing-workflow/extending-workflow.md
   - Troubleshooting:
     - Troubleshooting Workflow: troubleshooting/index.md
     - Troubleshooting using Kubectl: troubleshooting/kubectl.md

@@ -50,32 +50,17 @@ managing the build process of your [Application][]. The builder process is:
 
 Builder currently supports both buildpack and Dockerfile based builds.
 
-**Project Location:** [drycc/slugbuilder](https://github.com/drycc/slugbuilder)
-
-For Buildpack-based deploys, the builder component will launch a one-shot Pod
-in the `drycc` namespace. This pod runs `slugbuilder` component which handles
-default and custom buildpacks (specified by `.buildpacks`). The "compiled"
-application results in a slug, consisting of your application code and all of
-its dependencies as determined by the buildpack. The slug is pushed to the
-cluster-configured object storage for later execution. For more information
-about buildpacks see [using buildpacks][using-buildpacks].
-
 **Project Location:** [drycc/imagebuilder](https://github.com/drycc/imagebuilder)
 
-For Applications which contain a `Dockerfile` in the root of the repository,
-`builder` will instead launch the `imagebuilder` to package your application.
-Instead of generating a slug, `imagebuilder` generates a Docker image (using
-the underlying Docker engine). The completed image is pushed to the managed
-Docker registry on cluster. For more information see [using Dockerfiles][using-dockerfiles].
+For Buildpack-based deploys, the builder component will launch a one-shot Job
+in the `drycc` namespace. This job runs `imagebuilder` component which handles
+default and custom buildpacks (specified by `.packbuilder`). The completed image
+is pushed to the managed Docker registry on cluster. For more information
+about buildpacks see [using buildpacks][using-buildpacks].
 
-## Slugrunner
-
-**Project Location:** [drycc/slugrunner](https://github.com/drycc/slugrunner)
-
-Slugrunner is the component responsible for executing buildpack-based
-Applications. Slugrunner receives slug information from the controller and
-downloads the application slug just before launching your application
-processes.
+Unlike buildpack-based, For Applications which contain a `Dockerfile` in the root
+of the repository, it generates a Docker image (using the underlying Docker engine).
+For more information see [using Dockerfiles][using-dockerfiles].
 
 ## Object Storage
 
@@ -152,6 +137,14 @@ a more robust InfluxDB setup in a production setting.
 
 RabbitMQ is the most widely deployed open source message broker.
 Controller use celery with rabbitMQ to execute the asynchronous task.
+
+## HelmBroker
+
+**Project Location:** [drycc/rabbitmq](https://github.com/drycc/helmbroker)
+
+Helm Broker is a Service Broker that exposes Helm charts as Service Classes in Service Catalog.
+To do so, Helm Broker uses the concept of addons. An addon is an abstraction layer over a Helm chart
+which provides all information required to convert the chart into a Service Class.
 
 ## See Also
 

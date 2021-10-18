@@ -252,7 +252,7 @@ Kick off https://ci.drycc.info/job/workflow-cli-build-stable/ with the `TAG` bui
 and then verify `stable` artifacts are available and appropriately updated after the job completes:
 
 ```
-$ curl -sSL https://raw.githubusercontent.com/drycc/workflow-cli/main/install.tmpl | bash -s v1.1.0
+$ curl -sfL https://drycc.cc/install-cli.sh | bash -
 $ ./drycc version
 # (Should show $WORKFLOW_RELEASE)
 ```

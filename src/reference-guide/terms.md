@@ -45,7 +45,6 @@ The controller is the "brain" of the Drycc platform. A controller manages Applic
 
 The controller is in charge of:
 
-- Authenticating and authorizing clients
 - Processing client API calls
 - Managing containers that perform work for applications
 - Managing proxies that route traffic to containers

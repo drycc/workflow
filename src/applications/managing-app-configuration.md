@@ -53,11 +53,10 @@ the application to an external PostgreSQL database.
 Detachments can be performed with `drycc config:unset`.
 
 
-## Slugbuilder Cache
+## Buildpacks Cache
 
-By default, apps using the [Slugbuilder][] will have caching turned on. This means that Drycc will
-persist all data being written to `CACHE_DIR` inside the buildpack will be persisted between
-deploys. When deploying applications that depend on third-party libraries that have to be fetched,
+By default, apps using the [Imagebuilder][] will reuse the latest image data.
+When deploying applications that depend on third-party libraries that have to be fetched,
 this could speed up deployments a lot. In order to make use of this, the buildpack must implement
 the cache by writing to the cache directory. Most buildpacks already implement this, but when using
 custom buildpacks, it might need to be changed to make full use of the cache.
