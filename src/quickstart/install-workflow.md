@@ -124,7 +124,7 @@ $ export PLATFORM_DOMAIN=59.46.3.190.nip.io
 
 ## Install
 
-Before installation, please make sure whether your installation environment is a public network. 
+Before installation, please make sure whether your installation environment is a public network.
 If it is an intranet environment and there is no public IP, you need to disable the automatic certificate.
 
 ```
@@ -146,7 +146,7 @@ $ curl -sfL https://drycc.cc/install.sh | bash -
 
 ### Install Node
 
-Node can be a simple agent or a server; Server has the function of agent. Multiple servers have high availability, but the number of servers should not 
+Node can be a simple agent or a server; Server has the function of agent. Multiple servers have high availability, but the number of servers should not
 exceed 7 at most. There is no limit to the number of agents.
 
 * First, check the cluster token of the master.
@@ -210,9 +210,11 @@ RABBITMQ_PERSISTENCE_SIZE                  | The size of the persistence space a
 RABBITMQ_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `rabbitmq`; default storangeclass is used by default
 HELMBROKER_PERSISTENCE_SIZE                | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
 HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; default storangeclass is used by default
+K3S_DATA_DIR                               | The config of k3s data dir； If not set, the default path is used
+LONGHORN_DATA_PATH                         | The defaultDataPath of longhorn； If not set, the default path is used
 
 Since the installation script will install k3s, other environment variables can refer to k3s installation [environment variables](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
-    
+
 ## Uninstall
 
 If you installed drycc using an installation script, you can uninstall the entire drycc using this script.
