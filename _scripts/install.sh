@@ -164,13 +164,10 @@ EOF
 }
 
 function install_longhorn {
-  if [[ -n "${LONGHORN_DATA_PATH}" ]] ; then
-    LONGHORN_DATA_PATH="${LONGHORN_DATA_PATH}/longhorn"
-  fi
   helm install longhorn drycc/longhorn --create-namespace \
     --set persistence.defaultClass=true \
     --set persistence.defaultClassReplicaCount=1 \
-    --set defaultSettings.defaultDataPath=${LONGHORN_DATA_PATH:-""} \
+    --set defaultSettings.defaultDataPath=${LONGHORN_DATA_PATH:-"/var/lib/longhorn"} \
     --namespace longhorn-system --wait
 }
 
