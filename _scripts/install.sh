@@ -28,10 +28,13 @@ trap clean_before_exit EXIT
 init_arch
 
 function install_helm {
-  tar_name="helm-canary-linux-${ARCH}.tar.gz"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    version=$(curl -Ls https://drycc-mirrors.drycc.cc/helm/helm/releases|grep /helm/helm/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+    tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://drycc-mirrors.drycc.cc/helm/${tar_name}"
   else
+    version=$(curl -Ls https://github.com/helm/helm/releases|grep /helm/helm/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+    tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://get.helm.sh/${tar_name}"
   fi
   curl -fsSL -o "${tar_name}" "${helm_download_url}"
