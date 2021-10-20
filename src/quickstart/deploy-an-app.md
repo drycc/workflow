@@ -4,25 +4,17 @@ Drycc workflow requires a wildcard DNS record to dynamically map app names to th
 
 User should already have DNS set up pointing to their known host. The `$hostname` value can be calculated by prepending `drycc.` to the value set in `global.platform_domain`.
 
-## Register an Admin User
+## Login to Workflow
 
-The first user to register against Drycc Workflow will automatically be given administrative privileges.
-
-Use the controller `$hostname` to register a user in the cluster.
+Workflow use the passport component to create and authorize users.
+If you already have an account, use `drycc login` to authenticate against the Drycc Workflow API.
 
 ```
-$ drycc register http://$hostname
-username: admin
-password:
-password (confirm):
-email: jhansen@drycc.cc
-Registered admin
-Logged in as admin
-$ drycc whoami
-You are admin at http://$hostname
+$ drycc login http://drycc.example.com
+Opening browser to http://drycc.example.com/v2/login/drycc/?key=4ccc81ee2dce4349ad5261ceffe72c71
+Waiting for login... .o.Logged in as admin
+Configuration file written to /root/.drycc/client.json
 ```
-
-You have now registered your first user and you are ready to deploy an application.
 
 ## Deploy an Application
 
@@ -112,8 +104,8 @@ There is a lot more you can do with Drycc Workflow, play around with the CLI:
 * Roll back to a previous release with `drycc rollback -a proper-barbecue`
 * See application logs with `drycc logs -a proper-barbecue`
 * Try one of our other example applications like:
-    * [drycc/example-ruby-sinatra](https://github.com/drycc/example-ruby-sinatra)
-    * [drycc/example-nodejs-express](https://github.com/drycc/example-nodejs-express)
-    * [drycc/example-java-jetty](https://github.com/drycc/example-java-jetty)
+    * [drycc/ruby-getting-started](https://github.com/drycc/ruby-getting-started)
+    * [drycc/python-getting-started](https://github.com/drycc/python-getting-started)
+    * [drycc/php-getting-started](https://github.com/drycc/php-getting-started)
 * Read about using application [Buildpacks](../applications/using-buildpacks) or [Dockerfiles](../applications/using-dockerfiles.md)
 * Join our [#community slack channel](https://slack.drycc.cc) and meet the team!

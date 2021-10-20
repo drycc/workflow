@@ -1,6 +1,6 @@
 # Configuring Postgres
 
-Drycc Workflow's controller component relies on a PostgreSQL database to store platform state.
+Drycc Workflow's controller and passport component rely on a PostgreSQL database to store platform state.
 
 By default, Drycc Workflow ships with the [database] component, which provides an in-cluster PostgreSQL database backed up to in-cluster or off-cluster [object storage]. Currently, for object storage, which is utilized by _several_ Workflow components, only off-cluster solutions such as S3 or GCS are recommended in production environments. Experience has shown that many operators already opting for off-cluster object storage similarly prefer to host Postgres off-cluster as well, using Amazon RDS or similar. When excercising both options, a Workflow installation becomes entirely stateless, and is thus restored or rebuilt with greater ease should the need ever arise.
 

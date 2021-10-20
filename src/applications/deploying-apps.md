@@ -23,9 +23,9 @@ using the URL supplied by their Drycc administrator.
 
 ```
 $ drycc login http://drycc.example.com
-username: drycc
-password:
-Logged in as drycc
+Opening browser to http://drycc.example.com/v2/login/drycc/?key=4ccc81ee2dce4349ad5261ceffe72c71
+Waiting for login... .o.Logged in as admin
+Configuration file written to /root/.drycc/client.json
 ```
 
 ## Select a Build Process
@@ -34,7 +34,7 @@ Drycc Workflow supports three different ways of building applications:
 
 ### Buildpacks
 
-Heroku buildpacks are useful if you want to follow Heroku's best practices for building applications or if you are porting an application from Heroku.
+Cloud Native Buildpacks are useful if you want to follow [cnb's docs](https://buildpacks.io/docs/) for building applications.
 
 Learn how to deploy applications [using Buildpacks](../applications/using-buildpacks.md).
 
@@ -60,9 +60,9 @@ It is possible to configure a few of the [globally tunable](../applications/mana
 
 Setting                                         | Description
 ----------------------------------------------- | ---------------------------------
-DRYCC_DISABLE_CACHE                              | if set, this will disable the [slugbuilder cache][] (default: not set)
-DRYCC_DEPLOY_BATCHES                             | the number of pods to bring up and take down sequentially during a scale (default: number of available nodes)
-DRYCC_DEPLOY_TIMEOUT                             | deploy timeout in seconds per deploy batch (default: 120)
+DRYCC_DISABLE_CACHE                             | if set, this will disable the [slugbuilder cache][] (default: not set)
+DRYCC_DEPLOY_BATCHES                            | the number of pods to bring up and take down sequentially during a scale (default: number of available nodes)
+DRYCC_DEPLOY_TIMEOUT                            | deploy timeout in seconds per deploy batch (default: 120)
 IMAGE_PULL_POLICY                               | the kubernetes [image pull policy][pull-policy] for application images (default: "IfNotPresent") (allowed values: "Always", "IfNotPresent")
 KUBERNETES_DEPLOYMENTS_REVISION_HISTORY_LIMIT   | how many [revisions][kubernetes-deployment-revision] Kubernetes keeps around of a given Deployment (default: all revisions)
 KUBERNETES_POD_TERMINATION_GRACE_PERIOD_SECONDS | how many seconds kubernetes waits for a pod to finish work after a SIGTERM before sending SIGKILL (default: 30)

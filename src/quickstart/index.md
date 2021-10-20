@@ -18,4 +18,4 @@ For the quickstart we will [install Drycc Workflow CLI](install-cli-tools.md).
 
 ## Step 3: Deploy your first app
 
-Last but not least, [register a user and deploy your first application](deploy-an-app.md).
+Last but not least, [login and deploy your first application](deploy-an-app.md).

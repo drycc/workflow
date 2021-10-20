@@ -74,10 +74,8 @@ If you want to change it, set the variable when using helm.
 ```
 $ helm install --namespace drycc \
     --set builder.image_registry=quay.io \
-    --set slugbuilder.image_registry=quay.io \
     --set imagebuilder.image_registry=quay.io \
     --set controller.image_registry=quay.io \
-    --set slugrunner.image_registry=quay.io \
     --set database.image_registry=quay.io \
     --set fluentd.image_registry=quay.io \
     --set redis.image_registry=quay.io \
@@ -163,5 +161,5 @@ Once all of the pods are in the `READY` state, and `drycc-builder.$host` resolve
 
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
 
-If your k8s does not provide public network loadblance, you need to install TCP proxy services such as haproxy on machines that can 
+If your k8s does not provide public network loadblance, you need to install TCP proxy services such as haproxy on machines that can
 access both internal and external networks, and then expose `80` and `443`.

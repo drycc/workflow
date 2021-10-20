@@ -64,12 +64,11 @@ Setting                                         | Description
 REGISTRATION_MODE                               | set registration to "enabled", "disabled", or "admin_only" (default: "admin_only")
 GUNICORN_WORKERS                                | number of [gunicorn][] workers spawned to process requests (default: CPU cores * 4 + 1)
 RESERVED_NAMES                                  | a comma-separated list of names which applications cannot reserve for routing (default: "drycc, drycc-builder")
-SLUGRUNNER_IMAGE_NAME                           | the image used to run buildpack application slugs (default: "quay.io/drycc/slugrunner:canary")
-DRYCC_DEPLOY_HOOK_URLS                           | a comma-separated list of URLs to send [deploy hooks][] to.
-DRYCC_DEPLOY_HOOK_SECRET_KEY                     | a private key used to compute the HMAC signature for deploy hooks.
-DRYCC_DEPLOY_REJECT_IF_PROCFILE_MISSING          | rejects a deploy if the previous build had a Procfile but the current deploy is missing it. A 409 is thrown in the API. Prevents accidental process types removal. (default: "false", allowed values: "true", "false")
-DRYCC_DEPLOY_PROCFILE_MISSING_REMOVE             | when turned on (default) any missing process type in a Procfile compared to the previous deploy is removed. When set to false will allow an empty Procfile to go through without removing missing process types, note that new images, configs and so on will get updated on all proc types.  (default: "true", allowed values: "true", "false")
-DRYCC_DEFAULT_CONFIG_TAGS                        | set tags for all applications by default, for example: '{"role": "worker"}'. (default: '')
+DRYCC_DEPLOY_HOOK_URLS                          | a comma-separated list of URLs to send [deploy hooks][] to.
+DRYCC_DEPLOY_HOOK_SECRET_KEY                    | a private key used to compute the HMAC signature for deploy hooks.
+DRYCC_DEPLOY_REJECT_IF_PROCFILE_MISSING         | rejects a deploy if the previous build had a Procfile but the current deploy is missing it. A 409 is thrown in the API. Prevents accidental process types removal. (default: "false", allowed values: "true", "false")
+DRYCC_DEPLOY_PROCFILE_MISSING_REMOVE            | when turned on (default) any missing process type in a Procfile compared to the previous deploy is removed. When set to false will allow an empty Procfile to go through without removing missing process types, note that new images, configs and so on will get updated on all proc types.  (default: "true", allowed values: "true", "false")
+DRYCC_DEFAULT_CONFIG_TAGS                       | set tags for all applications by default, for example: '{"role": "worker"}'. (default: '')
 KUBERNETES_NAMESPACE_DEFAULT_QUOTA_SPEC         | set resource quota to application namespace by setting [ResourceQuota](http://kubernetes.io/docs/admin/resourcequota/) spec, for example: `{"spec":{"hard":{"pods":"10"}}}`, restrict app owner to spawn more then 10 pods (default: "", no quota will be applied to namespace)
 
 ### LDAP authentication settings
@@ -77,7 +76,7 @@ KUBERNETES_NAMESPACE_DEFAULT_QUOTA_SPEC         | set resource quota to applicat
 Configuration options for LDAP authentication are detailed [here](https://pythonhosted.org/django-auth-ldap/reference.html).
 
 The following environment variables are available for enabling LDAP
-authentication of user accounts in the [Controller][] component:
+authentication of user accounts in the [Passport][] component:
 
 Setting            | Description
 -------------------| ---------------------------------
@@ -88,20 +87,6 @@ LDAP_USER_BASEDN   | The distinguished name of the search base for user names (d
 LDAP_USER_FILTER   | The name of the login field in the users search base (default: "username")
 LDAP_GROUP_BASEDN  | The distinguished name of the search base for user's groups names (default: "")
 LDAP_GROUP_FILTER  | The filter for user's groups (default: "", example: ```objectClass=person```)
-
-### OAuth 2.0 Password Grant settings
-
-The following environment variables are available for enabling OAuth 2.0 Password Grant.
-If you have configured both of LDAP authentication and OAuth 2.0, LDAP authentication first.
-authentication of user accounts in the [Controller][] component:
-
-Setting                  | Description
--------------------------| ---------------------------------
-OAUTH_ACCESS_TOKEN_URL  | The URI of the OAuth 2.0 get token server. (default: ""). If not specified, OAuth 2.0 authentication is not enabled(default: "", example: ```http://hostname```).
-OAUTH_ACCESS_API_URL    | The URI of the OAuth 2.0 get resources server. (default: "")
-OAUTH_CLIENT_ID         | The client id.
-OAUTH_CLIENT_SECRET     | The client secret.
-OAUTH_CACHE_USER_TIME   | Cache user object, prevent too frequent request to the OAuth 2.0 authentication server.
 
 ### Global and per application settings
 
@@ -205,6 +190,7 @@ API_VERSION       | The version number Workflow Manager sends to the versions AP
 [Deploying Apps]: ../applications/deploying-apps.md
 [builder]: ../understanding-workflow/components.md#builder
 [controller]: ../understanding-workflow/components.md#controller
+[passport]: ../understanding-workflow/components.md#passport
 [database]: ../understanding-workflow/components.md#database
 [deploy hooks]: deploy-hooks.md#http-post-hook
 [Deployments]: http://kubernetes.io/docs/user-guide/deployments/
