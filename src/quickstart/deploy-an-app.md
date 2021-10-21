@@ -107,5 +107,5 @@ There is a lot more you can do with Drycc Workflow, play around with the CLI:
     * [drycc/ruby-getting-started](https://github.com/drycc/ruby-getting-started)
     * [drycc/python-getting-started](https://github.com/drycc/python-getting-started)
     * [drycc/php-getting-started](https://github.com/drycc/php-getting-started)
-* Read about using application [Buildpacks](../applications/using-buildpacks) or [Dockerfiles](../applications/using-dockerfiles.md)
-* Join our [#community slack channel](https://slack.drycc.cc) and meet the team!
+* Read about using application [Buildpacks](../applications/using-buildpacks.md) or [Dockerfiles](../applications/using-dockerfiles.md)
+* Join our [#community slack channel](https://drycc.slack.com/) and meet the team!
