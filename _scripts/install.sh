@@ -21,7 +21,6 @@ function clean_before_exit {
     # delay before exiting, so stdout/stderr flushes through the logging system
     rm -rf /tmp/drycc-values.yaml /etc/rancher/k3s/registries.yaml
     configure_registries runtime
-    systemctl restart k3s
     sleep 3
 }
 trap clean_before_exit EXIT
@@ -322,16 +321,16 @@ global
    user haproxy
    group haproxy
    daemon
-listen http-80
-   bind *:80
+listen http
+   bind *:${HAPROXY_HTTP_PORT:-80}
    mode tcp
    maxconn 100000
    timeout connect 60s
    timeout client  30000
    timeout server  30000
    server ingress ${INGRESS_IP}:80 check
-listen https-443
-   bind *:443
+listen https
+   bind *:${HAPROXY_HTTPS_PORT:-443}
    mode tcp
    maxconn 100000
    timeout connect 60s
@@ -339,7 +338,7 @@ listen https-443
    timeout server  30000
    server ingress ${INGRESS_IP}:443 check
 listen builder
-   bind *:2222
+   bind *:${HAPROXY_BUILDER_PORT:-2222}
    mode tcp
    maxconn 100000
    timeout connect 60s

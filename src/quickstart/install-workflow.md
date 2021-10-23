@@ -210,8 +210,11 @@ RABBITMQ_PERSISTENCE_SIZE                  | The size of the persistence space a
 RABBITMQ_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `rabbitmq`; default storangeclass is used by default
 HELMBROKER_PERSISTENCE_SIZE                | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
 HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; default storangeclass is used by default
-K3S_DATA_DIR                               | The config of k3s data dir； If not set, the default path is used
-LONGHORN_DATA_PATH                         | The defaultDataPath of longhorn； If not set, the default path is used
+K3S_DATA_DIR                               | The config of k3s data dir; If not set, the default path is used
+LONGHORN_DATA_PATH                         | The defaultDataPath of longhorn; If not set, the default path is used
+HAPROXY_HTTP_PORT                    | The drycc ingress http port of haproxy for external exposure, default `80`
+HAPROXY_HTTPS_PORT                   | The drycc ingress https port of haproxy for external exposure, default `443`
+HAPROXY_BUILDER_PORT                 | The drycc builder port of haproxy for external exposure, default `2222`
 
 Since the installation script will install k3s, other environment variables can refer to k3s installation [environment variables](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
 
