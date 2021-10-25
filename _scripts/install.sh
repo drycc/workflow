@@ -28,11 +28,11 @@ init_arch
 
 function install_helm {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    version=$(curl -Ls https://drycc-mirrors.drycc.cc/helm/helm/releases|grep /helm/helm/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+    version=$(curl -Ls https://drycc-mirrors.drycc.cc/helm/helm/releases|grep /helm/helm/releases/tag/ | sed -E 's/.*\/helm\/helm\/releases\/tag\/(v[0-9\.]+)".*/\1/g' | head -1)
     tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://drycc-mirrors.drycc.cc/helm/${tar_name}"
   else
-    version=$(curl -Ls https://github.com/helm/helm/releases|grep /helm/helm/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+    version=$(curl -Ls https://github.com/helm/helm/releases|grep /helm/helm/releases/tag/ | sed -E 's/.*\/helm\/helm\/releases\/tag\/(v[0-9\.]+)".*/\1/g' | head -1)
     tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://get.helm.sh/${tar_name}"
   fi
@@ -109,7 +109,7 @@ function install_cin_plugins {
   else
     cni_plugins_url="https://github.com/containernetworking/plugins/releases"
   fi
-  version=$(curl -Ls ${cni_plugins_url}|grep /containernetworking/plugins/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+  version=$(curl -Ls ${cni_plugins_url}|grep /containernetworking/plugins/releases/tag/ | sed -E 's/.*\/containernetworking\/plugins\/releases\/tag\/(v[0-9\.]+)".*/\1/g' | head -1)
   tar_name="cni-plugins-linux-${ARCH}-$version.tgz"
   download_url="${cni_plugins_url}/download/${version}/${tar_name}"
   curl -fsSL -o "${tar_name}" "${download_url}"

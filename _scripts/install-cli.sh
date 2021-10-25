@@ -39,7 +39,7 @@ init_arch() {
 }
 
 init_latest_version() {
-  VERSION=$(curl -Ls $DRYCC_BIN_URL_BASE|grep /drycc/workflow-cli/releases/tag/ | grep -v no-underline | head -n 1 | cut -d '"' -f 2| awk '{n=split($NF,a,"/");print a[n]}' | awk 'a !~ $0{print}; {a=$0}')
+  VERSION=$(curl -Ls $DRYCC_BIN_URL_BASE|grep /drycc/workflow-cli/releases/tag/ | sed -E 's/.*\/drycc\/workflow-cli\/releases\/tag\/(v[0-9\.]+)".*/\1/g' | head -1)
 }
 
 init_arch
