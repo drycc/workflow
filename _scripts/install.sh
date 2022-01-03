@@ -146,7 +146,11 @@ function install_components {
 
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
 
-  helm install cilium drycc/cilium --set operator.replicas=1 --set cni.chainingMode=portmap --namespace kube-system --wait
+  helm install cilium drycc/cilium \
+    --set operator.replicas=1 \
+    --set bandwidthManager=true \
+    --set cni.chainingMode=portmap \
+    --namespace kube-system --wait
   helm install metallb drycc/metallb --namespace kube-system --wait -f - <<EOF
 configInline:
   address-pools:
