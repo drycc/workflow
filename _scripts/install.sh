@@ -102,26 +102,10 @@ function configure_mirrors {
   fi
 }
 
-function install_cin_plugins {
-  mkdir -p /opt/cni/bin
-  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    cni_plugins_url="https://drycc-mirrors.drycc.cc/cni/plugins/releases"
-  else
-    cni_plugins_url="https://github.com/containernetworking/plugins/releases"
-  fi
-  version=$(curl -Ls ${cni_plugins_url}|grep /containernetworking/plugins/releases/tag/ | sed -E 's/.*\/containernetworking\/plugins\/releases\/tag\/(v[0-9\.]+)".*/\1/g' | head -1)
-  tar_name="cni-plugins-linux-${ARCH}-$version.tgz"
-  download_url="${cni_plugins_url}/download/${version}/${tar_name}"
-  curl -fsSL -o "${tar_name}" "${download_url}"
-  tar -zxvf "${tar_name}" -C /opt/cni/bin
-  rm -rf "${tar_name}"
-}
-
 function install_k3s_server {
   configure_os
   configure_mirrors
-  install_cin_plugins
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=local-storage --disable=servicelb --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable-kube-proxy --disable=local-storage --disable=servicelb --cluster-cidr=10.233.0.0/16"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
@@ -134,7 +118,6 @@ function install_k3s_server {
 function install_k3s_agent {
   configure_os
   configure_mirrors
-  install_cin_plugins
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
@@ -145,11 +128,14 @@ function install_components {
   helm repo update
 
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
-
+  api_server=(`kubectl config view -o=jsonpath='{.clusters[0].cluster.server}' | tr "://" " "`)
   helm install cilium drycc/cilium \
     --set operator.replicas=1 \
     --set bandwidthManager=true \
-    --set cni.chainingMode=portmap \
+    --set kubeProxyReplacement=strict \
+    --set k8sServiceHost=${api_server[1]} \
+    --set k8sServicePort=${api_server[2]} \
+    --set hostPort.enabled=true \
     --namespace kube-system --wait
   helm install metallb drycc/metallb --namespace kube-system --wait -f - <<EOF
 configInline:
@@ -159,9 +145,8 @@ configInline:
      addresses:
      - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
 EOF
-  helm install ingress-nginx drycc/ingress-nginx --namespace kube-system --wait
+  helm install traefik drycc/traefik --namespace traefik --create-namespace --set ssl.enabled=true --wait
   helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
-  # Use arm64 and amd64 arch of docker.io/drycc/service-catalog:canary, it will be deleted in the future.
   helm install catalog drycc/catalog \
     --set asyncBindingOperationsEnabled=true \
     --set image=docker.io/drycc/service-catalog:canary \
@@ -231,7 +216,7 @@ EOF
     --set global.cluster_domain="cluster.local" \
     --set global.platform_domain="${PLATFORM_DOMAIN}" \
     --set global.cert_manager_enabled=${CERT_MANAGER_ENABLED:-true} \
-    --set global.ingress_class=nginx \
+    --set global.ingress_class=traefik \
     --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
     --set controller.app_storage_class=${CONTROLLER_APP_STORAGE_CLASS:-""} \
     --set minio.persistence.enabled=true \
@@ -269,7 +254,7 @@ function install_helmbroker {
   echo -e "\\033[32m---> Start installing helmbroker...\\033[0m"
 
   helm install helmbroker drycc/helmbroker \
-    --set ingress_class="nginx" \
+    --set ingress_class="traefik" \
     --set platform_domain="cluster.local" \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
     --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:=""} \
@@ -312,7 +297,7 @@ EOF
 
 function configure_haproxy {
   BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
-  INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n kube-system -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
+  INGRESS_IP=$(kubectl get svc traefik -n kube-system -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
 
   if [[ "${USE_HAPROXY:-true}" == "true" ]] ; then
     cat << EOF > "/etc/haproxy/haproxy.cfg"
