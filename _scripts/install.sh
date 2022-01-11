@@ -40,7 +40,7 @@ function install_helm {
   tar -zxvf "${tar_name}"
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
-  helm repo add drycc https://charts.drycc.cc/${CHANNEL:-stable}
+  helm repo add --force-update drycc https://charts.drycc.cc/${CHANNEL:-stable}
 }
 
 function configure_os {
@@ -137,7 +137,7 @@ function install_components {
     --set k8sServicePort=${api_server[2]} \
     --set hostPort.enabled=true \
     --namespace kube-system --wait
-  helm install metallb drycc/metallb --namespace kube-system --wait -f - <<EOF
+  helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f - <<EOF
 configInline:
   address-pools:
    - name: default
@@ -154,12 +154,13 @@ EOF
     --create-namespace --wait
 }
 
-function install_longhorn {
-  helm install longhorn drycc/longhorn --create-namespace \
-    --set persistence.defaultClass=true \
-    --set persistence.defaultClassReplicaCount=1 \
-    --set defaultSettings.defaultDataPath=${LONGHORN_DATA_PATH:-"/var/lib/longhorn"} \
-    --namespace longhorn-system --wait
+function install_openebs {
+  helm install openebs drycc/openebs \
+    --namespace openebs \
+    --create-namespace \
+    --set nfs-provisioner.enabled=true --wait
+  kubectl patch storageclass ${DEFAULT_STORAGE_CLASS:-"openebs-hostpath"} \
+    -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 }
 
 function check_drycc_env {
@@ -218,7 +219,7 @@ EOF
     --set global.cert_manager_enabled=${CERT_MANAGER_ENABLED:-true} \
     --set global.ingress_class=traefik \
     --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
-    --set controller.app_storage_class=${CONTROLLER_APP_STORAGE_CLASS:-""} \
+    --set controller.app_storage_class=${CONTROLLER_APP_STORAGE_CLASS:-"openebs-kernel-nfs"} \
     --set minio.persistence.enabled=true \
     --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-20Gi} \
     --set minio.persistence.storageClass=${MINIO_PERSISTENCE_STORAGE_CLASS:-""} \
@@ -257,7 +258,7 @@ function install_helmbroker {
     --set ingress_class="traefik" \
     --set platform_domain="cluster.local" \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
-    --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:=""} \
+    --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"openebs-kernel-nfs"} \
     --set platform_domain=${PLATFORM_DOMAIN} \
     --set cert_manager_enabled=${CERT_MANAGER_ENABLED:-true} \
     --set username=${HELMBROKER_USERNAME} \
@@ -297,7 +298,7 @@ EOF
 
 function configure_haproxy {
   BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
-  INGRESS_IP=$(kubectl get svc traefik -n kube-system -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
+  INGRESS_IP=$(kubectl get svc traefik -n traefik -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
 
   if [[ "${USE_HAPROXY:-true}" == "true" ]] ; then
     cat << EOF > "/etc/haproxy/haproxy.cfg"
@@ -348,7 +349,7 @@ if [[ -z "$@" ]] ; then
   install_k3s_server
   install_helm
   install_components
-  install_longhorn
+  install_openebs
   install_drycc
   configure_haproxy
   install_helmbroker
