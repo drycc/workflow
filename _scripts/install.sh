@@ -130,6 +130,7 @@ function install_components {
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
   api_server=(`kubectl config view -o=jsonpath='{.clusters[0].cluster.server}' | tr "://" " "`)
   helm install cilium drycc/cilium \
+    --set tunnel=geneve \
     --set operator.replicas=1 \
     --set bandwidthManager=true \
     --set kubeProxyReplacement=strict \
