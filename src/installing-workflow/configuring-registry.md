@@ -23,7 +23,7 @@ Drycc Workflow currently supports:
 
   1. If you haven't already fetched the values file, do so with `helm inspect values drycc/workflow > values.yaml`
   1. Update registry location details by modifying the values file:
-    * Update the `registry_location` parameter to reference the registry location you are using: `off-cluster`, `ecr`, `gcr`
+    * Update the `registryLocation` parameter to reference the registry location you are using: `off-cluster`, `ecr`, `gcr`
     * Update the values in the section which corresponds to your registry location type.
 
 You are now ready to `helm install drycc/workflow --namespace drycc -f values.yaml` using your desired registry.
@@ -38,7 +38,7 @@ After following the [docs](https://docs.microsoft.com/en-us/azure/container-regi
 ```
 global:
 ...
-  registry_location: "off-cluster"
+  registryLocation: "off-cluster"
 ...
 registry-token-refresher:
 ...
@@ -57,7 +57,7 @@ registry-token-refresher:
 ```
 global:
 ...
-  registry_location: "off-cluster"
+  registryLocation: "off-cluster"
 ...
 registry-token-refresher:
 ...

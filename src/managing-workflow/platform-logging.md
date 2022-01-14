@@ -124,11 +124,11 @@ env:
       </store>
 ```
 
-Or you could configure it using the `daemon_environment` key in the `values.yaml`:
+Or you could configure it using the `daemonEnvironment` key in the `values.yaml`:
 
 ```
 fluentd:
-  daemon_environment:
+  daemonEnvironment:
     FLUENTD_PLUGIN_1: "fluent-plugin-kafka"
     CUSTOM_STORE_1: "|\n              <store>\n                @type kafka\n                        default_topic some_topic\n                        </store>"
     INSTALL_BUILD_TOOLS: "|\n              true"

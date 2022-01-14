@@ -215,12 +215,12 @@ EOF
   fi
   helm install drycc drycc/workflow \
     --set builder.service.type=LoadBalancer \
-    --set global.cluster_domain="cluster.local" \
-    --set global.platform_domain="${PLATFORM_DOMAIN}" \
-    --set global.cert_manager_enabled=${CERT_MANAGER_ENABLED:-true} \
-    --set global.ingress_class=traefik \
-    --set fluentd.daemon_environment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
-    --set controller.app_storage_class=${CONTROLLER_APP_STORAGE_CLASS:-"openebs-kernel-nfs"} \
+    --set global.clusterDomain="cluster.local" \
+    --set global.platformDomain="${PLATFORM_DOMAIN}" \
+    --set global.certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
+    --set global.ingressClass=traefik \
+    --set fluentd.daemonEnvironment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
+    --set controller.appStorageClass=${CONTROLLER_APP_STORAGE_CLASS:-"openebs-kernel-nfs"} \
     --set minio.persistence.enabled=true \
     --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-20Gi} \
     --set minio.persistence.storageClass=${MINIO_PERSISTENCE_STORAGE_CLASS:-""} \
@@ -235,8 +235,8 @@ EOF
     --set monitor.grafana.persistence.enabled=true \
     --set monitor.grafana.persistence.size=${MONITOR_GRAFANA_PERSISTENCE_SIZE:-5Gi} \
     --set monitor.grafana.storageClass=${MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS:-""} \
-    --set passport.admin_username=${DRYCC_ADMIN_USERNAME} \
-    --set passport.admin_password=${DRYCC_ADMIN_PASSWORD} \
+    --set passport.adminUsername=${DRYCC_ADMIN_USERNAME} \
+    --set passport.adminPassword=${DRYCC_ADMIN_PASSWORD} \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --create-namespace --wait --timeout 30m0s
@@ -256,12 +256,12 @@ function install_helmbroker {
   echo -e "\\033[32m---> Start installing helmbroker...\\033[0m"
 
   helm install helmbroker drycc/helmbroker \
-    --set ingress_class="traefik" \
-    --set platform_domain="cluster.local" \
+    --set ingressClass="traefik" \
+    --set platformDomain="cluster.local" \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
     --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"openebs-kernel-nfs"} \
-    --set platform_domain=${PLATFORM_DOMAIN} \
-    --set cert_manager_enabled=${CERT_MANAGER_ENABLED:-true} \
+    --set platformDomain=${PLATFORM_DOMAIN} \
+    --set certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
     --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq-0.drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \

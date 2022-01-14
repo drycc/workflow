@@ -16,4 +16,4 @@ spec:
     solvers:
     - http01:
         ingress:
-          class: "{{ .Values.global.ingress_class }}"
+          class: "{{ .Values.global.ingressClass }}"

@@ -39,7 +39,7 @@ Now, workflow requires that ingress and cert-manager must be installed. Any comp
 
 ## Add the Drycc Chart Repository
 
-The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc --set global.platform_domain=yourdomain.com` command.
+The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc --set global.platformDomain=yourdomain.com` command.
 
 Add this repository to Helm:
 
@@ -59,7 +59,7 @@ Now that Helm is installed and the repository has been added, install Workflow b
 
 ```
 $ helm install --namespace drycc \
-    --set global.platform_domain=drycc.cc \
+    --set global.platformDomain=drycc.cc \
     drycc/workflow
 ```
 
@@ -73,21 +73,21 @@ If you want to change it, set the variable when using helm.
 
 ```
 $ helm install --namespace drycc \
-    --set builder.image_registry=quay.io \
-    --set imagebuilder.image_registry=quay.io \
-    --set controller.image_registry=quay.io \
-    --set database.image_registry=quay.io \
-    --set fluentd.image_registry=quay.io \
-    --set redis.image_registry=quay.io \
-    --set influxdb.image_registry=quay.io \
-    --set rabbitmq.image_registry=quay.io \
-    --set logger.image_registry=quay.io \
-    --set minio.image_registry=quay.io \
-    --set monitor.image_registry=quay.io \
-    --set nsqd.image_registry=quay.io \
-    --set registry.image_registry=quay.io \
-    --set registry-proxy.image_registry=quay.io \
-    --set global.platform_domain=drycc.cc \
+    --set builder.imageRegistry=quay.io \
+    --set imagebuilder.imageRegistry=quay.io \
+    --set controller.imageRegistry=quay.io \
+    --set database.imageRegistry=quay.io \
+    --set fluentd.imageRegistry=quay.io \
+    --set redis.imageRegistry=quay.io \
+    --set influxdb.imageRegistry=quay.io \
+    --set rabbitmq.imageRegistry=quay.io \
+    --set logger.imageRegistry=quay.io \
+    --set minio.imageRegistry=quay.io \
+    --set monitor.imageRegistry=quay.io \
+    --set nsqd.imageRegistry=quay.io \
+    --set registry.imageRegistry=quay.io \
+    --set registry-proxy.imageRegistry=quay.io \
+    --set global.platformDomain=drycc.cc \
     drycc/workflow
 ```
 

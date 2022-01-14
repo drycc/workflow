@@ -20,42 +20,42 @@ global:
   #   automatically; backups are sent to object storage
   #   configured above)
   # - off-cluster: Run PostgreSQL outside the Kubernetes cluster (configure in database section)
-  database_location: "on-cluster"
+  databaseLocation: "on-cluster"
 
   # Set the location of Workflow's Redis instance
   #
   # Valid values are:
   # - on-cluster: Run Redis within the Kubernetes cluster
   # - off-cluster: Run Redis outside the Kubernetes cluster (configure in redis section)
-  redis_location: "on-cluster"
+  redisLocation: "on-cluster"
   # Set the location of Workflow's rabbitmq instance
   # Valid values are:
   # - on-cluster: Run Rabbitmq within the Kubernetes cluster
   # - off-cluster: Run Rabbitmq outside the Kubernetes cluster (configure in controller section)
-  rabbitmq_location: "on-cluster"
+  rabbitmqLocation: "on-cluster"
   # Set the location of Workflow's influxdb cluster
   #
   # Valid values are:
   # - on-cluster: Run Influxdb within the Kubernetes cluster
   # - off-cluster: Influxdb is running outside of the cluster and credentials and connection information will be provided.
-  influxdb_location: "on-cluster"
+  influxdbLocation: "on-cluster"
   # Set the location of Workflow's grafana instance
   #
   # Valid values are:
   # - on-cluster: Run Grafana within the Kubernetes cluster
   # - off-cluster: Grafana is running outside of the cluster
-  grafana_location: "on-cluster"
+  grafanaLocation: "on-cluster"
 
   # Set the location of Workflow's Registry
   #
   # Valid values are:
   # - on-cluster: Run registry within the Kubernetes cluster
   # - off-cluster: Use registry outside the Kubernetes cluster (example: dockerhub,quay.io,self-hosted)
-  registry_location: "on-cluster"
+  registryLocation: "on-cluster"
   # Prefix for the imagepull secret created when using private registry
-  registry_secret_prefix: "private-registry"
+  registrySecretPrefix: "private-registry"
   # The host port to which registry proxy binds to
-  registry_proxy_port: 5555
+  registryProxyPort: 5555
   # If the Kubernetes cluster uses CNI
   # use_cni: true
   # Set the `listen` variable for registry-proxy's NGINX
@@ -72,31 +72,31 @@ global:
   # Valid values are:
   # - true: all RBAC-related manifests will be installed (in case your cluster supports RBAC)
   # - false: no RBAC-related manifests will be installed
-  use_rbac: true
+  rbac: true
   # Please check `kubernetes.io/ingress.class`
   # The cert-manager component must be installed
   # If you want to use HTTPSEnforced or allowlist functions, you must specify:
   # - nginx
   # - traefik
   # Only the above options have been supported so far
-  ingress_class: ""
+  ingressClass: ""
   # A domain name consists of one or more parts.
   # Periods (.) are used to separate these parts.
   # Each part must be 1 to 63 characters in length and can contain lowercase letters, digits, and hyphens (-).
   # It must start and end with a lowercase letter or digit.
-  cluster_domain: "cluster.local"
+  clusterDomain: "cluster.local"
   # The publicly resolvable hostname to build your cluster with.
   #
   # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
-  platform_domain: ""
+  platformDomain: ""
   # Whether cert_manager is enabled to automatically generate drycc certificates
-  cert_manager_enabled: true
+  certManagerEnabled: true
   # Set the location of Workflow's passport
   #
   # Valid values are:
   # - on-cluster: Run passport within the Kubernetes cluster
   # - off-cluster: Use passport outside the Kubernetes cluster
-  passport_location: "on-cluster"
+  passportLocation: "on-cluster"
 
 s3:
   # Your AWS access key. Leave it empty if you want to use IAM credentials.
@@ -106,43 +106,43 @@ s3:
   # Any S3 region
   endpoint: "your-s3-endpoint"
   # Your buckets.
-  builder_bucket: "your-builder-bucket-name"
-  registry_bucket: "your-registry-bucket-name"
-  database_bucket: "your-database-bucket-name"
+  builderBucket: "your-builder-bucket-name"
+  registryBucket: "your-registry-bucket-name"
+  databaseBucket: "your-database-bucket-name"
 
 oss:
   accesskey: ""
   secretkey: ""
   endpoint: "your-oos-endpoint"
-  builder_bucket: "your-builder-bucket-name"
-  registry_bucket: "your-registry-bucket-name"
-  database_bucket: "your-database-bucket-name"
+  builderBucket: "your-builder-bucket-name"
+  registryBucket: "your-registry-bucket-name"
+  databaseBucket: "your-database-bucket-name"
 
 azure:
   accesskey: "YOUR ACCOUNT NAME"
   secretkey: "YOUR ACCOUNT KEY"
   endpoint: "your-azure-endpoint"
-  builder_bucket: "your-builder-container-name"
-  registry_bucket: "your-registry-container-name"
-  database_bucket: "your-database-container-name"
+  builderBucket: "your-builder-container-name"
+  registryBucket: "your-registry-container-name"
+  databaseBucket: "your-database-container-name"
 
 gcs:
-  # key_json is expanded into a JSON file on the remote server. It must be
+  # keyJson is expanded into a JSON file on the remote server. It must be
   # well-formatted JSON data.
   accesskey: "your accessKey for minio gateway"
   secretkey: "your secretkey for minio gateway"
-  key_json: <base64-encoded JSON data>
+  keyJson: <base64-encoded JSON data>
   projectid: "your-gcs-projectid"
-  builder_bucket: "your-builder-bucket-name"
-  registry_bucket: "your-registry-bucket-name"
-  database_bucket: "your-database-bucket-name"
+  builderBucket: "your-builder-bucket-name"
+  registryBucket: "your-registry-bucket-name"
+  databaseBucket: "your-database-bucket-name"
 
 minio:
   accesskey: "8TZRY2JRWMPT6UMXR6I5"
   secretkey: "gbstrOvotMMcg2sMfGUhA5a6Et/EI5ALtIHsobYk"
-  builder_bucket: "0fad60517a9e4225a07d77d7b9b58629"
-  registry_bucket: "c2da53f11c7a455db35797c3ba625d80"
-  database_bucket: "e95eb5c54c3a4047abe5269a68fa9a67"
+  builderBucket: "0fad60517a9e4225a07d77d7b9b58629"
+  registryBucket: "c2da53f11c7a455db35797c3ba625d80"
+  databaseBucket: "e95eb5c54c3a4047abe5269a68fa9a67"
   # Configure the following ONLY if you want persistence for on-cluster minio
   persistence:
     enabled: false # Set to true to enable persistence
@@ -181,23 +181,23 @@ passport:
   # Set passport deployment replicas
   replicas: 1
   # Configuring this will no longer use the built-in database component
-  database_url: ""
+  databaseUrl: ""
 
 controller:
-  app_image_pull_policy: "IfNotPresent"
+  appImagePullPolicy: "IfNotPresent"
   # Possible values are:
   # enabled - allows for open registration
   # disabled - turns off open registration
   # admin_only - allows for registration by an admin only.
-  registration_mode: "admin_only"
+  registrationMode: "admin_only"
   # Set storageClassName, It is used for application mount.
-  app_storage_class: ""
+  appStorageClass: ""
   # Set controller deployment  replicas
   replicas: 1
   # Set celery replicas
-  celery_replicas: 1
+  celeryReplicas: 1
   # Configuring this will no longer use the built-in database component
-  database_url: ""
+  databaseUrl: ""
 
 database:
   # The username and password to be used by the on-cluster database.

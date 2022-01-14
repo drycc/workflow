@@ -2,7 +2,7 @@
 
 We can use the blow command to create volumes and mount the created volumes.
 Drycc create volume support [ReadWriteMany](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes), so before deploying drycc, you need to have a StorageClass ready which can support ReadWriteMany.
-Deploying drycc, set controller.app_storage_class to this StorageClass.
+Deploying drycc, set controller.appStorageClass to this StorageClass.
 
 
 Use `drycc volumes` to mount a volume for a deployed application's processes.

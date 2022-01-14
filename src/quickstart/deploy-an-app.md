@@ -2,7 +2,7 @@
 
 Drycc workflow requires a wildcard DNS record to dynamically map app names to the router.
 
-User should already have DNS set up pointing to their known host. The `$hostname` value can be calculated by prepending `drycc.` to the value set in `global.platform_domain`.
+User should already have DNS set up pointing to their known host. The `$hostname` value can be calculated by prepending `drycc.` to the value set in `global.platformDomain`.
 
 ## Login to Workflow
 

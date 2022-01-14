@@ -33,9 +33,9 @@ The Helm chart for Drycc Workflow can be easily configured to connect the Workfl
 
 * **Step 1:** If you haven't already fetched the values, do so with `helm inspect values drycc/workflow > values.yaml`
 * **Step 2:** Update database connection details by modifying `values.yaml`:
-    * Update the `database_location` parameter to `off-cluster`.
+    * Update the `databaseLocation` parameter to `off-cluster`.
     * Update the values in the `[database]` configuration section to properly reflect all connection details.
-    * Update the values in the `[controller]` configuration section to properly reflect platform_domain details.
+    * Update the values in the `[controller]` configuration section to properly reflect platformDomain details.
     * Save your changes.
     * Note: you do not need to (and must not) base64 encode any values, as the Helm chart will automatically handle encoding as necessary.
 

@@ -31,7 +31,7 @@ There are a few ways to customize the respective component:
 
 You can set resource limits to Workflow components by modifying the values.yaml file fetched
 earlier. This file has a section for each Workflow component. To set a limit to any Workflow
-component just add `limits_cpu`, `limits_memory` in the section and set them to the appropriate
+component just add `limitsCpu`, `limitsMemory` in the section and set them to the appropriate
 values.
 
 Below is an example of how the builder section of `values.yaml` might look with CPU and memory
@@ -39,11 +39,11 @@ limits set:
 
 ```
 builder:
-  image_org: "drycc"
-  image_pull_policy: "Always"
-  image_tag: "canary"
-  limits_cpu: "100m"
-  limits_memory: "50Mi"
+  imageOrg: "drycc"
+  imagePullPolicy: "Always"
+  imageTag: "canary"
+  limitsCpu: "100m"
+  limitsMemory: "50Mi"
 ```
 
 ## Customizing the Builder
@@ -117,16 +117,16 @@ Key               | Default | Description
 ------------------| --------| ---------------------------------
 syslog.host | "" | Host value of a syslog endpoint
 syslog.port | "" | Port value of a syslog endpoint
-sources.start_script | false | Capture kubernetes start script logs
+sources.startScript | false | Capture kubernetes start script logs
 sources.docker | false | Capture docker daemon logs
 sources.etcd | false | Capture etcd logs
 sources.kubelet | false | Capture kubelet logs
-sources.kube_api | false | Capture Kubernetes API logs
+sources.kubeApi | false | Capture Kubernetes API logs
 sources.controller | false | Capture Kubernetes Controller logs
 sources.scheduler | false | Capture Kubernetes Scheduler logs
-output.disable_drycc | false | Disable the Drycc output plugin
-boot.install_build_tools | false | Install the build tools package. This is useful when using custom plugins
-daemon_environment | | Takes key-value pairs and turns them into environment variables.
+output.disableDrycc | false | Disable the Drycc output plugin
+boot.installBuildTools | false | Install the build tools package. This is useful when using custom plugins
+daemonEnvironment | | Takes key-value pairs and turns them into environment variables.
 
 For more information about the various environment variables that can be set please see the [README](https://github.com/drycc/fluentd/blob/main/README.md)
 

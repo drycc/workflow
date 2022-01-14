@@ -60,7 +60,7 @@ It is possible to configure a few of the [globally tunable](../applications/mana
 
 Setting                                         | Description
 ----------------------------------------------- | ---------------------------------
-DRYCC_DISABLE_CACHE                             | if set, this will disable the [slugbuilder cache][] (default: not set)
+DRYCC_DISABLE_CACHE                             | if set, this will disable the [imagebuilder cache][] (default: not set)
 DRYCC_DEPLOY_BATCHES                            | the number of pods to bring up and take down sequentially during a scale (default: number of available nodes)
 DRYCC_DEPLOY_TIMEOUT                            | deploy timeout in seconds per deploy batch (default: 120)
 IMAGE_PULL_POLICY                               | the kubernetes [image pull policy][pull-policy] for application images (default: "IfNotPresent") (allowed values: "Always", "IfNotPresent")
