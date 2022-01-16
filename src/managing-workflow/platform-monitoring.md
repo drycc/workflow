@@ -18,9 +18,9 @@ We now include a monitoring stack for introspection on a running Kubernetes clus
                         Log file                        ▲                
                             │                           │                
                             ▼                           │                
-┌────────┐             ┌─────────┐    logs/metrics   ┌─────┐             
-│App Logs│──Log File──▶│ fluentd │───────topics─────▶│ NSQ │             
-└────────┘             └─────────┘                   └─────┘             
+┌────────┐             ┌─────────┐    logs/metrics   ┌──────────────┐             
+│App Logs│──Log File──▶│ fluentd │───────topics─────▶│ Redis Stream │             
+└────────┘             └─────────┘                   └──────────────┘             
                                                         │                
                                                         │                
 ┌─────────────┐                                         │                

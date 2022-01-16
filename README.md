@@ -22,7 +22,6 @@ Please see below for links and descriptions of each component:
 - [influxdb](https://github.com/drycc/influxdb) - The monitor database
 - [rabbitmq](https://github.com/drycc/rabbitmq) - RabbitMQ is a message broker used with controller celery
 - [minio](https://github.com/drycc/minio) - The in-cluster, ephemeral, development-only object storage system
-- [nsq](https://github.com/drycc/nsq) - Realtime distributed messaging platform
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`
 
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Working on Documentation" section below and [submit a pull request][prs].

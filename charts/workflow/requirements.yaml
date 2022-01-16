@@ -26,9 +26,6 @@ dependencies:
   - name: monitor
     version: <monitor-tag>
     repository: https://charts.drycc.cc/stable/monitor
-  - name: nsqd
-    version: <nsqd-tag>
-    repository: https://charts.drycc.cc/stable/nsqd
   - name: registry
     version: <registry-tag>
     repository: https://charts.drycc.cc/stable/registry

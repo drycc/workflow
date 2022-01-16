@@ -205,9 +205,6 @@ database:
   username: ""
   password: ""
 
-nsqd:
-  replicas: 1
-
 redis:
   # The following parameters are configured only when using an on-cluster Redis instance
   replicas: 1

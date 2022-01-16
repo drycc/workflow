@@ -68,7 +68,6 @@ drycc-monitor-telegraf-51zel              1/1       Running   1          5m
 drycc-monitor-telegraf-cdasg              1/1       Running   0          5m
 drycc-monitor-telegraf-hea6x              1/1       Running   0          5m
 drycc-monitor-telegraf-r7lsg              1/1       Running   0          5m
-drycc-nsqd-3yrg2                          1/1       Running   0          5m
 drycc-registry-1814324048-yomz5           1/1       Running   0          5m
 drycc-registry-proxy-4m3o4                1/1       Running   0          5m
 drycc-registry-proxy-no3r1                1/1       Running   0          5m

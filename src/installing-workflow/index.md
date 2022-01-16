@@ -84,7 +84,6 @@ $ helm install --namespace drycc \
     --set logger.imageRegistry=quay.io \
     --set minio.imageRegistry=quay.io \
     --set monitor.imageRegistry=quay.io \
-    --set nsqd.imageRegistry=quay.io \
     --set registry.imageRegistry=quay.io \
     --set registry-proxy.imageRegistry=quay.io \
     --set global.platformDomain=drycc.cc \
@@ -124,7 +123,6 @@ drycc-redis-304849759-1f35p               1/1       Running   0          4m
 drycc-minio-676004970-nxqgt               1/1       Running   0          4m
 drycc-monitor-grafana-432627134-lnl2h     1/1       Running   0          4m
 drycc-monitor-telegraf-wmcmn              1/1       Running   1          4m
-drycc-nsqd-3597503299-6mn2x               1/1       Running   0          4m
 drycc-registry-756475849-lwc6b            1/1       Running   1          4m
 drycc-registry-proxy-96c4p                1/1       Running   0          4m
 drycc-rabbitmq-0                          1/1       Running   0          4m
