@@ -52,6 +52,11 @@ function configure_os {
   swapoff -a
   sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
   mount bpffs -t bpf /sys/fs/bpf
+  rmem_max=$(sysctl -ne net.core.rmem_max)
+  if [ ! -n "$rmem_max" ] || [ 2500000 -gt $rmem_max ] ;then
+      echo 'net.core.rmem_max=2500000' >> /etc/sysctl.conf
+      sysctl -p
+  fi
 }
 
 function configure_registries {
@@ -156,10 +161,9 @@ ingressClass:
   enabled: true
   isDefaultClass: true
 additionalArguments:
-  - "--entrypoints.websecure.http.tls"
-  - "--experimental.http3=true"
-  - "--entrypoints.websecure.http3"
-  - "--entrypoints.websecure.http3.advertisedPort=443"
+- "--entrypoints.websecure.http.tls"
+- "--experimental.http3=true"
+- "--entrypoints.name.enablehttp3=true"
 EOF
 
   helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
@@ -204,9 +208,9 @@ function check_drycc_env {
 function install_drycc {
   check_drycc_env
   echo -e "\\033[32m---> Start installing workflow...\\033[0m"
-
   RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     cat << EOF > "/tmp/drycc-values.yaml"
 imagebuilder:

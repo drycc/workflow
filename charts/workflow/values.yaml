@@ -276,8 +276,6 @@ fluentd:
 
 monitor:
   grafana:
-    user: "admin"
-    password: "admin"
     # Configure the following ONLY if you want persistence for on-cluster grafana
     # GCP PDs and EBS volumes are supported only
     persistence:
