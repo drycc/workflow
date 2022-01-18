@@ -242,6 +242,8 @@ EOF
     --set monitor.grafana.storageClass=${MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS:-""} \
     --set passport.adminUsername=${DRYCC_ADMIN_USERNAME} \
     --set passport.adminPassword=${DRYCC_ADMIN_PASSWORD} \
+    --set database.limitsMemory="256Mi" \
+    --set database.limitsHugepages2Mi="256Mi" \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --create-namespace --wait --timeout 30m0s
