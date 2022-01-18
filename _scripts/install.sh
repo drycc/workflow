@@ -147,11 +147,21 @@ configInline:
      - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
 EOF
   helm install traefik drycc/traefik \
-    --set websecure.tls.enabled=true \
-    --set ingressClass.enabled=true \
-    --set ingressClass.isDefaultClass=true \
     --namespace traefik \
-    --create-namespace --wait
+    --create-namespace --wait -f - <<EOF
+websecure:
+  tls:
+    enabled: true
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+additionalArguments:
+  - "--entrypoints.websecure.http.tls"
+  - "--experimental.http3=true"
+  - "--entrypoints.websecure.http3"
+  - "--entrypoints.websecure.http3.advertisedPort=443"
+EOF
+
   helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
   helm install catalog drycc/catalog \
     --set asyncBindingOperationsEnabled=true \
