@@ -147,7 +147,7 @@ configInline:
      - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
 EOF
   helm install traefik drycc/traefik \
-    --set ssl.enabled=true \
+    --set websecure.tls.enabled=true \
     --set ingressClass.enabled=true \
     --set ingressClass.isDefaultClass=true \
     --namespace traefik \
