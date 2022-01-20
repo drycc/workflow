@@ -204,6 +204,21 @@ database:
   # If left empty they will be generated using randAlphaNum
   username: ""
   password: ""
+  persistence:
+    enabled: false # Set to true to enable persistence
+    accessMode: ReadWriteOnce
+    size: 5Gi # PVC size
+    ## database data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## Storage class of PV to bind. By default it looks for standard storage class.
+    ## If the PV uses a different storage class, specify that here.
+    storageClass: ""
+    volumeName: ""
 
 redis:
   # The following parameters are configured only when using an on-cluster Redis instance
@@ -211,6 +226,10 @@ redis:
   # The following parameters are configured only when using an off-cluster Redis instance
   addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
   password: "redis password" # "" == no password
+  persistence:
+    enabled: false # Set to true to enable persistence
+    size: 5Gi
+    storageClass: ""
 
 rabbitmq:
   # Configure the following ONLY if using an off-cluster rabbitmq
@@ -222,7 +241,6 @@ rabbitmq:
   # GCP PDs and EBS volumes are supported only
   persistence:
     enabled: false # Set to true to enable persistence
-    accessMode: ReadWriteOnce
     size: 5Gi # PVC size
     ## rabbitmq data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -234,7 +252,6 @@ rabbitmq:
     ## Storage class of PV to bind. By default it looks for standard storage class.
     ## If the PV uses a different storage class, specify that here.
     storageClass: ""
-    volumeName: ""
 
 influxdb:
   # URL configuration is only available in off-cluster Influx database

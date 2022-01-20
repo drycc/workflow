@@ -60,24 +60,6 @@ For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image
 $ yum install nfs-utils
 ```
 
-### Installing haproxy
-We use metallb as the loadblance component.
-If the host managed by metallb has a public IP, we don't need to install haproxy.
-Otherwise, we need to use haproxy to expose ports such as `80` and `443 `.
-Ensure that ports `80`, `443` and `2222` cannot be occupied by other applications on the host, and focus on services such as httpd and nginx.
-
-For Debian and Ubuntu, use this command:
-
-```
-$ apt-get install haproxy
-```
-
-For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image, use this command:
-
-```
-$ yum install haproxy
-```
-
 ### Installing curl
 
 For Debian and Ubuntu, use this command:
@@ -189,17 +171,19 @@ $ curl -sfL https://drycc.cc/install.sh | bash -s - install_k3s_agent
 When using this method to install drycc, the following environment variables can be used to configure the installation:
 
 ENVIRONMENT VARIABLE                       | DESCRIPTION
--------------------------------------------|---------------------------------------------------------------------------------------------------------
+-------------------------------------------|---------------------------------------------------------------------------------------------
 PLATFORM_DOMAIN                            | Required item, specify drycc's domain name
 DRYCC_ADMIN_USERNAME                       | Required item, specify drycc's admin username
 DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admin password
 CERT_MANAGER_ENABLED                       | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
 REGISTRIES_FILE                            | The `registers.yaml` file path used by k3s.
-USE_HAPROXY                                | Haproxy is enabled by default. If you want to turn it off, this value is false
-METALLB_ADDRESS_POOLS                      | IP pool for LoadBalancer. The default is `172.16.0.0/12`
+BGP_ENABLED                                | Whether BGP is enabled or not. It is false by default.
+BGP_CONFIG_FILE                            | The bgp config file path used by k3s, after BGP is enabled, the env is required
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
+REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default
+REDIS_PERSISTENCE_STORAGE_CLASS            | StorangeClass of `redis`; default storangeclass is used by default
 MINIO_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `minio`, which is `20Gi` by default
 MINIO_PERSISTENCE_STORAGE_CLASS            | StorangeClass of `minio`; default storangeclass is used by default
 MONITOR_GRAFANA_PERSISTENCE_SIZE           | The size of the persistence space allocated to `monitor.grafana`, which is `5Gi` by default
@@ -208,13 +192,13 @@ INFLUXDB_PERSISTENCE_SIZE                  | The size of the persistence space a
 INFLUXDB_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `influxdb`; default storangeclass is used by default
 RABBITMQ_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default
 RABBITMQ_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `rabbitmq`; default storangeclass is used by default
+DATABASE_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `database`, which is `5Gi` by default
+DATABASE_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `database`; default storangeclass is used by default
 HELMBROKER_PERSISTENCE_SIZE                | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
 HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; default storangeclass is used by default
 K3S_DATA_DIR                               | The config of k3s data dir; If not set, the default path is used
-LONGHORN_DATA_PATH                         | The defaultDataPath of longhorn; If not set, the default path is used
-HAPROXY_HTTP_PORT                    | The drycc ingress http port of haproxy for external exposure, default `80`
-HAPROXY_HTTPS_PORT                   | The drycc ingress https port of haproxy for external exposure, default `443`
-HAPROXY_BUILDER_PORT                 | The drycc builder port of haproxy for external exposure, default `2222`
+DEFAULT_STORAGE_CLASS                      | K3s default stroageclass, If not set, the `openebs-hostpath` stroageclass is used
+LOCAL_PROVISIONER_PATH                     | Local path storage path, If not set, the `/var/openebs/local` path is used
 
 Since the installation script will install k3s, other environment variables can refer to k3s installation [environment variables](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
 

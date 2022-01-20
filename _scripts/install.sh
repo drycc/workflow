@@ -110,12 +110,41 @@ function configure_mirrors {
 function install_k3s_server {
   configure_os
   configure_mirrors
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable-kube-proxy --disable=local-storage --disable=servicelb --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable-kube-proxy --disable=local-storage --cluster-cidr=10.233.0.0/16"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
   if [[ -z "${K3S_URL}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
+  fi
+  if [[ "${BGP_ENABLED:-false}" == "true" ]] ; then
+    if [[ -z "${BGP_CONFIG_FILE}" ]] ; then
+      echo -e "\\033[31m---> Please set the BGP_CONFIG_FILE variable.\\033[0m"
+      echo -e "\\033[31m---> For example:\\033[0m"
+      echo -e "\\033[31m---> export BGP_CONFIG_FILE=./bgp.yaml\\033[0m"
+      echo -e "\\033[31m---> For details, please check bgp.yaml in the current directory\\033[0m"
+      cat << EOF >  "./bgp.yaml"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bgp-config
+  namespace: kube-system
+data:
+  config.yaml: |
+    peers:
+      - peer-address: 10.0.0.1
+        peer-asn: 64512
+        my-asn: 64512
+    address-pools:
+      - name: default
+        protocol: bgp
+        addresses:
+          - 192.0.2.0/24
+EOF
+      exit 1  
+    else
+      INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --disable=servicelb"
+    fi
   fi
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
@@ -142,15 +171,11 @@ function install_components {
     --set k8sServiceHost=${api_server[1]} \
     --set k8sServicePort=${api_server[2]} \
     --set hostPort.enabled=true \
+    --set bgp.enabled=${BGP_ENABLED:-false} \
+    --set bgp.announce.loadbalancerIP=true \
+    --set bgp.announce.podCIDR=true \
     --namespace kube-system --wait
-  helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f - <<EOF
-configInline:
-  address-pools:
-   - name: default
-     protocol: layer2
-     addresses:
-     - ${METALLB_ADDRESS_POOLS:-172.16.0.0/12}
-EOF
+
   helm install traefik drycc/traefik \
     --namespace traefik \
     --create-namespace --wait -f - <<EOF
@@ -178,6 +203,7 @@ function install_openebs {
   helm install openebs drycc/openebs \
     --namespace openebs \
     --create-namespace \
+    --set localprovisioner.basePath=${LOCAL_PROVISIONER_PATH:-"/var/openebs/local"} \
     --set nfs-provisioner.enabled=true --wait
   kubectl patch storageclass ${DEFAULT_STORAGE_CLASS:-"openebs-hostpath"} \
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
@@ -240,6 +266,9 @@ EOF
     --set global.ingressClass=traefik \
     --set fluentd.daemonEnvironment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
     --set controller.appStorageClass=${CONTROLLER_APP_STORAGE_CLASS:-"openebs-kernel-nfs"} \
+    --set redis.persistence.enabled=true \
+    --set redis.persistence.size=${REDIS_PERSISTENCE_SIZE:-5Gi} \
+    --set redis.persistence.storageClass=${REDIS_PERSISTENCE_STORAGE_CLASS:-""} \
     --set minio.persistence.enabled=true \
     --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-20Gi} \
     --set minio.persistence.storageClass=${MINIO_PERSISTENCE_STORAGE_CLASS:-""} \
@@ -258,6 +287,9 @@ EOF
     --set passport.adminPassword=${DRYCC_ADMIN_PASSWORD} \
     --set database.limitsMemory="256Mi" \
     --set database.limitsHugepages2Mi="256Mi" \
+    --set database.persistence.enabled=true \
+    --set database.persistence.size=${DATABASE_PERSISTENCE_SIZE:-5Gi} \
+    --set database.persistence.storageClass=${DATABASE_PERSISTENCE_STORAGE_CLASS:-""} \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --create-namespace --wait --timeout 30m0s
@@ -318,53 +350,6 @@ EOF
   echo -e "\\033[32m---> Helmbroker password: $HELMBROKER_PASSWORD\\033[0m"
 }
 
-function configure_haproxy {
-  BUILDER_IP=$(kubectl get svc drycc-builder -n drycc -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
-  INGRESS_IP=$(kubectl get svc traefik -n traefik -o="jsonpath={.status.loadBalancer.ingress[0].ip}")
-
-  if [[ "${USE_HAPROXY:-true}" == "true" ]] ; then
-    cat << EOF > "/etc/haproxy/haproxy.cfg"
-global
-   log /dev/log    local0
-   log /dev/log    local1 notice
-   chroot /var/lib/haproxy
-   stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
-   stats timeout 30s
-   user haproxy
-   group haproxy
-   daemon
-listen http
-   bind *:${HAPROXY_HTTP_PORT:-80}
-   mode tcp
-   maxconn 100000
-   timeout connect 60s
-   timeout client  30000
-   timeout server  30000
-   server ingress ${INGRESS_IP}:80 check
-listen https
-   bind *:${HAPROXY_HTTPS_PORT:-443}
-   mode tcp
-   maxconn 100000
-   timeout connect 60s
-   timeout client  30000
-   timeout server  30000
-   server ingress ${INGRESS_IP}:443 check
-listen builder
-   bind *:${HAPROXY_BUILDER_PORT:-2222}
-   mode tcp
-   maxconn 100000
-   timeout connect 60s
-   timeout client  30000
-   timeout server  30000
-   server builder ${BUILDER_IP}:2222 check
-EOF
-  fi
-
-  mkdir -p /run/haproxy
-  systemctl enable haproxy
-  systemctl restart haproxy
-}
-
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 if [[ -z "$@" ]] ; then
@@ -373,7 +358,6 @@ if [[ -z "$@" ]] ; then
   install_components
   install_openebs
   install_drycc
-  configure_haproxy
   install_helmbroker
   echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
 else
