@@ -1,6 +1,6 @@
 # Drycc workflow
 
-**Drycc Workflow** is an open source Platform as a Service (PaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
+**Drycc Workflow** is an open source Container as a Service (CaaS) that adds a developer-friendly layer to any [Kubernetes][k8s-home] cluster, making it easy to deploy and manage applications.
 
 To **get started** with **Drycc Workflow** please read the [Quick Start Guide](https://drycc.cc/quickstart/).
 
@@ -25,6 +25,9 @@ Please see below for links and descriptions of each component:
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`
 
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Working on Documentation" section below and [submit a pull request][prs].
+
+This project has been forked from [Deis](https://github.com/deis/deis) since 2018.08 but changed a lot,
+not compatible with each other.
 
 # Working on Documentation
 [![Build Status](https://drone.drycc.cc/api/badges/drycc/workflow/status.svg)](https://drone.drycc.cc/drycc/workflow)
