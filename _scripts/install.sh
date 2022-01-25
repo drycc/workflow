@@ -110,41 +110,12 @@ function configure_mirrors {
 function install_k3s_server {
   configure_os
   configure_mirrors
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable-kube-proxy --disable=local-storage --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable=traefik --disable=servicelb --disable-kube-proxy --disable=local-storage --cluster-cidr=10.233.0.0/16"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
   if [[ -z "${K3S_URL}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
-  fi
-  if [[ "${BGP_ENABLED:-false}" == "true" ]] ; then
-    if [[ -z "${BGP_CONFIG_FILE}" ]] ; then
-      echo -e "\\033[31m---> Please set the BGP_CONFIG_FILE variable.\\033[0m"
-      echo -e "\\033[31m---> For example:\\033[0m"
-      echo -e "\\033[31m---> export BGP_CONFIG_FILE=./bgp.yaml\\033[0m"
-      echo -e "\\033[31m---> For details, please check bgp.yaml in the current directory\\033[0m"
-      cat << EOF >  "./bgp.yaml"
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: bgp-config
-  namespace: kube-system
-data:
-  config.yaml: |
-    peers:
-      - peer-address: 10.0.0.1
-        peer-asn: 64512
-        my-asn: 64512
-    address-pools:
-      - name: default
-        protocol: bgp
-        addresses:
-          - 192.0.2.0/24
-EOF
-      exit 1  
-    else
-      INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --disable=servicelb"
-    fi
   fi
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
@@ -158,9 +129,52 @@ function install_k3s_agent {
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
 
-function install_components {
-  helm repo update
+function check_network {
+  if [[ -z "${NETWORK_CONFIG_FILE}" ]] ; then
+    echo -e "\\033[31m---> Please set the NETWORK_CONFIG_FILE variable.\\033[0m"
+    echo -e "\\033[31m---> For example:\\033[0m"
+    echo -e "\\033[31m---> export NETWORK_CONFIG_FILE=./network.yaml\\033[0m"
+    echo -e "\\033[31m---> Please modify and save the following file contents:\\033[0m"
+    if [[ "${BGP_ENABLED:-false}" == "true" ]] ; then
+      cat << EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bgp-config
+  namespace: kube-system
+data:
+  config.yaml: |
+    peers:
+    - peer-address: 10.0.0.1
+      peer-asn: 64512
+      my-asn: 64512
+    address-pools:
+    - name: default
+      protocol: bgp
+      addresses:
+      - 192.0.2.0/24
+EOF
+    else
+      cat << EOF
+configInline:
+  address-pools:
+  - name: default
+    protocol: layer2
+    addresses:
+    - 172.16.0.0/12
+  - name: extranet
+    protocol: layer2
+    addresses:
+    - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
+EOF
+    fi
+    exit 1
+  fi
+}
 
+function install_components {
+  check_network
+  helm repo update
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
   api_server=(`kubectl config view -o=jsonpath='{.clusters[0].cluster.server}' | tr "://" " "`)
   helm install cilium drycc/cilium \
@@ -176,9 +190,18 @@ function install_components {
     --set bgp.announce.podCIDR=true \
     --namespace kube-system --wait
 
+  if [[ "${BGP_ENABLED:-false}" == "true" ]] ; then
+    kubectl apply -n kube-system -f ${NETWORK_CONFIG_FILE}
+  else
+    helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f ${NETWORK_CONFIG_FILE}
+  fi
   helm install traefik drycc/traefik \
     --namespace traefik \
     --create-namespace --wait -f - <<EOF
+service:
+  annotations:
+    metallb.universe.tf/address-pool: extranet
+    metallb.universe.tf/allow-shared-ip: drycc 
 websecure:
   tls:
     enabled: true
@@ -190,7 +213,6 @@ additionalArguments:
 - "--experimental.http3=true"
 - "--entrypoints.name.enablehttp3=true"
 EOF
-
   helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
   helm install catalog drycc/catalog \
     --set asyncBindingOperationsEnabled=true \
@@ -209,7 +231,7 @@ function install_openebs {
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 }
 
-function check_drycc_env {
+function check_drycc {
   if [[ -z "${PLATFORM_DOMAIN}" ]] ; then
     echo -e "\\033[31m---> Please set the PLATFORM_DOMAIN variable.\\033[0m"
     echo -e "\\033[31m---> For example:\\033[0m"
@@ -232,13 +254,18 @@ function check_drycc_env {
 }
 
 function install_drycc {
-  check_drycc_env
+  check_drycc
   echo -e "\\033[32m---> Start installing workflow...\\033[0m"
   RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
 
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     cat << EOF > "/tmp/drycc-values.yaml"
+builder:
+  service:
+    annotations:
+      metallb.universe.tf/address-pool: extranet
+      metallb.universe.tf/allow-shared-ip: drycc
 imagebuilder:
   container_registries: |
     unqualified-search-registries = ["docker.io"]
@@ -252,6 +279,11 @@ imagebuilder:
 EOF
   else
     cat << EOF > "/tmp/drycc-values.yaml"
+builder:
+  service:
+    annotations:
+      metallb.universe.tf/address-pool: extranet
+      metallb.universe.tf/allow-shared-ip: drycc
 imagebuilder:
   container_registries: |
     unqualified-search-registries = ["docker.io"]
@@ -353,6 +385,8 @@ EOF
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 if [[ -z "$@" ]] ; then
+  check_drycc
+  check_network
   install_k3s_server
   install_helm
   install_components

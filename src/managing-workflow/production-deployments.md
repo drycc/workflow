@@ -48,11 +48,6 @@ Please see the following documentation to learn about disabling Grafana signups:
 
  - [Customizing Monitor][]
 
-## Using on-cluster registry with CNI
-
-If you are using [CNI](https://github.com/containernetworking/cni) for managing container network, you cannot use `hostPort` notation due to [this issue](https://github.com/kubernetes/kubernetes/issues/23920).
-In this case you could enable CNI for `drycc-registry-proxy` by setting `use_cni` variable to `true` inside `values.yaml` or by adding `--set global.use_cni=true` to `helm`'s args.
-
 ## Running Workflow with RBAC
 
 If your cluster has [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) amongst your [authorization](https://kubernetes.io/docs/admin/authorization/) modes (`$ kubectl api-versions` should contains `rbac.authorization.k8s.io`) it may be necessary to enable RBAC in Workflow.

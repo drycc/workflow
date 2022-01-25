@@ -179,7 +179,7 @@ CERT_MANAGER_ENABLED                       | Whether to use automatic certificat
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
 REGISTRIES_FILE                            | The `registers.yaml` file path used by k3s.
 BGP_ENABLED                                | Whether BGP is enabled or not. It is false by default.
-BGP_CONFIG_FILE                            | The bgp config file path used by k3s, after BGP is enabled, the env is required
+NETWORK_CONFIG_FILE                        | The network config file path used by k3s, The default path is `/tmp/network.yaml`
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
 REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default
