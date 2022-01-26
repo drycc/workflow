@@ -129,51 +129,15 @@ function install_k3s_agent {
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
 
-function check_network {
-  if [[ -z "${NETWORK_CONFIG_FILE}" ]] ; then
-    echo -e "\\033[31m---> Please set the NETWORK_CONFIG_FILE variable.\\033[0m"
-    echo -e "\\033[31m---> For example:\\033[0m"
-    echo -e "\\033[31m---> export NETWORK_CONFIG_FILE=./network.yaml\\033[0m"
-    echo -e "\\033[31m---> Please modify and save the following file contents:\\033[0m"
-    if [[ "${BGP_ENABLED:-false}" == "true" ]] ; then
-      cat << EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: bgp-config
-  namespace: kube-system
-data:
-  config.yaml: |
-    peers:
-    - peer-address: 10.0.0.1
-      peer-asn: 64512
-      my-asn: 64512
-    address-pools:
-    - name: default
-      protocol: bgp
-      addresses:
-      - 192.0.2.0/24
-EOF
-    else
-      cat << EOF
-configInline:
-  address-pools:
-  - name: default
-    protocol: layer2
-    addresses:
-    - 172.16.0.0/12
-  - name: extranet
-    protocol: layer2
-    addresses:
-    - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
-EOF
-    fi
+function check_metallb {
+  if [[ "${METALLB_CONFIG_FILE}" && ! -f "${METALLB_CONFIG_FILE}" ]] ; then
+    echo -e "\\033[33m---> The path ${METALLB_CONFIG_FILE} does not exist...\\033[0m"
     exit 1
   fi
 }
 
 function install_components {
-  check_network
+  check_metallb
   helm repo update
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
   api_server=(`kubectl config view -o=jsonpath='{.clusters[0].cluster.server}' | tr "://" " "`)
@@ -185,22 +149,40 @@ function install_components {
     --set k8sServiceHost=${api_server[1]} \
     --set k8sServicePort=${api_server[2]} \
     --set hostPort.enabled=true \
-    --set bgp.enabled=${BGP_ENABLED:-false} \
-    --set bgp.announce.loadbalancerIP=true \
-    --set bgp.announce.podCIDR=true \
     --namespace kube-system --wait
-
-  if [[ "${BGP_ENABLED:-false}" == "true" ]] ; then
-    kubectl apply -n kube-system -f ${NETWORK_CONFIG_FILE}
+  
+  helm install metallb drycc/metallb --namespace metallb --create-namespace --wait
+  if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
+    kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metallb
+  namespace: metallb
+data:
+  config: |
+    address-pools:
+    - addresses:
+      - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
+      name: public
+      protocol: layer2
+    - addresses:
+      - 172.16.0.0/12
+      name: default
+      protocol: layer2
+EOF
+    echo -e "\\033[32m---> Metallb using the default configuration.\\033[0m"
+    kubectl get cm metallb -n metallb -o yaml
   else
-    helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f ${NETWORK_CONFIG_FILE}
+    kubectl apply -n metallb -f ${METALLB_CONFIG_FILE}
   fi
+  
   helm install traefik drycc/traefik \
     --namespace traefik \
     --create-namespace --wait -f - <<EOF
 service:
   annotations:
-    metallb.universe.tf/address-pool: extranet
+    metallb.universe.tf/address-pool: public
     metallb.universe.tf/allow-shared-ip: drycc 
 websecure:
   tls:
@@ -233,22 +215,22 @@ function install_openebs {
 
 function check_drycc {
   if [[ -z "${PLATFORM_DOMAIN}" ]] ; then
-    echo -e "\\033[31m---> Please set the PLATFORM_DOMAIN variable.\\033[0m"
-    echo -e "\\033[31m---> For example:\\033[0m"
-    echo -e "\\033[31m---> export PLATFORM_DOMAIN=drycc.cc\\033[0m"
-    echo -e "\\033[31m---> And confirm that wildcard domain name resolution has been set.\\033[0m"
-    echo -e "\\033[31m---> For example, the current server IP is 8.8.8.8\\033[0m"
-    echo -e "\\033[31m---> Please point *.drycc.cc to 8.8.8.8\\033[0m"
+    echo -e "\\033[33m---> Please set the PLATFORM_DOMAIN variable.\\033[0m"
+    echo -e "\\033[33m---> For example:\\033[0m"
+    echo -e "\\033[33m---> export PLATFORM_DOMAIN=drycc.cc\\033[0m"
+    echo -e "\\033[33m---> And confirm that wildcard domain name resolution has been set.\\033[0m"
+    echo -e "\\033[33m---> For example, the current server IP is 8.8.8.8\\033[0m"
+    echo -e "\\033[33m---> Please point *.drycc.cc to 8.8.8.8\\033[0m"
     exit 1
   fi
 
   if [[ -z "${DRYCC_ADMIN_USERNAME}" || -z "${DRYCC_ADMIN_PASSWORD}" ]] ; then
-    echo -e "\\033[31m---> Please set the DRYCC_ADMIN_USERNAME and DRYCC_ADMIN_PASSWORD variable.\\033[0m"
-    echo -e "\\033[31m---> For example:\\033[0m"
-    echo -e "\\033[31m---> export DRYCC_ADMIN_USERNAME=admin\\033[0m"
-    echo -e "\\033[31m---> export DRYCC_ADMIN_PASSWORD=admin\\033[0m"
-    echo -e "\\033[31m---> This password is used by end users to log in and manage drycc.\\033[0m"
-    echo -e "\\033[31m---> Please set a high security string!!!\\033[0m"
+    echo -e "\\033[33m---> Please set the DRYCC_ADMIN_USERNAME and DRYCC_ADMIN_PASSWORD variable.\\033[0m"
+    echo -e "\\033[33m---> For example:\\033[0m"
+    echo -e "\\033[33m---> export DRYCC_ADMIN_USERNAME=admin\\033[0m"
+    echo -e "\\033[33m---> export DRYCC_ADMIN_PASSWORD=admin\\033[0m"
+    echo -e "\\033[33m---> This password is used by end users to log in and manage drycc.\\033[0m"
+    echo -e "\\033[33m---> Please set a high security string!!!\\033[0m"
     exit 1
   fi
 }
@@ -264,7 +246,7 @@ function install_drycc {
 builder:
   service:
     annotations:
-      metallb.universe.tf/address-pool: extranet
+      metallb.universe.tf/address-pool: public
       metallb.universe.tf/allow-shared-ip: drycc
 imagebuilder:
   container_registries: |
@@ -282,7 +264,7 @@ EOF
 builder:
   service:
     annotations:
-      metallb.universe.tf/address-pool: extranet
+      metallb.universe.tf/address-pool: public
       metallb.universe.tf/allow-shared-ip: drycc
 imagebuilder:
   container_registries: |
@@ -386,7 +368,7 @@ export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 if [[ -z "$@" ]] ; then
   check_drycc
-  check_network
+  check_metallb
   install_k3s_server
   install_helm
   install_components

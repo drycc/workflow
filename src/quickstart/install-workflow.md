@@ -177,9 +177,8 @@ DRYCC_ADMIN_USERNAME                       | Required item, specify drycc's admi
 DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admin password
 CERT_MANAGER_ENABLED                       | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
-REGISTRIES_FILE                            | The `registers.yaml` file path used by k3s.
-BGP_ENABLED                                | Whether BGP is enabled or not. It is false by default.
-NETWORK_CONFIG_FILE                        | The network config file path used by k3s, The default path is `/tmp/network.yaml`
+REGISTRIES_FILE                            | The `registers.yaml` file path used by drycc registry
+METALLB_CONFIG_FILE                        | The metallb config file path, layer 2 network is used by default
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
 REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default
