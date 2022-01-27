@@ -54,9 +54,14 @@ function configure_os {
   mount bpffs -t bpf /sys/fs/bpf
   rmem_max=$(sysctl -ne net.core.rmem_max)
   if [ ! -n "$rmem_max" ] || [ 2500000 -gt $rmem_max ] ;then
-      echo 'net.core.rmem_max=2500000' >> /etc/sysctl.conf
-      sysctl -p
+      echo 'net.core.rmem_max = 2500000' >> /etc/sysctl.conf
+      
   fi
+  nr_hugepages=$(sysctl -ne vm.nr_hugepages)
+  if [ ! -n "$nr_hugepages" ] || [ 1024 -gt $nr_hugepages ] ;then
+      echo 'vm.nr_hugepages = 1024' >> /etc/sysctl.conf
+  fi
+  sysctl -p
 }
 
 function configure_registries {
