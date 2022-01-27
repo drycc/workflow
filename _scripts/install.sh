@@ -164,6 +164,8 @@ kind: ConfigMap
 metadata:
   name: metallb
   namespace: metallb
+  labels:                          
+    app.kubernetes.io/managed-by: Helm
 data:
   config: |
     address-pools:
