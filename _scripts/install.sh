@@ -155,33 +155,24 @@ function install_components {
     --set k8sServicePort=${api_server[2]} \
     --set hostPort.enabled=true \
     --namespace kube-system --wait
-  
-  helm install metallb drycc/metallb --namespace metallb --create-namespace --wait
+
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
-    kubectl apply -f - <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: metallb
-  namespace: metallb
-  labels:                          
-    app.kubernetes.io/managed-by: Helm
-data:
-  config: |
-    address-pools:
-    - addresses:
-      - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
-      name: public
-      protocol: layer2
-    - addresses:
-      - 172.16.0.0/12
-      name: default
-      protocol: layer2
+    helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f - <<EOF
+configInline:
+  address-pools:
+  - addresses:
+    - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
+    name: public
+    protocol: layer2
+  - addresses:
+    - 172.16.0.0/12
+    name: default
+    protocol: layer2
 EOF
     echo -e "\\033[32m---> Metallb using the default configuration.\\033[0m"
     kubectl get cm metallb -n metallb -o yaml
   else
-    kubectl apply -n metallb -f ${METALLB_CONFIG_FILE}
+    helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f ${METALLB_CONFIG_FILE}
   fi
   
   helm install traefik drycc/traefik \

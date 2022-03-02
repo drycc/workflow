@@ -6,9 +6,7 @@ WORKDIR /app
 
 RUN export DEBIAN_FRONTEND=noninteractive \
   && install-stack python $PYTHON_VERSION && . init-stack \
-  && python -m venv /usr/local/env \
-  && source /usr/local/env/bin/activate \
-  && pip install -r requirements.txt
+  && set -eux; pip3 install -r requirements.txt 2>/dev/null
 
 EXPOSE 8000
-CMD ["PATH=/usr/local/env/bin:\$PATH", "mkdocs", "serve", "-a", "0.0.0.0:8000"]
+CMD ["mkdocs", "serve", "-a", "0.0.0.0:8000"]
