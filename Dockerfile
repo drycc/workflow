@@ -1,15 +1,15 @@
 FROM docker.io/drycc/base:bullseye
 
-RUN adduser --system \
-	--shell /bin/bash \
-	--disabled-password \
-	--home /workspace \
-	--group \
-	drycc
+ARG DRYCC_UID=1001
+ARG DRYCC_GID=1001
+ARG DRYCC_HOME_DIR=/workspace
+
+RUN groupadd drycc --gid ${DRYCC_GID} \
+  && useradd drycc -u ${DRYCC_UID} -g ${DRYCC_GID} -s /bin/bash -m -d ${DRYCC_HOME_DIR}
 
 ENV PYTHON_VERSION=3.10.2
-COPY . /workspace
-WORKDIR /workspace
+COPY . ${DRYCC_HOME_DIR}
+WORKDIR ${DRYCC_HOME_DIR}
 
 RUN export DEBIAN_FRONTEND=noninteractive \
   && install-stack python $PYTHON_VERSION && . init-stack \
@@ -28,7 +28,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         /usr/lib/`echo $(uname -m)`-linux-gnu/gconv/IBM* \
         /usr/lib/`echo $(uname -m)`-linux-gnu/gconv/EBC* \
   && mkdir -p /usr/share/man/man{1..8} \
-  && chown -R drycc:drycc /workspace
+  && chown -R drycc:drycc ${DRYCC_HOME_DIR}
 
 USER drycc
 EXPOSE 8000

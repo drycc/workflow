@@ -11,7 +11,6 @@ MKDOCSSERVE     = $(MKDOCS) serve -a 0.0.0.0:8000
 SHORT_NAME ?= workflow
 VERSION ?= git-$(shell git rev-parse --short HEAD)
 IMAGE := ${SHORT_NAME}:${VERSION}
-
 REPO_PATH := github.com/drycc/${SHORT_NAME}
 DEV_ENV_WORK_DIR := /src/${REPO_PATH}
 DEV_ENV_PREFIX := docker run --rm -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR} -p 8000:8000
@@ -41,6 +40,7 @@ test: build
 	$(TEST_CMD)
 
 docker-build-docs:
+	$(shell chown -R 1001:1001 ${CURDIR})
 	$(DEV_ENV_CMD) ${IMAGE} $(BUILD_CMD)
 
 docker-test: docker-build-docs

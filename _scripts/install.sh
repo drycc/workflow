@@ -177,7 +177,7 @@ EOF
   
   helm install traefik drycc/traefik \
     --namespace traefik \
-    --create-namespace --wait -f - <<EOF
+    --create-namespace -f - <<EOF
 service:
   annotations:
     metallb.universe.tf/address-pool: public
@@ -191,7 +191,7 @@ ingressClass:
 additionalArguments:
 - "--entrypoints.websecure.http.tls"
 - "--experimental.http3=true"
-- "--entrypoints.name.enablehttp3=true"
+- "--entrypoints.name.http3"
 EOF
   helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
   helm install catalog drycc/catalog \
