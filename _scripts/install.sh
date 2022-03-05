@@ -165,7 +165,7 @@ configInline:
     name: public
     protocol: layer2
   - addresses:
-    - 172.16.0.0/12
+    - 192.168.254.0/24
     name: default
     protocol: layer2
 EOF
@@ -177,7 +177,7 @@ EOF
   
   helm install traefik drycc/traefik \
     --namespace traefik \
-    --create-namespace -f - <<EOF
+    --create-namespace --wait -f - <<EOF
 service:
   annotations:
     metallb.universe.tf/address-pool: public
