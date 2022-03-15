@@ -1,7 +1,7 @@
 # Managing resources for an Application
 
 We can use blow command to create resources and bind which resource is created.
-This command depend on [service-catalog](https://svc-cat.io).
+This command depend on [service-catalog](https://service-catalog.drycc.cc).
 
 
 Use `drycc resources` to create and bind a resource for a deployed application.

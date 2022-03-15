@@ -15,7 +15,7 @@ Workflow supports the use of ACME to manage automatic certificates, [cert-manage
 
 Workflow supports stateful apps. You can create and use them through the 'drycc volumes' command. If you want to use this feature, you must have a `StorageClass` that supports `ReadWriteMany`.
 
-Workflow also supports the [OSB](https://github.com/openservicebrokerapi/servicebroker) API through the 'drycc resources' command. If you want to use this function, you need to install [service-catalog](https://svc-cat.io).
+Workflow also supports the [OSB](https://github.com/openservicebrokerapi/servicebroker) API through the 'drycc resources' command. If you want to use this function, you need to install [service-catalog](https://service-catalog.drycc.cc).
 
 ## Storage Requirements
 
