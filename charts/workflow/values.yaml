@@ -3,6 +3,8 @@
 global:
   # Admin email, used for each component to send email to administrator
   email: "drycc@drycc.cc"
+  # Whether to use the template defined by common
+  common: true
   # Set the storage backend
   #
   # Valid values are:
