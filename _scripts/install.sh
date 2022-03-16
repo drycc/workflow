@@ -192,6 +192,7 @@ additionalArguments:
 - "--entrypoints.websecure.http.tls"
 - "--experimental.http3=true"
 - "--entrypoints.name.http3"
+- "--providers.kubernetesingress.allowEmptyServices=true"
 EOF
   helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
   helm install catalog drycc/catalog \
