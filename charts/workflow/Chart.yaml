@@ -1,7 +1,51 @@
 name: workflow
+apiVersion: v2
 home: https://github.com/drycc/workflow
-version: v1.0.0
+dependencies:
+- name: builder
+  version: <builder-tag>
+  repository: https://charts.drycc.cc/stable/builder
+- name: imagebuilder
+  version: <imagebuilder-tag>
+  repository: https://charts.drycc.cc/stable/imagebuilder
+- name: controller
+  version: <controller-tag>
+  repository: https://charts.drycc.cc/stable/controller
+- name: database
+  version: <database-tag>
+  repository: https://charts.drycc.cc/stable/database
+- name: fluentd
+  version: <fluentd-tag>
+  repository: https://charts.drycc.cc/stable/fluentd
+- name: redis
+  version: <redis-tag>
+  repository: https://charts.drycc.cc/stable/redis
+- name: logger
+  version: <logger-tag>
+  repository: https://charts.drycc.cc/stable/logger
+- name: minio
+  version: <minio-tag>
+  repository: https://charts.drycc.cc/stable/minio
+- name: monitor
+  version: <monitor-tag>
+  repository: https://charts.drycc.cc/stable/monitor
+- name: registry
+  version: <registry-tag>
+  repository: https://charts.drycc.cc/stable/registry
+- name: registry-proxy
+  version: <registry-proxy-tag>
+  repository: https://charts.drycc.cc/stable/registry-proxy
+- name: influxdb
+  version: <influxdb-tag>
+  repository: https://charts.drycc.cc/stable/influxdb
+- name: rabbitmq
+  version: <rabbitmq-tag>
+  repository: https://charts.drycc.cc/stable/rabbitmq
+- name: passport
+  version: <passport-tag>
+  repository: https://charts.drycc.cc/stable/passport
 description: Drycc Workflow
 maintainers:
-  - name: Team Drycc
-    email: team@drycc.cc
+- name: Team Drycc
+  email: team@drycc.cc
+version: v1.0.0
