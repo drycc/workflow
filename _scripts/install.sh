@@ -44,11 +44,13 @@ function install_helm {
 }
 
 function configure_os {
-  iptables -F
-  iptables -X
-  iptables -F -t nat
-  iptables -X -t nat
-  iptables -P FORWARD ACCEPT
+  if [[ "$(command -v iptables)" != "" ]] ; then
+    iptables -F
+    iptables -X
+    iptables -F -t nat
+    iptables -X -t nat
+    iptables -P FORWARD ACCEPT
+  fi
   swapoff -a
   sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
   mount bpffs -t bpf /sys/fs/bpf
