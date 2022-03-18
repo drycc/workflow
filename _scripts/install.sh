@@ -305,6 +305,9 @@ EOF
     --set database.persistence.enabled=true \
     --set database.persistence.size=${DATABASE_PERSISTENCE_SIZE:-5Gi} \
     --set database.persistence.storageClass=${DATABASE_PERSISTENCE_STORAGE_CLASS:-""} \
+    --set acme.server=${ACME_SERVER:-"https://acme-v02.api.letsencrypt.org/directory"} \
+    --set acme.externalAccountBinding.keyID=${ACME_EAB_KEY_ID:-""} \
+    --set acme.externalAccountBinding.keySecret=${ACME_EAB_KEY_SECRET:-""} \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --create-namespace --wait --timeout 30m0s
