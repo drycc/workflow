@@ -198,6 +198,9 @@ HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; defa
 K3S_DATA_DIR                               | The config of k3s data dir; If not set, the default path is used
 DEFAULT_STORAGE_CLASS                      | K3s default stroageclass, If not set, the `openebs-hostpath` stroageclass is used
 LOCAL_PROVISIONER_PATH                     | Local path storage path, If not set, the `/var/openebs/local` path is used
+ACME_SERVER                                | ACME Server url, default use letsencrypt
+ACME_EAB_KEY_ID                            | The key ID of which your external account binding is indexed by the external account
+ACME_EAB_KEY_SECRET                        | The key Secret of which your external account symmetric MAC key
 
 Since the installation script will install k3s, other environment variables can refer to k3s installation [environment variables](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
 

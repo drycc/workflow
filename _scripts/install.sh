@@ -196,7 +196,12 @@ additionalArguments:
 - "--entrypoints.name.http3"
 - "--providers.kubernetesingress.allowEmptyServices=true"
 EOF
-  helm install cert-manager drycc/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --wait
+  helm install cert-manager drycc/cert-manager \
+    --namespace cert-manager \
+    --create-namespace \
+    --set clusterResourceNamespace=drycc \
+    --set installCRDs=true --wait
+
   helm install catalog drycc/catalog \
     --set asyncBindingOperationsEnabled=true \
     --set image=docker.io/drycc/service-catalog:canary \
@@ -305,6 +310,9 @@ EOF
     --set database.persistence.enabled=true \
     --set database.persistence.size=${DATABASE_PERSISTENCE_SIZE:-5Gi} \
     --set database.persistence.storageClass=${DATABASE_PERSISTENCE_STORAGE_CLASS:-""} \
+    --set acme.server=${ACME_SERVER:-"https://acme-v02.api.letsencrypt.org/directory"} \
+    --set acme.externalAccountBinding.keyID=${ACME_EAB_KEY_ID:-""} \
+    --set acme.externalAccountBinding.keySecret=${ACME_EAB_KEY_SECRET:-""} \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --create-namespace --wait --timeout 30m0s
