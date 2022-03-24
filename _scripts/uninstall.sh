@@ -3,7 +3,14 @@ set -eo pipefail
 shopt -s expand_aliases
 
 /usr/local/bin/k3s-killall.sh
-/usr/local/bin/k3s-uninstall.sh
+
+if [[ -x /usr/local/bin/k3s-uninstall.sh ]] ; then
+    /usr/local/bin/k3s-uninstall.sh
+fi
+
+if [[ -x /usr/local/bin/k3s-agent-uninstall.sh ]] ; then
+    /usr/local/bin/k3s-agent-uninstall.sh
+fi
 
 if [[ -n "${K3S_DATA_DIR}" ]] ; then
     rm -rf  "${K3S_DATA_DIR}/rancher"
