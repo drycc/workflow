@@ -178,6 +178,8 @@ DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admi
 CERT_MANAGER_ENABLED                       | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
 REGISTRIES_FILE                            | The `registers.yaml` file path used by drycc registry
+KUBE_API_SERVER_ADDRESS                    | Set with the IP address of the loadbalancer that was in front of kube-apiserver, The default is the IP address of the current node
+KUBE_API_SERVER_PORT                       | Set with the PORT of the loadbalancer that was in front of kube-apiserver, which is `6443` by default
 METALLB_CONFIG_FILE                        | The metallb config file path, layer 2 network is used by default
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default

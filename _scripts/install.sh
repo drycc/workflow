@@ -147,14 +147,16 @@ function install_components {
   check_metallb
   helm repo update
   echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
-  api_server=(`kubectl config view -o=jsonpath='{.clusters[0].cluster.server}' | tr "://" " "`)
+  api_server_address=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
   helm install cilium drycc/cilium \
     --set tunnel=geneve \
     --set operator.replicas=1 \
     --set bandwidthManager=true \
     --set kubeProxyReplacement=strict \
-    --set k8sServiceHost=${api_server[1]} \
-    --set k8sServicePort=${api_server[2]} \
+    --set k8sServiceHost=${KUBE_API_SERVER_ADDRESS:-$api_server_address} \
+    --set k8sServicePort=${KUBE_API_SERVER_PORT:-"6443"} \
+    --set global.containerRuntime.integration="containerd" \
+    --set global.containerRuntime.socketPath="/var/run/k3s/containerd/containerd.sock" \
     --set hostPort.enabled=true \
     --namespace kube-system --wait
 
