@@ -1,4 +1,4 @@
-mkdocs==1.2.3
-PyYaml==5.4.1
-markdown-checklist==0.4.1
-markdown-include==0.5.1
+mkdocs==1.3.0
+PyYaml==6.0
+markdown-checklist==0.4.3
+markdown-include==0.6.0
