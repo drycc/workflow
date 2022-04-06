@@ -324,9 +324,9 @@ EOF
 
 function install_helmbroker {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    addons_url="https://drycc-mirrors.drycc.cc/drycc/addons/releases/download/latest/index.yaml"
+    addons_url="https://drycc-mirrors.drycc.cc/drycc-addons/addons/releases/download/latest/index.yaml"
   else
-    addons_url="https://github.com/drycc/addons/releases/download/latest/index.yaml"
+    addons_url="https://github.com/drycc-addons/addons/releases/download/latest/index.yaml"
   fi
   HELMBROKER_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   HELMBROKER_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
