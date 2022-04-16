@@ -17,6 +17,24 @@ init_arch() {
   esac
 }
 
+init_registry() {
+  if [[ -z $DRYCC_REGISTRY]]
+    echo -e "\\033[32m---> Get the fastest drycc registry...\\033[0m"
+    registrys=(quay.io ccr.ccs.tencentyun.com sgccr.ccs.tencentyun.com jpccr.ccs.tencentyun.com uswccr.ccs.tencentyun.com useccr.ccs.tencentyun.com deccr.ccs.tencentyun.com saoccr.ccs.tencentyun.com)
+    delay=65535
+    DRYCC_REGISTRY=quay.io
+    for registry in ${registrys[@]}
+    do
+        time_total=$(curl -o /dev/null -s -w "%{time_total}" "https://$registry")
+        if [[ `echo "$delay>$time_total"|bc` -eq 1 ]];then
+            delay=$time_total
+            DRYCC_REGISTRY=$registry
+        fi
+    done
+  fi
+  echo -e "\\033[32m---> The drycc registry is: ${DRYCC_REGISTRY}\\033[0m"
+}
+
 function clean_before_exit {
     # delay before exiting, so stdout/stderr flushes through the logging system
     rm -rf /tmp/drycc-values.yaml /etc/rancher/k3s/registries.yaml
@@ -25,6 +43,7 @@ function clean_before_exit {
 }
 trap clean_before_exit EXIT
 init_arch
+init_registry
 
 function install_helm {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
@@ -280,6 +299,7 @@ imagebuilder:
     short-name-mode="permissive"
 EOF
   fi
+
   helm install drycc drycc/workflow \
     --set builder.service.type=LoadBalancer \
     --set global.clusterDomain="cluster.local" \
@@ -312,6 +332,20 @@ EOF
     --set database.persistence.enabled=true \
     --set database.persistence.size=${DATABASE_PERSISTENCE_SIZE:-5Gi} \
     --set database.persistence.storageClass=${DATABASE_PERSISTENCE_STORAGE_CLASS:-""} \
+    --set builder.imageRegistry=${DRYCC_REGISTRY} \
+    --set controller.imageRegistry=${DRYCC_REGISTRY} \
+    --set database.imageRegistry=${DRYCC_REGISTRY} \
+    --set fluentd.imageRegistry=${DRYCC_REGISTRY} \
+    --set imagebuilder.imageRegistry=${DRYCC_REGISTRY} \
+    --set influxdb.imageRegistry=${DRYCC_REGISTRY} \
+    --set logger.imageRegistry=${DRYCC_REGISTRY} \
+    --set minio.imageRegistry=${DRYCC_REGISTRY} \
+    --set monitor.imageRegistry=${DRYCC_REGISTRY} \
+    --set passport.imageRegistry=${DRYCC_REGISTRY} \
+    --set rabbitmq.imageRegistry=${DRYCC_REGISTRY} \
+    --set redis.imageRegistry=${DRYCC_REGISTRY} \
+    --set registry.imageRegistry=${DRYCC_REGISTRY} \
+    --set registry-proxy.imageRegistry=${DRYCC_REGISTRY} \
     --set acme.server=${ACME_SERVER:-"https://acme-v02.api.letsencrypt.org/directory"} \
     --set acme.externalAccountBinding.keyID=${ACME_EAB_KEY_ID:-""} \
     --set acme.externalAccountBinding.keySecret=${ACME_EAB_KEY_SECRET:-""} \

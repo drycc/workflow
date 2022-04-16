@@ -74,6 +74,20 @@ For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image
 $ yum install curl
 ```
 
+### Installing bc
+
+For Debian and Ubuntu, use this command:
+
+```
+$ apt-get install bc
+```
+
+For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image, use this command:
+
+```
+$ yum install bc
+```
+
 ## Hardware
 
 Hardware requirements scale based on the size of your deployments. Minimum recommendations are outlined here.
