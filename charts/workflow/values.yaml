@@ -1,17 +1,20 @@
 # This is the global configuration file for Workflow
 
+# If the service is used by a component alone, it needs to be configured inside the component.
+# Refer to rabbitmqUrl and databaseUrl of the controller component. 
+# If the service is dependent on multiple components and there is state synchronization,
+# it needs to be configured separately, such as minio and influxdb.
+
 global:
   # Admin email, used for each component to send email to administrator
   email: "drycc@drycc.cc"
-  # Set the storage backend
+
+  # Set the location of Workflow's Object Storage
   #
   # Valid values are:
-  # - s3: Store persistent data in AWS S3 (configure in S3 section)
-  # - azure: Store persistent data in Azure's object storage
-  # - gcs: Store persistent data in Google Cloud Storage
-  # - oss: Store persistent data in Aliyun OSS
-  # - minio: Store persistent data on in-cluster Minio server
-  storage: minio
+  # - on-cluster: Run minio within the Kubernetes cluster
+  # - off-cluster: Run Object Storage outside the Kubernetes cluster (Compatible with s3 API)
+  minioLocation: "on-cluster"
 
   # Set the location of Workflow's PostgreSQL database
   #
@@ -19,7 +22,7 @@ global:
   # - on-cluster: Run PostgreSQL within the Kubernetes cluster (credentials are generated
   #   automatically; backups are sent to object storage
   #   configured above)
-  # - off-cluster: Run PostgreSQL outside the Kubernetes cluster (configure in database section)
+  # - off-cluster: Run PostgreSQL outside the Kubernetes cluster
   databaseLocation: "on-cluster"
 
   # Set the location of Workflow's Redis instance
@@ -88,51 +91,23 @@ global:
   # - off-cluster: Use passport outside the Kubernetes cluster
   passportLocation: "on-cluster"
 
-s3:
-  # Your AWS access key. Leave it empty if you want to use IAM credentials.
-  accesskey: ""
-  # Your AWS secret key. Leave it empty if you want to use IAM credentials.
-  secretkey: ""
-  # Any S3 region
-  endpoint: "your-s3-endpoint"
-  # Your buckets.
-  builderBucket: "your-builder-bucket-name"
-  registryBucket: "your-registry-bucket-name"
-  databaseBucket: "your-database-bucket-name"
-
-oss:
-  accesskey: ""
-  secretkey: ""
-  endpoint: "your-oos-endpoint"
-  builderBucket: "your-builder-bucket-name"
-  registryBucket: "your-registry-bucket-name"
-  databaseBucket: "your-database-bucket-name"
-
-azure:
-  accesskey: "YOUR ACCOUNT NAME"
-  secretkey: "YOUR ACCOUNT KEY"
-  endpoint: "your-azure-endpoint"
-  builderBucket: "your-builder-container-name"
-  registryBucket: "your-registry-container-name"
-  databaseBucket: "your-database-container-name"
-
-gcs:
-  # keyJson is expanded into a JSON file on the remote server. It must be
-  # well-formatted JSON data.
-  accesskey: "your accessKey for minio gateway"
-  secretkey: "your secretkey for minio gateway"
-  keyJson: <base64-encoded JSON data>
-  projectid: "your-gcs-projectid"
-  builderBucket: "your-builder-bucket-name"
-  registryBucket: "your-registry-bucket-name"
-  databaseBucket: "your-database-bucket-name"
-
 minio:
-  accesskey: "8TZRY2JRWMPT6UMXR6I5"
-  secretkey: "gbstrOvotMMcg2sMfGUhA5a6Et/EI5ALtIHsobYk"
-  builderBucket: "0fad60517a9e4225a07d77d7b9b58629"
-  registryBucket: "c2da53f11c7a455db35797c3ba625d80"
-  databaseBucket: "e95eb5c54c3a4047abe5269a68fa9a67"
+  # bucket lookup supported by the server.
+  # Valid options are '[dns, path]'
+  # When the minio is off-cluster, this value can be set
+  # Otherwise, Hard coded as `path`
+  lookup: "path"
+  # endpoint configuration is only available in off-cluster minio database
+  endpoint: ""
+  # If minio is off-cluster, accesskey and secretkey must be specified
+  # Otherwise, they are generated randomly, if they are empty
+  accesskey: ""
+  secretkey: ""
+  # The following three bucket name parameters are valid only in cluster-off
+  # In the case of cluster-on, they are hard coded and named: builder, registry, database
+  builderBucket: "drycc-builder-bucket"
+  registryBucket: "drycc-registry-bucket"
+  databaseBucket: "drycc-database-bucket"
   # Configure the following ONLY if you want persistence for on-cluster minio
   persistence:
     enabled: false # Set to true to enable persistence
@@ -181,9 +156,11 @@ controller:
   celeryReplicas: 1
   # Configuring this will no longer use the built-in database component
   databaseUrl: ""
+  # Configuring this will no longer use the built-in rabbitmq component
+  rabbitmqUrl: ""
 
 database:
-  # The username and password to be used by the on-cluster database.
+  # The following parameters are configured only when using an on-cluster Database instance
   # If left empty they will be generated using randAlphaNum
   username: ""
   password: ""
@@ -204,20 +181,18 @@ database:
     volumeName: ""
 
 redis:
-  # The following parameters are configured only when using an on-cluster Redis instance
-  replicas: 1
   # The following parameters are configured only when using an off-cluster Redis instance
   addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
   password: "redis password" # "" == no password
+  # The following parameters are configured only when using an on-cluster Redis instance
+  replicas: 1
   persistence:
     enabled: false # Set to true to enable persistence
     size: 5Gi
     storageClass: ""
 
 rabbitmq:
-  # Configure the following ONLY if using an off-cluster rabbitmq
-  url: "amqp://myuser:mypassword@localhost:5672/myvhost"
-  # The username and password to be used by the on-cluster database.
+  # The following parameters are configured only when using an on-cluster Rabbitmq instance
   # If left empty they will be generated using randAlphaNum
   username: ""
   password: ""
@@ -241,7 +216,7 @@ influxdb:
   url: "http://my.influx.url:8086"
   bucket: "kubernetes"
   org: "org"
-  # If it is off-cluster, it must be specified
+  # If influxdb is off-cluster, it must be specified
   # Otherwise, it is generated randomly, if it is empty
   token: ""
   # Configure the following is only available in on-cluster Influx database
@@ -295,12 +270,14 @@ monitor:
       volumeName: ""
 
 registry:
+  # The following parameters are configured only when using an off-cluster Registry instance
   hostname: ""
   organization: ""
   username: ""
   password: ""
 
 passport:
+  # The following parameters are configured only when using an on-cluster passport
   # Set passport deployment replicas
   replicas: 1
   # Configuring this will no longer use the built-in database component
