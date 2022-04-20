@@ -181,7 +181,7 @@ database:
     volumeName: ""
 
 redis:
-  # The following parameters are configured only when using an off-cluster Redis instance
+  # The addrs parameters are configured only when using an off-cluster Redis instance
   addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
   password: "redis password" # "" == no password
   # The following parameters are configured only when using an on-cluster Redis instance
@@ -270,11 +270,17 @@ monitor:
       volumeName: ""
 
 registry:
-  # The following parameters are configured only when using an off-cluster Registry instance
-  hostname: ""
+  # The host parameters is configured only when using an off-cluster Registry instance
+  host: ""
+  # The following organization parameters are valid only in cluster-off
+  # In the case of cluster-on, the value is app name, which is dynamically assigned by builder.
   organization: ""
   username: ""
   password: ""
+  # The redirect parameters is configured only when using an on-cluster Registry instance
+  # The subsection provides configuration for managing redirects from content backends.
+  # For backends that support it, redirecting is enabled by default.
+  redirect: "true"
 
 passport:
   # The following parameters are configured only when using an on-cluster passport

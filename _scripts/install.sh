@@ -18,7 +18,7 @@ init_arch() {
 }
 
 init_registry() {
-  if [[ -z $DRYCC_REGISTRY]]
+  if [[ -z "$DRYCC_REGISTRY" ]] ; then
     echo -e "\\033[32m---> Get the fastest drycc registry...\\033[0m"
     registrys=(quay.io ccr.ccs.tencentyun.com sgccr.ccs.tencentyun.com jpccr.ccs.tencentyun.com uswccr.ccs.tencentyun.com useccr.ccs.tencentyun.com deccr.ccs.tencentyun.com saoccr.ccs.tencentyun.com)
     delay=65535
