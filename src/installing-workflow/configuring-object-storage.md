@@ -8,8 +8,8 @@ Drycc Workflow ships with [Minio][minio] by default, which provides in-cluster, 
 
 Every component that relies on object storage uses two inputs for configuration:
 
-1. Component-specific environment variables (e.g. `BUILDER_STORAGE` and `REGISTRY_STORAGE`)
-2. Access credentials stored as a Kubernetes secret named `objectstorage-keyfile`
+1. You must use object storage services that are compatible with S3 API
+2. Access credentials stored as a Kubernetes secret named `minio-creds`
 
 The helm chart for Drycc Workflow can be easily configured to connect Workflow components to off-cluster object storage. Drycc Workflow currently supports Google Compute Storage, Amazon S3, [Azure Blob Storage][] and OpenStack Swift Storage.
 
