@@ -92,6 +92,11 @@ function configure_registries {
   elif [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]]; then
     if [[ "$1" == "runtime" ]] ; then
       cat << EOF > "/etc/rancher/k3s/registries.yaml"
+configs:
+  "registry.drycc.cc":
+    auth:
+      username: anonymous
+      password: anonymous
 mirrors:
   "docker.io":
     endpoint:
@@ -100,6 +105,11 @@ mirrors:
 EOF
     else
       cat << EOF > "/etc/rancher/k3s/registries.yaml"
+configs:
+  "registry.drycc.cc":
+    auth:
+      username: anonymous
+      password: anonymous
 mirrors:
   "docker.io":
     endpoint:

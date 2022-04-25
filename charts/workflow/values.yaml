@@ -279,8 +279,8 @@ registry:
   password: ""
   # The redirect parameters is configured only when using an on-cluster Registry instance
   # The subsection provides configuration for managing redirects from content backends.
-  # For backends that support it, redirecting is enabled by default.
-  redirect: "true"
+  # For backends that support it, redirecting is disabled by default.
+  redirect: "false"
 
 passport:
   # The following parameters are configured only when using an on-cluster passport
