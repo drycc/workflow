@@ -241,13 +241,21 @@ EOF
 }
 
 function install_openebs {
-  helm install openebs drycc/openebs \
-    --namespace openebs \
-    --create-namespace \
-    --set localprovisioner.basePath=${LOCAL_PROVISIONER_PATH:-"/var/openebs/local"} \
-    --set nfs-provisioner.enabled=true --wait
-  kubectl patch storageclass ${DEFAULT_STORAGE_CLASS:-"openebs-hostpath"} \
-    -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  if [[ -z "${OPENEBS_CONFIG_FILE}" ]] ; then
+    helm install openebs drycc/openebs \
+      --namespace openebs \
+      --create-namespace \
+      --set localprovisioner.basePath=${LOCAL_PROVISIONER_PATH:-"/var/openebs/local"} \
+      --set nfs-provisioner.enabled=true \
+      --set provisioner.hostpathClass.isDefaultClass=true \
+      --wait
+  else
+    helm install openebs drycc/openebs \
+      --namespace openebs \
+      --create-namespace \
+      --wait \
+      -f "${OPENEBS_CONFIG_FILE}"
+  fi
 }
 
 function check_drycc {
