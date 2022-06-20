@@ -199,6 +199,9 @@ INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror loca
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
 REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default
 REDIS_PERSISTENCE_STORAGE_CLASS            | StorangeClass of `redis`; default storangeclass is used by default
+MINIO_ZONE                                 | Minio number of zones, capacity expansion through the number of zones
+MINIO_DRIVES                               | Minio number of drives per node, after the cluster is initialized, it cannot be changed
+MINIO_REPLICAS                             | Minio number of nodes, after the cluster is initialized, it cannot be changed
 MINIO_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `minio`, which is `20Gi` by default
 MINIO_PERSISTENCE_STORAGE_CLASS            | StorangeClass of `minio`; default storangeclass is used by default
 MONITOR_GRAFANA_PERSISTENCE_SIZE           | The size of the persistence space allocated to `monitor.grafana`, which is `5Gi` by default

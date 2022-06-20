@@ -286,13 +286,109 @@ function install_drycc {
   RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
 
-  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    cat << EOF > "/tmp/drycc-values.yaml"
+cat << EOF > "/tmp/drycc-values.yaml"
+global:
+  clusterDomain: cluster.local
+  platformDomain: ${PLATFORM_DOMAIN}
+  certManagerEnabled: ${CERT_MANAGER_ENABLED:-true}
+  ingressClass: traefik
+
 builder:
+  imageRegistry: ${DRYCC_REGISTRY} 
   service:
+    type: LoadBalancer
     annotations:
       metallb.universe.tf/address-pool: public
       metallb.universe.tf/allow-shared-ip: drycc
+
+database
+  imageRegistry: ${DRYCC_REGISTRY}
+  limitsMemory: "256Mi"
+  limitsHugepages2Mi: "256Mi"
+  persistence:
+    enabled: true
+    size: ${DATABASE_PERSISTENCE_SIZE:-5Gi}
+    storageClass: ${DATABASE_PERSISTENCE_STORAGE_CLASS:-""}
+
+fluentd:
+  imageRegistry: ${DRYCC_REGISTRY} 
+  daemonEnvironment:
+    CONTAINER_TAIL_PARSER_TYPE: "/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/"
+
+controller:
+  imageRegistry: ${DRYCC_REGISTRY} 
+  appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"openebs-kernel-nfs"}
+
+redis:
+  imageRegistry: ${DRYCC_REGISTRY}
+  persistence:
+    enabled: true
+    size: ${REDIS_PERSISTENCE_SIZE:-5Gi}
+    storageClass: ${REDIS_PERSISTENCE_STORAGE_CLASS:-""}
+
+minio:
+  zone: ${MINIO_ZONE:-1}
+  drives: ${MINIO_DRIVES:-4}
+  replicas: ${MINIO_REPLICAS:-1}
+  imageRegistry: ${DRYCC_REGISTRY}
+  persistence:
+    enabled: true
+    size: ${MINIO_PERSISTENCE_SIZE:-20Gi}
+    storageClass: ${MINIO_PERSISTENCE_STORAGE_CLASS:-""}
+
+rabbitmq:
+  imageRegistry: ${DRYCC_REGISTRY}
+  username: "${RABBITMQ_USERNAME}"
+  password: "${RABBITMQ_PASSWORD}"
+  persistence:
+    enabled: true
+    size: ${RABBITMQ_PERSISTENCE_SIZE:-5Gi}
+    storageClass: ${RABBITMQ_PERSISTENCE_STORAGE_CLASS:-""}
+
+imagebuilder:
+  imageRegistry: ${DRYCC_REGISTRY}
+
+influxdb:
+  imageRegistry: ${DRYCC_REGISTRY}
+  persistence:
+    enabled: true
+    size: ${INFLUXDB_PERSISTENCE_SIZE:-5Gi}
+    storageClass: ${INFLUXDB_PERSISTENCE_STORAGE_CLASS:-""}
+
+logger:
+  imageRegistry: ${DRYCC_REGISTRY}
+
+monitor:
+  grafana:
+    imageRegistry: ${DRYCC_REGISTRY}
+    persistence:
+      enabled: true
+      size: ${MONITOR_GRAFANA_PERSISTENCE_SIZE:-5Gi}
+      storageClass: ${MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS:-""}
+  telegraf:
+    imageRegistry: ${DRYCC_REGISTRY}
+
+
+passport:
+  imageRegistry: ${DRYCC_REGISTRY}
+  adminUsername: ${DRYCC_ADMIN_USERNAME}
+  adminPassword: ${DRYCC_ADMIN_PASSWORD}
+
+registry:
+  imageRegistry: ${DRYCC_REGISTRY}
+
+registry-proxy:
+  imageRegistry: ${DRYCC_REGISTRY}
+
+acme:
+  server: ${ACME_SERVER:-"https://acme-v02.api.letsencrypt.org/directory"}
+  externalAccountBinding:
+    keyID: ${ACME_EAB_KEY_ID:-""}
+    keySecret: ${ACME_EAB_KEY_SECRET:-""}
+EOF
+
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    cat << EOF > "/tmp/drycc-mirror-values.yaml"
 imagebuilder:
   container_registries: |
     unqualified-search-registries = ["docker.io"]
@@ -305,12 +401,7 @@ imagebuilder:
     location = "hub-mirror.c.163.com"
 EOF
   else
-    cat << EOF > "/tmp/drycc-values.yaml"
-builder:
-  service:
-    annotations:
-      metallb.universe.tf/address-pool: public
-      metallb.universe.tf/allow-shared-ip: drycc
+    cat << EOF > "/tmp/drycc-mirror-values.yaml"
 imagebuilder:
   container_registries: |
     unqualified-search-registries = ["docker.io"]
@@ -319,56 +410,9 @@ EOF
   fi
 
   helm install drycc drycc/workflow \
-    --set builder.service.type=LoadBalancer \
-    --set global.clusterDomain="cluster.local" \
-    --set global.platformDomain="${PLATFORM_DOMAIN}" \
-    --set global.certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
-    --set global.ingressClass=traefik \
-    --set fluentd.daemonEnvironment.CONTAINER_TAIL_PARSER_TYPE="/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/" \
-    --set controller.appStorageClass=${CONTROLLER_APP_STORAGE_CLASS:-"openebs-kernel-nfs"} \
-    --set redis.persistence.enabled=true \
-    --set redis.persistence.size=${REDIS_PERSISTENCE_SIZE:-5Gi} \
-    --set redis.persistence.storageClass=${REDIS_PERSISTENCE_STORAGE_CLASS:-""} \
-    --set minio.persistence.enabled=true \
-    --set minio.persistence.size=${MINIO_PERSISTENCE_SIZE:-20Gi} \
-    --set minio.persistence.storageClass=${MINIO_PERSISTENCE_STORAGE_CLASS:-""} \
-    --set rabbitmq.username="${RABBITMQ_USERNAME}" \
-    --set rabbitmq.password="${RABBITMQ_PASSWORD}" \
-    --set rabbitmq.persistence.enabled=true \
-    --set rabbitmq.persistence.size=${RABBITMQ_PERSISTENCE_SIZE:-5Gi} \
-    --set rabbitmq.persistence.storageClass=${RABBITMQ_PERSISTENCE_STORAGE_CLASS:-""} \
-    --set influxdb.persistence.enabled=true \
-    --set influxdb.persistence.size=${INFLUXDB_PERSISTENCE_SIZE:-5Gi} \
-    --set influxdb.persistence.storageClass=${INFLUXDB_PERSISTENCE_STORAGE_CLASS:-""} \
-    --set monitor.grafana.persistence.enabled=true \
-    --set monitor.grafana.persistence.size=${MONITOR_GRAFANA_PERSISTENCE_SIZE:-5Gi} \
-    --set monitor.grafana.storageClass=${MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS:-""} \
-    --set passport.adminUsername=${DRYCC_ADMIN_USERNAME} \
-    --set passport.adminPassword=${DRYCC_ADMIN_PASSWORD} \
-    --set database.limitsMemory="256Mi" \
-    --set database.limitsHugepages2Mi="256Mi" \
-    --set database.persistence.enabled=true \
-    --set database.persistence.size=${DATABASE_PERSISTENCE_SIZE:-5Gi} \
-    --set database.persistence.storageClass=${DATABASE_PERSISTENCE_STORAGE_CLASS:-""} \
-    --set builder.imageRegistry=${DRYCC_REGISTRY} \
-    --set controller.imageRegistry=${DRYCC_REGISTRY} \
-    --set database.imageRegistry=${DRYCC_REGISTRY} \
-    --set fluentd.imageRegistry=${DRYCC_REGISTRY} \
-    --set imagebuilder.imageRegistry=${DRYCC_REGISTRY} \
-    --set influxdb.imageRegistry=${DRYCC_REGISTRY} \
-    --set logger.imageRegistry=${DRYCC_REGISTRY} \
-    --set minio.imageRegistry=${DRYCC_REGISTRY} \
-    --set monitor.imageRegistry=${DRYCC_REGISTRY} \
-    --set passport.imageRegistry=${DRYCC_REGISTRY} \
-    --set rabbitmq.imageRegistry=${DRYCC_REGISTRY} \
-    --set redis.imageRegistry=${DRYCC_REGISTRY} \
-    --set registry.imageRegistry=${DRYCC_REGISTRY} \
-    --set registry-proxy.imageRegistry=${DRYCC_REGISTRY} \
-    --set acme.server=${ACME_SERVER:-"https://acme-v02.api.letsencrypt.org/directory"} \
-    --set acme.externalAccountBinding.keyID=${ACME_EAB_KEY_ID:-""} \
-    --set acme.externalAccountBinding.keySecret=${ACME_EAB_KEY_SECRET:-""} \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
+    --values /tmp/drycc-mirror-values.yaml \
     --create-namespace --wait --timeout 30m0s
   echo -e "\\033[32m---> Rabbitmq username: $RABBITMQ_USERNAME\\033[0m"
   echo -e "\\033[32m---> Rabbitmq password: $RABBITMQ_PASSWORD\\033[0m"
