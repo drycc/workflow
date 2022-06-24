@@ -60,6 +60,7 @@ function install_helm {
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
   helm repo add --force-update drycc https://charts.drycc.cc/${CHANNEL:-stable}
+  helm repo update
 }
 
 function configure_os {
@@ -172,10 +173,8 @@ function check_metallb {
   fi
 }
 
-function install_components {
-  check_metallb
-  helm repo update
-  echo -e "\\033[32m---> Waiting for helm to install components...\\033[0m"
+function install_network() {
+  echo -e "\\033[32m--->Start installing network...\\033[0m"
   api_server_address=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
   helm install cilium drycc/cilium \
     --set tunnel=geneve \
@@ -188,7 +187,12 @@ function install_components {
     --set global.containerRuntime.socketPath="/var/run/k3s/containerd/containerd.sock" \
     --set hostPort.enabled=true \
     --namespace kube-system --wait
+  echo -e "\\033[32m---> Network installed!\\033[0m"
+}
 
+function install_metallb() {
+  check_metallb
+  echo -e "\\033[32m--->Start installing metallb...\\033[0m"
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
     helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f - <<EOF
 configInline:
@@ -207,7 +211,11 @@ EOF
   else
     helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f ${METALLB_CONFIG_FILE}
   fi
-  
+  echo -e "\\033[32m---> Metallb installed!\\033[0m"
+}
+
+function install_traefik() {
+  echo -e "\\033[32m--->Start installing traefik...\\033[0m"
   helm install traefik drycc/traefik \
     --namespace traefik \
     --create-namespace --wait -f - <<EOF
@@ -227,17 +235,35 @@ additionalArguments:
 - "--entrypoints.name.http3"
 - "--providers.kubernetesingress.allowEmptyServices=true"
 EOF
+  echo -e "\\033[32m---> Traefik installed!\\033[0m"
+}
+
+function install_cert_manager() {
+  echo -e "\\033[32m--->Start installing cert-manager...\\033[0m"
   helm install cert-manager drycc/cert-manager \
     --namespace cert-manager \
     --create-namespace \
     --set clusterResourceNamespace=drycc \
     --set installCRDs=true --wait
+  echo -e "\\033[32m---> Cert-manager installed!\\033[0m"
+}
 
+function install_catalog() {
+  echo -e "\\033[32m--->Start installing catalog...\\033[0m"
   helm install catalog drycc/catalog \
     --set asyncBindingOperationsEnabled=true \
     --set image=docker.io/drycc/service-catalog:canary \
     --namespace catalog \
     --create-namespace --wait
+  echo -e "\\033[32m---> Catalog installed!\\033[0m"
+}
+
+function install_components {
+  install_network
+  install_metallb
+  install_traefik
+  install_cert_manager
+  install_catalog
 }
 
 function install_openebs {
