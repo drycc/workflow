@@ -352,15 +352,15 @@ redis:
     size: ${REDIS_PERSISTENCE_SIZE:-5Gi}
     storageClass: ${REDIS_PERSISTENCE_STORAGE_CLASS:-""}
 
-minio:
-  zone: ${MINIO_ZONE:-1}
-  drives: ${MINIO_DRIVES:-4}
-  replicas: ${MINIO_REPLICAS:-1}
+storage:
+  zone: ${STORAGE_ZONE:-1}
+  drives: ${STORAGE_DRIVES:-4}
+  replicas: ${STORAGE_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
   persistence:
     enabled: true
-    size: ${MINIO_PERSISTENCE_SIZE:-20Gi}
-    storageClass: ${MINIO_PERSISTENCE_STORAGE_CLASS:-""}
+    size: ${STORAGE_PERSISTENCE_SIZE:-20Gi}
+    storageClass: ${STORAGE_PERSISTENCE_STORAGE_CLASS:-""}
 
 rabbitmq:
   imageRegistry: ${DRYCC_REGISTRY}

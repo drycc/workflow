@@ -57,7 +57,7 @@ drycc-database-rad1o           1/1       Running   0          5m
 drycc-logger-fluentd-1v8uk     1/1       Running   0          5m
 drycc-logger-fluentd-esm60     1/1       Running   0          5m
 drycc-logger-sm8b3             1/1       Running   0          5m
-drycc-minio-4ww3t              1/1       Running   0          5m
+drycc-storage-4ww3t              1/1       Running   0          5m
 drycc-registry-asozo           1/1       Running   1          5m
 drycc-rabbitmq-0               1/1       Running   0          5m
 ```

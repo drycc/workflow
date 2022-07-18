@@ -23,9 +23,9 @@ dependencies:
 - name: logger
   version: <logger-tag>
   repository: https://charts.drycc.cc/stable/logger
-- name: minio
-  version: <minio-tag>
-  repository: https://charts.drycc.cc/stable/minio
+- name: storage
+  version: <storage-tag>
+  repository: https://charts.drycc.cc/stable/storage
 - name: monitor
   version: <monitor-tag>
   repository: https://charts.drycc.cc/stable/monitor

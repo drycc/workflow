@@ -5,14 +5,6 @@ Drycc Workflow releases may be upgraded in-place with minimal downtime. This upg
 * Helm version [2.1.0 or newer](https://github.com/kubernetes/helm/releases/tag/v2.1.0)
 * Configured Off-Cluster Storage
 
-## Off-Cluster Storage Required
-
-A Workflow upgrade requires using off-cluster object storage, since the default
-in-cluster storage is ephemeral. **Upgrading Workflow with the in-cluster default
-of [Minio][] will result in data loss.**
-
-See [Configuring Object Storage][] to learn how to store your Workflow data off-cluster.
-
 ## Upgrade Process
 
 !!! note
@@ -84,7 +76,5 @@ Users of Drycc Workflow should now upgrade their drycc client to avoid getting `
 curl -sfL https://drycc.cc/install-cli.sh | bash - && sudo mv drycc $(which drycc)
 ```
 
-
-[minio]: https://github.com/drycc/minio
 [Configuring Object Storage]: ../installing-workflow/configuring-object-storage.md
 [Workflow-Migration]: https://github.com/drycc/workflow-migration/blob/main/README.md

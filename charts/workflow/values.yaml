@@ -3,7 +3,7 @@
 # If the service is used by a component alone, it needs to be configured inside the component.
 # Refer to rabbitmqUrl and databaseUrl of the controller component. 
 # If the service is dependent on multiple components and there is state synchronization,
-# it needs to be configured separately, such as minio and influxdb.
+# it needs to be configured separately, such as storage and influxdb.
 
 global:
   # Admin email, used for each component to send email to administrator
@@ -12,9 +12,9 @@ global:
   # Set the location of Workflow's Object Storage
   #
   # Valid values are:
-  # - on-cluster: Run minio within the Kubernetes cluster
-  # - off-cluster: Run Object Storage outside the Kubernetes cluster (Compatible with s3 API)
-  minioLocation: "on-cluster"
+  # - on-cluster: Run drycc storage within the Kubernetes cluster
+  # - off-cluster: Run Storage outside the Kubernetes cluster (Compatible with s3 API)
+  storageLocation: "on-cluster"
 
   # Set the location of Workflow's PostgreSQL database
   #
@@ -91,15 +91,15 @@ global:
   # - off-cluster: Use passport outside the Kubernetes cluster
   passportLocation: "on-cluster"
 
-minio:
+storage:
   # bucket lookup supported by the server.
   # Valid options are '[dns, path]'
-  # When the minio is off-cluster, this value can be set
+  # When the storage is off-cluster, this value can be set
   # Otherwise, Hard coded as `path`
   lookup: "path"
-  # endpoint configuration is only available in off-cluster minio database
+  # endpoint configuration is only available in off-cluster storage
   endpoint: ""
-  # If minio is off-cluster, accesskey and secretkey must be specified
+  # If storage is off-cluster, accesskey and secretkey must be specified
   # Otherwise, they are generated randomly, if they are empty
   accesskey: ""
   secretkey: ""
@@ -108,12 +108,12 @@ minio:
   builderBucket: "drycc-builder-bucket"
   registryBucket: "drycc-registry-bucket"
   databaseBucket: "drycc-database-bucket"
-  # Configure the following ONLY if you want persistence for on-cluster minio
+  # Configure the following ONLY if you want persistence for on-cluster storage
   persistence:
     enabled: false # Set to true to enable persistence
     accessMode: ReadWriteOnce
     size: 5Gi # PVC size
-    ## minio data Persistent Volume Storage Class
+    ## storage data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is

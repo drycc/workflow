@@ -82,7 +82,7 @@ $ helm install --namespace drycc \
     --set influxdb.imageRegistry=quay.io \
     --set rabbitmq.imageRegistry=quay.io \
     --set logger.imageRegistry=quay.io \
-    --set minio.imageRegistry=quay.io \
+    --set storage.imageRegistry=quay.io \
     --set monitor.imageRegistry=quay.io \
     --set registry.imageRegistry=quay.io \
     --set registry-proxy.imageRegistry=quay.io \
@@ -120,7 +120,7 @@ drycc-influxdb-2729788615-m9b5n           1/1       Running   0          4m
 drycc-logger-176328999-wjckx              1/1       Running   4          4m
 drycc-logger-fluentd-zxnqb                1/1       Running   0          4m
 drycc-redis-304849759-1f35p               1/1       Running   0          4m
-drycc-minio-676004970-nxqgt               1/1       Running   0          4m
+drycc-storage-676004970-nxqgt               1/1       Running   0          4m
 drycc-monitor-grafana-432627134-lnl2h     1/1       Running   0          4m
 drycc-monitor-telegraf-wmcmn              1/1       Running   1          4m
 drycc-registry-756475849-lwc6b            1/1       Running   1          4m

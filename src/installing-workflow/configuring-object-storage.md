@@ -2,14 +2,14 @@
 
 A variety of Drycc Workflow components rely on an object storage system to do their work including storing application slugs, Docker images and database logs.
 
-Drycc Workflow ships with [Minio][minio] by default, which provides in-cluster, ephemeral object storage. This means that _if the Minio server crashes, all data will be lost_. Therefore, **Minio should be used for development or testing only**.
+Drycc Workflow ships with [Storage][storage] by default, which provides in-cluster.
 
 ## Configuring off-cluster Object Storage
 
 Every component that relies on object storage uses two inputs for configuration:
 
 1. You must use object storage services that are compatible with S3 API
-2. Access credentials stored as a Kubernetes secret named `minio-creds`
+2. Access credentials stored as a Kubernetes secret named `storage-creds`
 
 The helm chart for Drycc Workflow can be easily configured to connect Workflow components to off-cluster object storage. Drycc Workflow currently supports Google Compute Storage, Amazon S3, [Azure Blob Storage][] and OpenStack Swift Storage.
 
@@ -50,6 +50,6 @@ Operators should configure object storage by editing the Helm values file before
 You are now ready to run `helm install drycc/workflow --namespace drycc -f values.yaml` using your desired object storage.
 
 
-[minio]: ../understanding-workflow/components.md#object-storage
+[storage]: ../understanding-workflow/components.md#object-storage
 [aws-iam]: http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
 [Azure Blob Storage]: https://azure.microsoft.com/en-us/services/storage/blobs/

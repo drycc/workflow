@@ -22,8 +22,7 @@ Workflow also supports the [OSB](https://github.com/openservicebrokerapi/service
 A variety of Drycc Workflow components rely on an object storage system to do their work, including storing application
 slugs, Docker images and database logs.
 
-Drycc Workflow ships with Minio by default, which provides in-cluster, ephemeral object storage. This means that if the
-Minio server crashes, all data will be lost. Therefore, Minio should be used for development or testing only.
+Drycc Workflow ships with drycc storage by default, which provides in-cluster.
 
 Workflow supports Amazon Simple Storage Service (S3), Google Cloud Storage (GCS), OpenShift Swift, and Azure Blob
 Storage. See [configuring object storage](configuring-object-storage) for setup instructions.

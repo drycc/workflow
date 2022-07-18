@@ -4,18 +4,14 @@ When readying a Workflow deployment for production workloads, there are some add
 recommendations.
 
 
-## Running Workflow without Minio
-
-Workflow makes use of [Minio][] to provide storage for the [Registry][], [Database][], and
-[Logger][] components. Minio is provided out of the box as a central storage compartment, but it is
-not resilient to cluster outages. If Minio is shut down, all data is lost.
+## Running Workflow without drycc storage
 
 In production, persistent storage can be achieved by running an external object store.
 For users on AWS, GCE/GKE or Azure, the convenience of Amazon S3, Google GCS or Microsoft Azure Storage
-makes the prospect of running a Minio-less Workflow cluster quite reasonable. For users who have restriction
+makes the prospect of running a Storage-less Workflow cluster quite reasonable. For users who have restriction
 on using external object storage using swift object storage can be an option.
 
-Running a Workflow cluster without Minio provides several advantages:
+Running a Workflow cluster without Storage provides several advantages:
 
  - Removal of state from the worker nodes
  - Reduced resource usage
@@ -65,7 +61,7 @@ RBAC support was announced in Kubernetes-1.5 and is enabled by default if:
 [customizing monitor]: tuning-component-settings.md#customizing-the-monitor
 [database]: ../understanding-workflow/components.md#database
 [logger]: ../understanding-workflow/components.md#logger
-[minio]: ../understanding-workflow/components.md#minio
+[storage]: ../understanding-workflow/components.md#storage
 [platform ssl]: platform-ssl.md
 [registry]: ../understanding-workflow/components.md#registry
 [helm specific permissions]: ../installing-workflow/index.md#check-your-authorization

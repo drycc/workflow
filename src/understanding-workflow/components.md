@@ -64,7 +64,7 @@ For more information see [using Dockerfiles][using-dockerfiles].
 
 ## Object Storage
 
-**Project Location:** [drycc/minio](https://github.com/drycc/minio)
+**Project Location:** [drycc/storage](https://github.com/drycc/storage)
 
 All of the Workflow components that need to persist data will ship them to the
 object storage that was configured for the cluster.For example, database ships
@@ -74,10 +74,10 @@ Workflow supports either on or off-cluster storage. For production deployments
 we highly recommend that you configure [off-cluster object storage][configure-objectstorage].
 
 To facilitate experimentation, development and test environments, the default charts for
-Workflow include on-cluster object storage via [minio](https://github.com/minio/minio).
+Workflow include on-cluster storage via [storage](https://github.com/drycc/storage).
 
 If you also feel comfortable using Kubernetes persistent volumes you may
-configure minio to use persistent storage available in your environment.
+configure storage to use persistent storage available in your environment.
 
 ## Registry
 
