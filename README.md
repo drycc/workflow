@@ -21,7 +21,7 @@ Please see below for links and descriptions of each component:
 - [monitor](https://github.com/drycc/monitor) - The platform monitoring components
 - [influxdb](https://github.com/drycc/influxdb) - The monitor database
 - [rabbitmq](https://github.com/drycc/rabbitmq) - RabbitMQ is a message broker used with controller celery
-- [storage](https://github.com/drycc/storage) - The in-cluster, ephemeral, development-only object storage system
+- [storage](https://github.com/drycc/storage) - The in-cluster, kubernetes storage, s3 api compatible, hybrid storage system.
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`
 
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Working on Documentation" section below and [submit a pull request][prs].

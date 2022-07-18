@@ -149,7 +149,7 @@ controller:
   # admin_only - allows for registration by an admin only.
   registrationMode: "admin_only"
   # Set storageClassName, It is used for application mount.
-  appStorageClass: ""
+  appStorageClass: "drycc-storage"
   # Set controller deployment  replicas
   replicas: 1
   # Set celery replicas
