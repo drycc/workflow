@@ -20,7 +20,7 @@ $ helm install drycc/workflow --namespace drycc \
     --set builder.service.nodePort=32222
 ```
 
-If you want to use Load Balancer on a bare machine, you can look at [metallb](https://github.com/danderson/metallb)
+If you want to use Load Balancer on a bare machine, you can look at [metallb](https://github.com/metallb/metallb)
 
 Where `global.platformDomain` is a **required** parameter that is traditionally not required for Workflow that is explained in the next section. In this example we are using `drycc.cc` for `$hostname`.
 

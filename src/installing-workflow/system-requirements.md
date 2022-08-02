@@ -27,9 +27,6 @@ Drycc Workflow ships with drycc storage by default, which provides in-cluster.
 Workflow supports Amazon Simple Storage Service (S3), Google Cloud Storage (GCS), OpenShift Swift, and Azure Blob
 Storage. See [configuring object storage](configuring-object-storage) for setup instructions.
 
-In addition, workflow needs to use RWX block storage services, such as cloud native [longhorn](https://longhorn.io/), 
-[openebs](https://openebs.io/), or external [glusterfs](https://www.gluster.org/) or [ceph](https://ceph.io/).
-
 ## Resource Requirements
 
 When deploying Drycc Workflow, it's important to provision machines with adequate resources. Drycc is a highly-available

@@ -215,8 +215,6 @@ DATABASE_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `database`; defaul
 HELMBROKER_PERSISTENCE_SIZE                | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
 HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; default storangeclass is used by default
 K3S_DATA_DIR                               | The config of k3s data dir; If not set, the default path is used
-DEFAULT_STORAGE_CLASS                      | K3s default stroageclass, If not set, the `openebs-hostpath` stroageclass is used
-LOCAL_PROVISIONER_PATH                     | Local path storage path, If not set, the `/var/openebs/local` path is used
 ACME_SERVER                                | ACME Server url, default use letsencrypt
 ACME_EAB_KEY_ID                            | The key ID of which your external account binding is indexed by the external account
 ACME_EAB_KEY_SECRET                        | The key Secret of which your external account symmetric MAC key

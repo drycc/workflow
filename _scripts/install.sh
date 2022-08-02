@@ -147,7 +147,7 @@ function configure_mirrors {
 function install_k3s_server {
   configure_os
   configure_mirrors
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --disable=local-storage --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=10.233.0.0/16"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
@@ -193,23 +193,45 @@ function install_network() {
 function install_metallb() {
   check_metallb
   echo -e "\\033[32m--->Start installing metallb...\\033[0m"
+  helm install metallb drycc/metallb \
+    --set frr.enabled=true \
+    --namespace metallb \
+    --create-namespace \
+    --wait
+  sleep 10s
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
-    helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f - <<EOF
-configInline:
-  address-pools:
-  - addresses:
-    - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
-    name: public
-    protocol: layer2
-  - addresses:
-    - 192.168.254.0/24
-    name: default
-    protocol: layer2
-EOF
     echo -e "\\033[32m---> Metallb using the default configuration.\\033[0m"
-    kubectl get cm metallb -n metallb -o yaml
+    kubectl apply -n metallb -f - <<EOF
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: public
+spec:
+  addresses:
+  - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
+
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default
+spec:
+  addresses:
+  - 192.168.254.0/24
+
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: drycc-l2-advertisement
+  namespace: metallb
+spec:
+  ipAddressPools:
+  - public
+  - default
+EOF
   else
-    helm install metallb drycc/metallb --namespace metallb --create-namespace --wait -f ${METALLB_CONFIG_FILE}
+    kubectl apply -n metallb -f ${METALLB_CONFIG_FILE} -n 
   fi
   echo -e "\\033[32m---> Metallb installed!\\033[0m"
 }
@@ -266,24 +288,6 @@ function install_components {
   install_catalog
 }
 
-function install_openebs {
-  if [[ -z "${OPENEBS_CONFIG_FILE}" ]] ; then
-    helm install openebs drycc/openebs \
-      --namespace openebs \
-      --create-namespace \
-      --set localprovisioner.basePath=${LOCAL_PROVISIONER_PATH:-"/var/openebs/local"} \
-      --set nfs-provisioner.enabled=true \
-      --set provisioner.hostpathClass.isDefaultClass=true \
-      --wait
-  else
-    helm install openebs drycc/openebs \
-      --namespace openebs \
-      --create-namespace \
-      --wait \
-      -f "${OPENEBS_CONFIG_FILE}"
-  fi
-}
-
 function check_drycc {
   if [[ -z "${PLATFORM_DOMAIN}" ]] ; then
     echo -e "\\033[33m---> Please set the PLATFORM_DOMAIN variable.\\033[0m"
@@ -327,7 +331,7 @@ builder:
       metallb.universe.tf/address-pool: public
       metallb.universe.tf/allow-shared-ip: drycc
 
-database
+database:
   imageRegistry: ${DRYCC_REGISTRY}
   limitsMemory: "256Mi"
   limitsHugepages2Mi: "256Mi"
@@ -343,7 +347,7 @@ fluentd:
 
 controller:
   imageRegistry: ${DRYCC_REGISTRY} 
-  appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"openebs-kernel-nfs"}
+  appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"drycc-storage"}
 
 redis:
   imageRegistry: ${DRYCC_REGISTRY}
@@ -459,7 +463,7 @@ function install_helmbroker {
     --set ingressClass="traefik" \
     --set platformDomain="cluster.local" \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
-    --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"openebs-kernel-nfs"} \
+    --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"drycc-storage"} \
     --set platformDomain=${PLATFORM_DOMAIN} \
     --set certManagerEqnabled=${CERT_MANAGER_ENABLED:-true} \
     --set username=${HELMBROKER_USERNAME} \
@@ -505,7 +509,6 @@ if [[ -z "$@" ]] ; then
   install_k3s_server
   install_helm
   install_components
-  install_openebs
   install_drycc
   install_helmbroker
   echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
