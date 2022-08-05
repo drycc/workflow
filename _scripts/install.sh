@@ -137,11 +137,15 @@ function configure_mirrors {
   configure_registries
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
+    k3s_install_url="https://get-k3s.drycc.cc"
+    K3S_RELEASE_URL=https://drycc-mirrors.drycc.cc/k3s-io/k3s/releases
     export INSTALL_K3S_MIRROR
-    k3s_install_url="http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh"
   else
     k3s_install_url="https://get.k3s.io"
+    K3S_RELEASE_URL=github.com/k3s-io/k3s/releases
   fi
+  INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}%2Bk3s[0-9])".*/\1/g' | head -1)
+  export INSTALL_K3S_VERSION
 }
 
 function install_k3s_server {
@@ -194,7 +198,7 @@ function install_metallb() {
   check_metallb
   echo -e "\\033[32m--->Start installing metallb...\\033[0m"
   helm install metallb drycc/metallb \
-    --set frr.enabled=true \
+    --set speaker.frr.enabled=true \
     --namespace metallb \
     --create-namespace \
     --wait
