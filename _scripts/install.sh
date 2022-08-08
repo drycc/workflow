@@ -361,14 +361,15 @@ redis:
     storageClass: ${REDIS_PERSISTENCE_STORAGE_CLASS:-""}
 
 storage:
-  zone: ${STORAGE_ZONE:-1}
-  drives: ${STORAGE_DRIVES:-4}
-  replicas: ${STORAGE_REPLICAS:-1}
-  imageRegistry: ${DRYCC_REGISTRY}
-  persistence:
-    enabled: true
-    size: ${STORAGE_PERSISTENCE_SIZE:-20Gi}
-    storageClass: ${STORAGE_PERSISTENCE_STORAGE_CLASS:-""}
+  minio:
+    zone: ${STORAGE_MINIO_ZONE:-1}
+    drives: ${STORAGE_MINIO_DRIVES:-4}
+    replicas: ${STORAGE_MINIO_REPLICAS:-1}
+    imageRegistry: ${DRYCC_REGISTRY}
+    persistence:
+      enabled: true
+      size: ${STORAGE_MINIO_PERSISTENCE_SIZE:-20Gi}
+      storageClass: ${STORAGE_MINIO_PERSISTENCE_STORAGE_CLASS:-""}
   meta:
     pd:
       persistence:

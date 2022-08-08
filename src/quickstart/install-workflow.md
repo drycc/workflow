@@ -199,11 +199,11 @@ INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror loca
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
 REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default
 REDIS_PERSISTENCE_STORAGE_CLASS            | StorangeClass of `redis`; default storangeclass is used by default
-STORAGE_ZONE                               | Storage number of zones, capacity expansion through the number of zones
-STORAGE_DRIVES                             | Storage number of drives per node, after the cluster is initialized, it cannot be changed
-STORAGE_REPLICAS                           | Storage number of nodes, after the cluster is initialized, it cannot be changed
-STORAGE_PERSISTENCE_SIZE                   | The size of the persistence space allocated to `storage`, which is `20Gi` by default
-STORAGE_PERSISTENCE_STORAGE_CLASS          | StorangeClass of `storage`; default storangeclass is used by default
+STORAGE_MINIO_ZONE                         | Storage number of zones, capacity expansion through the number of zones
+STORAGE_MINIO_DRIVES                       | Storage number of drives per node, after the cluster is initialized, it cannot be changed
+STORAGE_MINIO_REPLICAS                     | Storage number of nodes, after the cluster is initialized, it cannot be changed
+STORAGE_MINIO_PERSISTENCE_SIZE             | The size of the persistence space allocated to `storage`, which is `20Gi` by default
+STORAGE_MINIO_PERSISTENCE_STORAGE_CLASS    | StorangeClass of `storage`; default storangeclass is used by default
 STORAGE_META_PD_PERSISTENCE_SIZE           | The size of the persistence space allocated to `storage meta pd`, which is `10Gi` by default
 STORAGE_META_PD_PERSISTENCE_STORAGE_CLASS  | StorangeClass of `storage meta pd`; default storangeclass is used by default
 STORAGE_META_TIKV_PERSISTENCE_SIZE         | The size of the persistence space allocated to `storage meta tikv`, which is `10Gi` by default
