@@ -369,6 +369,17 @@ storage:
     enabled: true
     size: ${STORAGE_PERSISTENCE_SIZE:-20Gi}
     storageClass: ${STORAGE_PERSISTENCE_STORAGE_CLASS:-""}
+  meta:
+    pd:
+      persistence:
+        enabled: true
+        size: ${STORAGE_META_PD_PERSISTENCE_SIZE:-10Gi}
+        storageClass: ${STORAGE_META_PD_PERSISTENCE_STORAGE_CLASS:-""}
+    tikv:
+      persistence:
+        enabled: true
+        size: ${STORAGE_META_TIKV_PERSISTENCE_SIZE:-10Gi}
+        storageClass: ${STORAGE_META_TIKV_PERSISTENCE_STORAGE_CLASS:-""}
 
 rabbitmq:
   imageRegistry: ${DRYCC_REGISTRY}
