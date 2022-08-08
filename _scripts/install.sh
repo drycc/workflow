@@ -200,9 +200,9 @@ function install_metallb() {
   helm install metallb drycc/metallb \
     --set speaker.frr.enabled=true \
     --namespace metallb \
-    --create-namespace \
-    --wait
-  sleep 10s
+    --create-namespace
+
+  sleep 30s
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
     echo -e "\\033[32m---> Metallb using the default configuration.\\033[0m"
     kubectl apply -n metallb -f - <<EOF
@@ -235,7 +235,7 @@ spec:
   - default
 EOF
   else
-    kubectl apply -n metallb -f ${METALLB_CONFIG_FILE} -n 
+    kubectl apply -n metallb -f ${METALLB_CONFIG_FILE}
   fi
   echo -e "\\033[32m---> Metallb installed!\\033[0m"
 }
