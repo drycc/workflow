@@ -97,6 +97,8 @@ storage:
   # When the storage is off-cluster, this value can be set
   # Otherwise, Hard coded as `path`
   lookup: "path"
+  # health check url is only available in off-cluster storage
+  health: ""
   # endpoint configuration is only available in off-cluster storage
   endpoint: ""
   # If storage is off-cluster, accesskey and secretkey must be specified
