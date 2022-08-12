@@ -202,7 +202,9 @@ function install_metallb() {
     --namespace metallb \
     --create-namespace
 
-  sleep 30s
+  echo -e "\\033[32m--->Waiting metallb pods ready...\\033[0m"
+  kubectl wait pods -n metallb --all  --for condition=Ready --timeout=600s
+
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
     echo -e "\\033[32m---> Metallb using the default configuration.\\033[0m"
     kubectl apply -n metallb -f - <<EOF
