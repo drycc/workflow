@@ -156,8 +156,9 @@ controller:
   replicas: 1
   # Set celery replicas
   celeryReplicas: 1
-  # Configuring this will no longer use the built-in database component
+  ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
   databaseUrl: ""
+  databaseReplicaUrl: ""
   # Configuring this will no longer use the built-in rabbitmq component
   rabbitmqUrl: ""
 
@@ -288,8 +289,9 @@ passport:
   # The following parameters are configured only when using an on-cluster passport
   # Set passport deployment replicas
   replicas: 1
-  # Configuring this will no longer use the built-in database component
+  ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
   databaseUrl: ""
+  databaseReplicaUrl: ""
 
 # acme configuration takes effect if and only if certManagerEnabled is true
 acme:
