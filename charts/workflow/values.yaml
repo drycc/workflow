@@ -106,10 +106,9 @@ storage:
   accesskey: ""
   secretkey: ""
   # The following three bucket name parameters are valid only in cluster-off
-  # In the case of cluster-on, they are hard coded and named: builder, registry, database
+  # In the case of cluster-on, they are hard coded and named: builder, registry
   builderBucket: "drycc-builder-bucket"
   registryBucket: "drycc-registry-bucket"
-  databaseBucket: "drycc-database-bucket"
   # Configure the following ONLY if you want persistence for on-cluster storage
   persistence:
     enabled: false # Set to true to enable persistence
