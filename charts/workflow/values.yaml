@@ -153,7 +153,9 @@ controller:
 
 database:
   # The following parameters are configured only when using an on-cluster Database instance
-  # If left empty they will be generated using randAlphaNum
+  # The username and password to be used by the on-cluster database.
+  # If left empty they will be generated
+  # The user name should be set to lowercase letters 
   superuser: "postgres"
   superuserPassword: ""
   replicator: "standby"
