@@ -321,6 +321,9 @@ function install_drycc {
   echo -e "\\033[32m---> Start installing workflow...\\033[0m"
   RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+  INFLUXDB_USERNAME=$(cat /proc/sys/kernel/random/uuid)
+  INFLUXDB_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+
 
 cat << EOF > "/tmp/drycc-values.yaml"
 global:
@@ -398,6 +401,8 @@ imagebuilder:
 
 influxdb:
   imageRegistry: ${DRYCC_REGISTRY}
+  user: "${INFLUXDB_USERNAME}"
+  password: "${INFLUXDB_PASSWORD}"
   persistence:
     enabled: true
     size: ${INFLUXDB_PERSISTENCE_SIZE:-5Gi}
@@ -464,6 +469,8 @@ EOF
     --create-namespace --wait --timeout 30m0s
   echo -e "\\033[32m---> Rabbitmq username: $RABBITMQ_USERNAME\\033[0m"
   echo -e "\\033[32m---> Rabbitmq password: $RABBITMQ_PASSWORD\\033[0m"
+  echo -e "\\033[32m---> Influxdb username: $INFLUXDB_USERNAME\\033[0m"
+  echo -e "\\033[32m---> Influxdb password: $INFLUXDB_PASSWORD\\033[0m"
 }
 
 function install_helmbroker {

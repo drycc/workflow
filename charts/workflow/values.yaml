@@ -217,7 +217,7 @@ influxdb:
   # URL configuration is only available in off-cluster Influx database
   url: "http://my.influx.url:8086"
   bucket: "kubernetes"
-  org: "org"
+  org: "drycc"
   # If influxdb is off-cluster, it must be specified
   # Otherwise, it is generated randomly, if it is empty
   token: ""
