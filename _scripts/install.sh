@@ -321,6 +321,9 @@ function install_drycc {
   echo -e "\\033[32m---> Start installing workflow...\\033[0m"
   RABBITMQ_USERNAME=$(cat /proc/sys/kernel/random/uuid)
   RABBITMQ_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+  INFLUXDB_USERNAME=$(cat /proc/sys/kernel/random/uuid)
+  INFLUXDB_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+
 
 cat << EOF > "/tmp/drycc-values.yaml"
 global:
@@ -406,6 +409,8 @@ imagebuilder:
 influxdb:
   replicas: ${INFLUXDB_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
+  user: "${INFLUXDB_USERNAME}"
+  password: "${INFLUXDB_PASSWORD}"
   persistence:
     enabled: true
     size: ${INFLUXDB_PERSISTENCE_SIZE:-5Gi}
@@ -475,6 +480,8 @@ EOF
     --create-namespace --wait --timeout 30m0s
   echo -e "\\033[32m---> Rabbitmq username: $RABBITMQ_USERNAME\\033[0m"
   echo -e "\\033[32m---> Rabbitmq password: $RABBITMQ_PASSWORD\\033[0m"
+  echo -e "\\033[32m---> Influxdb username: $INFLUXDB_USERNAME\\033[0m"
+  echo -e "\\033[32m---> Influxdb password: $INFLUXDB_PASSWORD\\033[0m"
 }
 
 function install_helmbroker {
@@ -494,7 +501,7 @@ function install_helmbroker {
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
     --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"drycc-storage"} \
     --set platformDomain=${PLATFORM_DOMAIN} \
-    --set certManagerEqnabled=${CERT_MANAGER_ENABLED:-true} \
+    --set certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
     --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \

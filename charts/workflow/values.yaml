@@ -92,39 +92,29 @@ global:
   passportLocation: "on-cluster"
 
 storage:
-  # bucket lookup supported by the server.
-  # Valid options are '[dns, path]'
-  # When the storage is off-cluster, this value can be set
-  # Otherwise, Hard coded as `path`
-  lookup: "path"
-  # health check url is only available in off-cluster storage
-  health: ""
-  # endpoint configuration is only available in off-cluster storage
-  endpoint: ""
-  # If storage is off-cluster, accesskey and secretkey must be specified
-  # Otherwise, they are generated randomly, if they are empty
-  accesskey: ""
-  secretkey: ""
-  # The following three bucket name parameters are valid only in cluster-off
-  # In the case of cluster-on, they are hard coded and named: builder, registry
-  builderBucket: "drycc-builder-bucket"
-  registryBucket: "drycc-registry-bucket"
-  # Configure the following ONLY if you want persistence for on-cluster storage
-  persistence:
-    enabled: false # Set to true to enable persistence
-    accessMode: ReadWriteOnce
-    size: 5Gi # PVC size
-    ## storage data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    ## Storage class of PV to bind. By default it looks for standard storage class.
-    ## If the PV uses a different storage class, specify that here.
-    storageClass: ""
-    volumeName: ""
+  minio:
+    # Storage zone count
+    zones: 1
+    # Device count of per replica
+    drives: 4
+    # Number of replicas per zone
+    replicas: 1
+    persistence:
+      enabled: false
+      accessMode: ReadWriteOnce
+      size: 5Gi
+      storageClass: ""
+  meta:
+    pd:
+      persistence:
+        enabled: false
+        size: 5Gi
+        storageClass: ""
+    tikv:
+      persistence:
+        enabled: false
+        size: 5Gi
+        storageClass: ""
 
 # Set the default (global) way of how Application (your own) images are
 # pulled from within the Controller.
@@ -155,19 +145,25 @@ controller:
   replicas: 1
   # Set celery replicas
   celeryReplicas: 1
-  # Configuring this will no longer use the built-in database component
+  ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
   databaseUrl: ""
+  databaseReplicaUrl: ""
   # Configuring this will no longer use the built-in rabbitmq component
   rabbitmqUrl: ""
 
 database:
   # The following parameters are configured only when using an on-cluster Database instance
-  # If left empty they will be generated using randAlphaNum
-  username: ""
+  # The username and password to be used by the on-cluster database.
+  # If left empty they will be generated
+  # The user name should be set to lowercase letters 
+  superuser: "postgres"
+  superuserPassword: ""
+  replicator: "standby"
+  replicatorPassword: ""
+  user: ""
   password: ""
   persistence:
     enabled: false # Set to true to enable persistence
-    accessMode: ReadWriteOnce
     size: 5Gi # PVC size
     ## database data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -179,7 +175,6 @@ database:
     ## Storage class of PV to bind. By default it looks for standard storage class.
     ## If the PV uses a different storage class, specify that here.
     storageClass: ""
-    volumeName: ""
 
 redis:
   # The addrs parameters are configured only when using an off-cluster Redis instance
@@ -216,7 +211,7 @@ influxdb:
   # URL configuration is only available in off-cluster Influx database
   url: "http://my.influx.url:8086"
   bucket: "kubernetes"
-  org: "org"
+  org: "drycc"
   # If influxdb is off-cluster, it must be specified
   # Otherwise, it is generated randomly, if it is empty
   token: ""
@@ -287,8 +282,9 @@ passport:
   # The following parameters are configured only when using an on-cluster passport
   # Set passport deployment replicas
   replicas: 1
-  # Configuring this will no longer use the built-in database component
+  ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
   databaseUrl: ""
+  databaseReplicaUrl: ""
 
 # acme configuration takes effect if and only if certManagerEnabled is true
 acme:
