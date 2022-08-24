@@ -196,7 +196,10 @@ KUBE_API_SERVER_ADDRESS                    | Set with the IP address of the load
 KUBE_API_SERVER_PORT                       | Set with the PORT of the loadbalancer that was in front of kube-apiserver, which is `6443` by default
 METALLB_CONFIG_FILE                        | The metallb config file path, layer 2 network is used by default
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
+BUILDER_REPLICAS                           | Number of builder replicas to deploy
+CONTROLLER_REPLICAS                        | Number of controller replicas to deploy
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
+REDIS_REPLICAS                             | Number of redis replicas to deploy
 REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default
 REDIS_PERSISTENCE_STORAGE_CLASS            | StorangeClass of `redis`; default storangeclass is used by default
 STORAGE_MINIO_ZONE                         | Storage number of zones, capacity expansion through the number of zones
@@ -204,18 +207,26 @@ STORAGE_MINIO_DRIVES                       | Storage number of drives per node, 
 STORAGE_MINIO_REPLICAS                     | Storage number of nodes, after the cluster is initialized, it cannot be changed
 STORAGE_MINIO_PERSISTENCE_SIZE             | The size of the persistence space allocated to `storage`, which is `20Gi` by default
 STORAGE_MINIO_PERSISTENCE_STORAGE_CLASS    | StorangeClass of `storage`; default storangeclass is used by default
+STORAGE_META_PD_REPLICAS                   | Number of storage meta pd replicas to deploy
 STORAGE_META_PD_PERSISTENCE_SIZE           | The size of the persistence space allocated to `storage meta pd`, which is `10Gi` by default
 STORAGE_META_PD_PERSISTENCE_STORAGE_CLASS  | StorangeClass of `storage meta pd`; default storangeclass is used by default
+STORAGE_META_TIKV_REPLICAS                 | Number of storage meta tikv replicas to deploy
 STORAGE_META_TIKV_PERSISTENCE_SIZE         | The size of the persistence space allocated to `storage meta tikv`, which is `10Gi` by default
 STORAGE_META_TIKV_PERSISTENCE_STORAGE_CLASS| StorangeClass of `storage meta tikv`; default storangeclass is used by default
 MONITOR_GRAFANA_PERSISTENCE_SIZE           | The size of the persistence space allocated to `monitor.grafana`, which is `5Gi` by default
 MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS  | StorangeClass of `monitor` grafana; default storangeclass is used by default
+INFLUXDB_REPLICAS                          | Number of influxdb replicas to deploy
 INFLUXDB_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `influxdb`, which is `5Gi` by default
 INFLUXDB_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `influxdb`; default storangeclass is used by default
+LOGGER_REPLICAS                            | Number of logger replicas to deploy
+RABBITMQ_REPLICAS                          | Number of rabbitmq replicas to deploy
 RABBITMQ_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default
 RABBITMQ_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `rabbitmq`; default storangeclass is used by default
+DATABASE_REPLICAS                          | Number of database replicas to deploy
 DATABASE_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `database`, which is `5Gi` by default
 DATABASE_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `database`; default storangeclass is used by default
+PASSPORT_REPLICAS                          | Number of passport replicas to deploy
+REGISTRY_REPLICAS                          | Number of registry replicas to deploy
 HELMBROKER_PERSISTENCE_SIZE                | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
 HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; default storangeclass is used by default
 K3S_DATA_DIR                               | The config of k3s data dir; If not set, the default path is used
