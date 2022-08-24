@@ -204,6 +204,8 @@ function install_metallb() {
 
   echo -e "\\033[32m--->Waiting metallb pods ready...\\033[0m"
   kubectl wait pods -n metallb --all  --for condition=Ready --timeout=600s
+  echo -e "\\033[32m--->Waiting metallb webhook ready...\\033[0m"
+  sleep 30s
 
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
     echo -e "\\033[32m---> Metallb using the default configuration.\\033[0m"
