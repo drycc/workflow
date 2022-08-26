@@ -204,6 +204,8 @@ function install_metallb() {
 
   echo -e "\\033[32m--->Waiting metallb pods ready...\\033[0m"
   kubectl wait pods -n metallb --all  --for condition=Ready --timeout=600s
+  echo -e "\\033[32m--->Waiting metallb webhook ready...\\033[0m"
+  sleep 30s
 
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
     echo -e "\\033[32m---> Metallb using the default configuration.\\033[0m"
@@ -333,7 +335,8 @@ global:
   ingressClass: traefik
 
 builder:
-  imageRegistry: ${DRYCC_REGISTRY} 
+  replicas: ${BUILDER_REPLICAS}
+  imageRegistry: ${DRYCC_REGISTRY}
   service:
     type: LoadBalancer
     annotations:
@@ -341,6 +344,7 @@ builder:
       metallb.universe.tf/allow-shared-ip: drycc
 
 database:
+  replicas: ${DATABASE_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
   limitsMemory: "256Mi"
   limitsHugepages2Mi: "256Mi"
@@ -355,10 +359,12 @@ fluentd:
     CONTAINER_TAIL_PARSER_TYPE: "/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/"
 
 controller:
+  replicas: ${CONTROLLER_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY} 
   appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"drycc-storage"}
 
 redis:
+  replicas: ${REDIS_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
   persistence:
     enabled: true
@@ -377,17 +383,20 @@ storage:
       storageClass: ${STORAGE_MINIO_PERSISTENCE_STORAGE_CLASS:-""}
   meta:
     pd:
+      replicas: ${STORAGE_META_PD_REPLICAS}
       persistence:
         enabled: true
         size: ${STORAGE_META_PD_PERSISTENCE_SIZE:-10Gi}
         storageClass: ${STORAGE_META_PD_PERSISTENCE_STORAGE_CLASS:-""}
     tikv:
+      replicas: ${STORAGE_META_TIKV_REPLICAS}
       persistence:
         enabled: true
         size: ${STORAGE_META_TIKV_PERSISTENCE_SIZE:-10Gi}
         storageClass: ${STORAGE_META_TIKV_PERSISTENCE_STORAGE_CLASS:-""}
 
 rabbitmq:
+  replicas: ${RABBITMQ_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
   username: "${RABBITMQ_USERNAME}"
   password: "${RABBITMQ_PASSWORD}"
@@ -400,6 +409,7 @@ imagebuilder:
   imageRegistry: ${DRYCC_REGISTRY}
 
 influxdb:
+  replicas: ${INFLUXDB_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
   user: "${INFLUXDB_USERNAME}"
   password: "${INFLUXDB_PASSWORD}"
@@ -409,6 +419,7 @@ influxdb:
     storageClass: ${INFLUXDB_PERSISTENCE_STORAGE_CLASS:-""}
 
 logger:
+  replicas: ${LOGGER_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
 
 monitor:
@@ -423,11 +434,13 @@ monitor:
 
 
 passport:
+  replicas: ${PASSPORT_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
   adminUsername: ${DRYCC_ADMIN_USERNAME}
   adminPassword: ${DRYCC_ADMIN_PASSWORD}
 
 registry:
+  replicas: ${REGISTRY_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
 
 registry-proxy:
