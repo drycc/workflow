@@ -8,7 +8,7 @@ steps:
   - make docker-build docker-build-docs
   - cp _scripts/* _build/html
   - git config --global --add safe.directory _build/html
-  - cd _build/html && echo "drycc.cc" > CNAME  && echo "www.drycc.cc" >> CNAME && git init
+  - cd _build/html && echo "drycc.cc" > CNAME  && echo "www.drycc.cc" >> CNAME && git init & git config --global --add safe.directory .
   environment:
     SSH_DEPLOY_KEY:
       from_secret: ssh_deploy_key
