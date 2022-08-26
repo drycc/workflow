@@ -7,14 +7,14 @@ steps:
   commands:
   - make docker-build docker-build-docs
   - cp _scripts/* _build/html
-  - git config --global --add safe.directory _build/html
-  - cd _build/html && echo "drycc.cc" > CNAME  && echo "www.drycc.cc" >> CNAME && git init & git config --global --add safe.directory .
+  - cd _build/html && echo "drycc.cc" > CNAME  && echo "www.drycc.cc" >> CNAME && git init
   environment:
     SSH_DEPLOY_KEY:
       from_secret: ssh_deploy_key
 
 - name: publish-docs
   commands:
+  - chown -R root:root _build/html
   - docker run --rm
       -e DRONE_COMMIT_AUTHOR="$DRONE_COMMIT_AUTHOR"
       -e DRONE_COMMIT_AUTHOR_EMAIL="$DRONE_COMMIT_AUTHOR_EMAIL"
