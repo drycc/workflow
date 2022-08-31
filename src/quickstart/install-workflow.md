@@ -197,7 +197,9 @@ KUBE_API_SERVER_PORT                       | Set with the PORT of the loadbalanc
 METALLB_CONFIG_FILE                        | The metallb config file path, layer 2 network is used by default
 INSTALL_DRYCC_MIRROR                       | Specify the accelerated mirror location. Currently, only `cn` is supported
 BUILDER_REPLICAS                           | Number of builder replicas to deploy
-CONTROLLER_REPLICAS                        | Number of controller replicas to deploy
+CONTROLLER_API_REPLICAS                    | Number of controller api replicas to deploy
+CONTROLLER_CELERY_REPLICAS                 | Number of controller celery replicas to deploy
+CONTROLLER_WEBHOOK_REPLICAS                | Number of controller webhook replicas to deploy
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
 REDIS_REPLICAS                             | Number of redis replicas to deploy
 REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default

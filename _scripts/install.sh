@@ -359,7 +359,9 @@ fluentd:
     CONTAINER_TAIL_PARSER_TYPE: "/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/"
 
 controller:
-  replicas: ${CONTROLLER_REPLICAS}
+  apiReplicas: ${CONTROLLER_API_REPLICAS}
+  celeryReplicas: ${CONTROLLER_CELERY_REPLICAS}
+  webhookReplicas: ${CONTROLLER_WEBHOOK_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY} 
   appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"drycc-storage"}
 
