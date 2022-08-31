@@ -508,6 +508,8 @@ function install_helmbroker {
     --set certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
+    --set replicas=${HELMBROKER_REPLICAS} \
+    --set celeryReplicas=${HELMBROKER_CELERY_REPLICAS} \
     --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
     --namespace drycc --create-namespace --wait -f - <<EOF
 repositories:
