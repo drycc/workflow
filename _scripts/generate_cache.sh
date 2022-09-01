@@ -25,5 +25,5 @@ helm fetch jetstack/cert-manager
 
 for tar in `ls $tmp | grep .tgz`
 do
-    curl -u $CHARTMUSEUM_USERNAME:$CHARTMUSEUM_PASSWORD -F chart=@$tar "$CHARTMUSEUM_API/api/$([ -z $DRONE_TAG ] && echo testing || echo stable)/charts"
+    helm push $tar oci://$DRYCC_REGISTRY/$([ -z $DRONE_TAG ] && echo charts-testing || echo charts)
 done

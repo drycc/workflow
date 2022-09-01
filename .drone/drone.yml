@@ -35,17 +35,19 @@ steps:
 - name: publish-charts
   commands:
   - pip install -r requirements.txt
-  - python3 _scripts/dependency_update.py "$CHARTMUSEUM_API/$([ -z $DRONE_TAG ] && echo testing || echo stable)" "charts/workflow/Chart.yaml" 
-  - helm package charts/workflow -u --version ${DRONE_TAG:-v1.0.0}
-  - curl -u $CHARTMUSEUM_USERNAME:$CHARTMUSEUM_PASSWORD -F chart=@workflow-${DRONE_TAG:-v1.0.0}.tgz "$CHARTMUSEUM_API/api/$([ -z $DRONE_TAG ] && echo testing || echo stable)/charts"
+  - python3 _scripts/dependency_update.py "oci://$DRYCC_REGISTRY/$([ -z $DRONE_TAG ] && echo charts-testing || echo charts)" "charts/workflow/Chart.yaml" 
+  - helm dependency update charts/workflow
+  - helm package charts/workflow -u --version $([ -z $DRONE_TAG ] && echo 1.0.0 || echo ${DRONE_TAG#v})
+  - echo $CONTAINER_PASSWORD | helm registry login $DRYCC_REGISTRY -u $CONTAINER_USERNAME --password-stdin
+  - helm push workflow-$([ -z $DRONE_TAG ] && echo 1.0.0 || echo ${DRONE_TAG#v}).tgz oci://$DRYCC_REGISTRY/$([ -z $DRONE_TAG ] && echo charts-testing || echo charts)
   - bash _scripts/generate_cache.sh 
   environment:
-    CHARTMUSEUM_API:
-      from_secret: chartmuseum_api
-    CHARTMUSEUM_USERNAME:
-      from_secret: chartmuseum_username
-    CHARTMUSEUM_PASSWORD:
-      from_secret: chartmuseum_password
+    DRYCC_REGISTRY:
+      from_secret: drycc_registry
+    CONTAINER_USERNAME:
+      from_secret: container_username
+    CONTAINER_PASSWORD:
+      from_secret: container_password
 
 trigger:
   event:

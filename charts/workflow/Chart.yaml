@@ -1,51 +1,51 @@
-name: workflow
 apiVersion: v2
-home: https://github.com/drycc/workflow
 dependencies:
 - name: builder
-  version: <builder-tag>
-  repository: https://charts.drycc.cc/stable/builder
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: imagebuilder
-  version: <imagebuilder-tag>
-  repository: https://charts.drycc.cc/stable/imagebuilder
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: controller
-  version: <controller-tag>
-  repository: https://charts.drycc.cc/stable/controller
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: database
-  version: <database-tag>
-  repository: https://charts.drycc.cc/stable/database
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: fluentd
-  version: <fluentd-tag>
-  repository: https://charts.drycc.cc/stable/fluentd
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: redis
-  version: <redis-tag>
-  repository: https://charts.drycc.cc/stable/redis
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: logger
-  version: <logger-tag>
-  repository: https://charts.drycc.cc/stable/logger
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: storage
-  version: <storage-tag>
-  repository: https://charts.drycc.cc/stable/storage
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: monitor
-  version: <monitor-tag>
-  repository: https://charts.drycc.cc/stable/monitor
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: registry
-  version: <registry-tag>
-  repository: https://charts.drycc.cc/stable/registry
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: registry-proxy
-  version: <registry-proxy-tag>
-  repository: https://charts.drycc.cc/stable/registry-proxy
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: influxdb
-  version: <influxdb-tag>
-  repository: https://charts.drycc.cc/stable/influxdb
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: rabbitmq
-  version: <rabbitmq-tag>
-  repository: https://charts.drycc.cc/stable/rabbitmq
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: passport
-  version: <passport-tag>
-  repository: https://charts.drycc.cc/stable/passport
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 description: Drycc Workflow
+home: https://github.com/drycc/workflow
 maintainers:
-- name: Team Drycc
-  email: team@drycc.cc
+- email: team@drycc.cc
+  name: Team Drycc
+name: workflow
 version: v1.0.0

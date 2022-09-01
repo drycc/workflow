@@ -15,6 +15,8 @@ lib
 lib64
 bower_components
 .sass-cache
+charts/workflow/charts
+charts/workflow/Chart.lock
 
 # python virtual environments for testing
 venv/

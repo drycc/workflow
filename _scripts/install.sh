@@ -59,7 +59,7 @@ function install_helm {
   tar -zxvf "${tar_name}"
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
-  helm repo add --force-update drycc https://charts.drycc.cc/${CHANNEL:-stable}
+  helm repo add --force-update drycc oci://registry.drycc.cc/$([ $CHANNEL == "stable" ] && echo charts || echo charts-testing)
   helm repo update
 }
 
