@@ -18,6 +18,7 @@ init_arch() {
 }
 
 init_registry() {
+  CHARTS_URL=oci://registry.drycc.cc/$([ $CHANNEL == "stable" ] && echo charts || echo charts-testing)
   if [[ -z "$DRYCC_REGISTRY" ]] ; then
     echo -e "\\033[32m---> Get the fastest drycc registry...\\033[0m"
     registrys=(quay.io ccr.ccs.tencentyun.com sgccr.ccs.tencentyun.com jpccr.ccs.tencentyun.com uswccr.ccs.tencentyun.com useccr.ccs.tencentyun.com deccr.ccs.tencentyun.com saoccr.ccs.tencentyun.com)
@@ -59,8 +60,6 @@ function install_helm {
   tar -zxvf "${tar_name}"
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
-  helm repo add --force-update drycc oci://registry.drycc.cc/$([ $CHANNEL == "stable" ] && echo charts || echo charts-testing)
-  helm repo update
 }
 
 function configure_os {
@@ -180,7 +179,7 @@ function check_metallb {
 function install_network() {
   echo -e "\\033[32m--->Start installing network...\\033[0m"
   api_server_address=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
-  helm install cilium drycc/cilium \
+  helm install cilium $CHARTS_URL/cilium \
     --set tunnel=geneve \
     --set operator.replicas=1 \
     --set bandwidthManager=true \
@@ -197,7 +196,7 @@ function install_network() {
 function install_metallb() {
   check_metallb
   echo -e "\\033[32m--->Start installing metallb...\\033[0m"
-  helm install metallb drycc/metallb \
+  helm install metallb $CHARTS_URL/metallb \
     --set speaker.frr.enabled=true \
     --namespace metallb \
     --create-namespace
@@ -246,7 +245,7 @@ EOF
 
 function install_traefik() {
   echo -e "\\033[32m--->Start installing traefik...\\033[0m"
-  helm install traefik drycc/traefik \
+  helm install traefik $CHARTS_URL/traefik \
     --namespace traefik \
     --create-namespace --wait -f - <<EOF
 service:
@@ -270,7 +269,7 @@ EOF
 
 function install_cert_manager() {
   echo -e "\\033[32m--->Start installing cert-manager...\\033[0m"
-  helm install cert-manager drycc/cert-manager \
+  helm install cert-manager $CHARTS_URL/cert-manager \
     --namespace cert-manager \
     --create-namespace \
     --set clusterResourceNamespace=drycc \
@@ -280,7 +279,7 @@ function install_cert_manager() {
 
 function install_catalog() {
   echo -e "\\033[32m--->Start installing catalog...\\033[0m"
-  helm install catalog drycc/catalog \
+  helm install catalog $CHARTS_URL/catalog \
     --set asyncBindingOperationsEnabled=true \
     --set image=docker.io/drycc/service-catalog:canary \
     --namespace catalog \
@@ -477,7 +476,7 @@ imagebuilder:
 EOF
   fi
 
-  helm install drycc drycc/workflow \
+  helm install drycc $CHARTS_URL/workflow \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --values /tmp/drycc-mirror-values.yaml \
@@ -499,7 +498,7 @@ function install_helmbroker {
 
   echo -e "\\033[32m---> Start installing helmbroker...\\033[0m"
 
-  helm install helmbroker drycc/helmbroker \
+  helm install helmbroker $CHARTS_URL/helmbroker \
     --set ingressClass="traefik" \
     --set platformDomain="cluster.local" \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \

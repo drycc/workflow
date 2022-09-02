@@ -10,22 +10,12 @@ Server: &version.Version{SemVer:"v2.5.0", GitCommit:"012cb0ac1a1b2f888144ef5a67b
 
 Ensure the `kubectl` client is installed and can connect to your Kubernetes cluster.
 
-## Add the Drycc Chart Repository
-
-The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc` command.
-
-Add this repository to Helm:
-
-```
-$ helm repo add drycc oci://registry.drycc.cc/charts
-```
-
 ## Install Drycc Workflow
 
 Now that Helm is installed and the repository has been added, install Workflow by running:
 
 ```
-$ helm install drycc/workflow --namespace drycc
+$ helm install drycc oci://registry.drycc.cc/charts/workflow --namespace drycc
 ```
 
 Helm will install a variety of Kubernetes resources in the `drycc` namespace.

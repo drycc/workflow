@@ -37,16 +37,6 @@ More rigorous installations would benefit from using outside sources for the fol
 
 Now, workflow requires that ingress and cert-manager must be installed. Any compatible Kubernetes entry controller can be used, but only ingress-nginx and ingress-traefik currently support enforced HTTPS and allowlist. Enable entries in accordance with [this guide](./ingress.md).
 
-## Add the Drycc Chart Repository
-
-The Drycc Chart Repository contains everything needed to install Drycc Workflow onto a Kubernetes cluster, with a single `helm install drycc/workflow --namespace drycc --set global.platformDomain=yourdomain.com` command.
-
-Add this repository to Helm:
-
-```
-$ helm repo add drycc oci://registry.drycc.cc/charts
-```
-
 ## Install Drycc Workflow
 
 If the version of helm is 3.0 +; you need to create the namespace in advance:
@@ -58,9 +48,9 @@ kubectl create ns drycc
 Now that Helm is installed and the repository has been added, install Workflow by running:
 
 ```
-$ helm install --namespace drycc \
-    --set global.platformDomain=drycc.cc \
-    drycc/workflow
+$ helm install drycc oci://registry.drycc.cc/charts/workflow \
+    --namespace drycc \
+    --set global.platformDomain=drycc.cc
 ```
 
 By default, registry uses docker hub, at present, we support three registries. They are:
@@ -72,7 +62,8 @@ By default, registry uses docker hub, at present, we support three registries. T
 If you want to change it, set the variable when using helm.
 
 ```
-$ helm install --namespace drycc \
+$ helm install drycc oci://registry.drycc.cc/charts/workflow \
+    --namespace drycc \
     --set builder.imageRegistry=quay.io \
     --set imagebuilder.imageRegistry=quay.io \
     --set controller.imageRegistry=quay.io \
@@ -86,8 +77,7 @@ $ helm install --namespace drycc \
     --set monitor.imageRegistry=quay.io \
     --set registry.imageRegistry=quay.io \
     --set registry-proxy.imageRegistry=quay.io \
-    --set global.platformDomain=drycc.cc \
-    drycc/workflow
+    --set global.platformDomain=drycc.cc
 ```
 
 Helm will install a variety of Kubernetes resources in the `drycc` namespace.

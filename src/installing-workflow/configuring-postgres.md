@@ -39,7 +39,7 @@ The Helm chart for Drycc Workflow can be easily configured to connect the Workfl
     * Save your changes.
     * Note: you do not need to (and must not) base64 encode any values, as the Helm chart will automatically handle encoding as necessary.
 
-You are now ready to `helm install drycc/workflow --namespace drycc -f values.yaml` [as usual][installing].
+You are now ready to `helm install drycc oci://registry.drycc.cc/charts/workflow --namespace drycc -f values.yaml` [as usual][installing].
 
 [database]: ../understanding-workflow/components.md#database
 [object storage]: configuring-object-storage.md

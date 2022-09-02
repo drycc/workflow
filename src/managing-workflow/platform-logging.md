@@ -69,7 +69,8 @@ Error: There are currently no log messages. Please check the following things:
 By default the Fluentd pod can be configured to talk to numerous syslog endpoints. So for example it is possible to have Fluentd send log messages to both the Logger component and [Papertrail](https://papertrailapp.com/). This allows production deployments of Drycc to satisfy stringent logging requirements such as offsite backups of log data.
 
 Configuring Fluentd to talk to multiple syslog endpoints means modifying the Fluentd daemonset
-manifest. This means you will need to fetch the chart with `helm fetch drycc/workflow --untar`, then
+manifest.
+This means you will need to fetch the chart with `helm fetch oci://registry.drycc.cc/charts/workflow --untar`, then
 modify `workflow/charts/fluentd/templates/logger-fluentd-daemon.yaml` with the following:
 
 ```

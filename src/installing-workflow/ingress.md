@@ -5,7 +5,8 @@
 Now that Helm is installed and the repository has been added, install Workflow with a native ingress by running:
 
 ```
-$ helm install drycc/workflow --namespace drycc \
+$ helm install drycc oci://registry.drycc.cc/charts/workflow \
+    --namespace drycc \
     --set global.ingressClass=nginx \
     --set global.platformDomain=drycc.cc \
     --set builder.service.type=LoadBalancer
@@ -13,7 +14,8 @@ $ helm install drycc/workflow --namespace drycc \
 
 Of course, if you deploy it on a bare machine, you probably do not have Load Balancer. You need to use NodePort:
 ```
-$ helm install drycc/workflow --namespace drycc \
+$ helm install drycc oci://registry.drycc.cc/charts/workflow \
+    --namespace drycc \
     --set global.ingressClass=nginx \
     --set global.platformDomain=drycc.cc \
     --set builder.service.type=NodePort \
@@ -65,7 +67,10 @@ Now that Workflow has been deployed with the `global.ingressClass` , we will nee
 Here is an example of how to use [traefik](https://traefik.io/) as an ingress controller for Workflow. Of course, you are welcome to use any controller you wish.
 
 ```
-$ helm install stable/traefik --name ingress --namespace kube-system --set ssl.enabled=true
+$ helm install traefik oci://registry.drycc.cc/charts/traefik \
+    --name ingress \
+    --namespace kube-system \
+    --set ssl.enabled=true
 ```
 
 ## Configure DNS

@@ -27,15 +27,11 @@ If applicable, generate credentials that have create and write access to the sto
 
 If you are using AWS S3 and your Kubernetes nodes are configured with appropriate [IAM][aws-iam] API keys via InstanceRoles, you do not need to create API credentials. Do, however, validate that the InstanceRole has appropriate permissions to the configured buckets!
 
-### Step 3: Add Drycc Repo
-
-If you haven't already added the Helm repo, do so with `helm repo add drycc oci://registry.drycc.cc/charts`
-
-### Step 4: Configure Workflow Chart
+### Step 3: Configure Workflow Chart
 
 Operators should configure object storage by editing the Helm values file before running `helm install`. To do so:
 
-* Fetch the Helm values by running `helm inspect values drycc/workflow > values.yaml`
+* Fetch the Helm values by running `helm inspect values oci://registry.drycc.cc/charts/workflow > values.yaml`
 * Update the `global/storage` parameter to reference the platform you are using, e.g. `s3`, `azure`, `gcs`, or `swift`
 * Find the corresponding section for your storage type and provide appropriate values including region, bucket names, and access credentials.
 * Save your changes.
@@ -43,11 +39,12 @@ Operators should configure object storage by editing the Helm values file before
 !!! note
 	All values will be automatically (base64) encoded _except_ the `key_json` values under `gcs`/`gcr`.  These must be base64-encoded.  This is to support cleanly passing said encoded text via `helm --set` cli functionality rather than attempting to pass the raw JSON data.  For example:
 
-		$ helm install workflow --namespace drycc \
+		$ helm install drycc oci://registry.drycc.cc/charts/workflow \
+		    --namespace drycc \
 			--set global.platformDomain=youdomain.com
 			--set global.storage=gcs,gcs.key_json="$(cat /path/to/gcs_creds.json | base64 -w 0)"
 
-You are now ready to run `helm install drycc/workflow --namespace drycc -f values.yaml` using your desired object storage.
+You are now ready to run `helm install drycc oci://registry.drycc.cc/charts/workflow --namespace drycc -f values.yaml` using your desired object storage.
 
 
 [storage]: ../understanding-workflow/components.md#object-storage
