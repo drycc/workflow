@@ -249,7 +249,7 @@ Kick off https://ci.drycc.info/job/workflow-cli-build-stable/ with the `TAG` bui
 and then verify `stable` artifacts are available and appropriately updated after the job completes:
 
 ```
-$ curl -sfL https://drycc.cc/install-cli.sh | bash -
+$ curl -sfL https://www.drycc.cc/install-cli.sh | bash -
 $ ./drycc version
 # (Should show $WORKFLOW_RELEASE)
 ```

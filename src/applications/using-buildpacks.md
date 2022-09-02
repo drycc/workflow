@@ -84,7 +84,7 @@ Use `git push drycc master` to deploy your application.
 
     Use 'drycc open' to view this application in your browser
 
-    To learn more, use 'drycc help' or visit http://drycc.cc
+    To learn more, use 'drycc help' or visit https://www.drycc.cc
 
     To ssh://git@drycc.staging-2.drycc.cc:2222/skiing-keypunch.git
      * [new branch]      master -> master

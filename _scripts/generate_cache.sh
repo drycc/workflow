@@ -23,6 +23,17 @@ helm fetch metallb/metallb
 helm fetch traefik/traefik
 helm fetch jetstack/cert-manager
 
+# remove v from cert-manager version
+filename=$(find cert-manager-v* 2>/dev/null || echo "")
+if [[ ! -z $filename ]]; then
+  tar -xvzf $filename
+  rm -rf $filename
+  version=${filename#cert-manager-v}
+  version=${version%.tgz}
+  helm package -u cert-manager --version $version
+  rm -rf cert-manager
+fi
+
 for tar in `ls $tmp | grep .tgz`
 do
     helm push $tar oci://$DRYCC_REGISTRY/$([ -z $DRONE_TAG ] && echo charts-testing || echo charts)

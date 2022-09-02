@@ -14,6 +14,6 @@ Drycc projects are bounty-friendly.  We believe open source bounty sites can be 
 
 
 [github]: https://github.com/drycc
-[ey]: https://drycc.cc/community
+[ey]: https://www.drycc.cc/community
 [bdfl]: http://en.wikipedia.org/wiki/Benevolent_Dictator_for_Life
 [gabriel]: https://github.com/gabrtv

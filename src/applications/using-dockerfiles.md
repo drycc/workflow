@@ -107,7 +107,7 @@ Use `git push drycc master` to deploy your application.
     -----> folksy-offshoot deployed to Drycc
            http://folksy-offshoot.local3.dryccapp.com
 
-           To learn more, use `drycc help` or visit http://drycc.cc
+           To learn more, use `drycc help` or visit https://www.drycc.cc
 
     To ssh://git@local3.dryccapp.com:2222/folksy-offshoot.git
      * [new branch]      master -> master

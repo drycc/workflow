@@ -6,7 +6,7 @@ with Drycc Workflow.
 ## Installation
 
 Install the latest `drycc` client for Linux or Mac OS X with:
-    $ curl -sfL https://drycc.cc/install-cli.sh | bash -
+    $ curl -sfL https://www.drycc.cc/install-cli.sh | bash -
 
 The installer puts `drycc` in your current directory, but you should move it
 somewhere in your $PATH:

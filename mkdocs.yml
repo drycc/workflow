@@ -3,7 +3,7 @@
 # names
 #
 site_name: Drycc Workflow Documentation
-site_url: https://drycc.cc/docs/workflow
+site_url: https://www.drycc.cc/docs/workflow
 nav:
   - Home: index.md
   - Quick Start:
