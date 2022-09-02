@@ -63,6 +63,7 @@ function install_helm {
 }
 
 function configure_os {
+  echo -e "\\033[32m---> Start configuring kernel parameters\\033[0m"
   if [[ "$(command -v iptables)" != "" ]] ; then
     iptables -F
     iptables -X
@@ -83,6 +84,7 @@ function configure_os {
       echo 'vm.nr_hugepages = 1024' >> /etc/sysctl.conf
   fi
   sysctl -p
+  echo -e "\\033[32m---> Configuring kernel parameters finish\\033[0m"
 }
 
 function configure_registries {
@@ -133,6 +135,7 @@ EOF
 }
 
 function configure_mirrors {
+  echo -e "\\033[32m---> Start configuring mirrors\\033[0m"
   configure_registries
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
@@ -145,6 +148,7 @@ function configure_mirrors {
   fi
   INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}[rc0-9\-]{0,}%2Bk3s[0-9])".*/\1/g' | head -1)
   export INSTALL_K3S_VERSION
+  echo -e "\\033[32m---> Configuring mirrors finish\\033[0m"
 }
 
 function install_k3s_server {
