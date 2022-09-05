@@ -146,8 +146,10 @@ function configure_mirrors {
     k3s_install_url="https://get.k3s.io"
     K3S_RELEASE_URL=github.com/k3s-io/k3s/releases
   fi
-  INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}[rc0-9\-]{0,}%2Bk3s[0-9])".*/\1/g' | head -1)
-  export INSTALL_K3S_VERSION
+  if [ -z "${INSTALL_K3S_VERSION}" ]; then
+    INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}[rc0-9\-]{0,}%2Bk3s[0-9])".*/\1/g' | head -1)
+    export INSTALL_K3S_VERSION
+  fi
   echo -e "\\033[32m---> Configuring mirrors finish\\033[0m"
 }
 
