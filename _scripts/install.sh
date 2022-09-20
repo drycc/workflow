@@ -18,7 +18,7 @@ init_arch() {
 }
 
 init_registry() {
-  CHARTS_URL=oci://registry.drycc.cc/$([ $CHANNEL == "stable" ] && echo charts || echo charts-testing)
+  CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
   if [[ -z "$DRYCC_REGISTRY" ]] ; then
     echo -e "\\033[32m---> Get the fastest drycc registry...\\033[0m"
     registrys=(quay.io ccr.ccs.tencentyun.com sgccr.ccs.tencentyun.com jpccr.ccs.tencentyun.com uswccr.ccs.tencentyun.com useccr.ccs.tencentyun.com deccr.ccs.tencentyun.com saoccr.ccs.tencentyun.com)
