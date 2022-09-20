@@ -214,6 +214,38 @@ echoed-lollipop-web-67cfc78bdc-fdx4n up (v2)
 echoed-lollipop-web-67cfc78bdc-h2vxf up (v2)
 ```
 
+## Get a Shell to a Running Container
+
+Verify that the container is running:
+
+```
+# drycc ps
+=== python-getting-started Processes
+--- web:
+python-getting-started-web-69b7d4bfdc-kl4xf up (v2)
+```
+
+Get a shell to the running container:
+
+```
+# drycc ps:exec python-getting-started-web-69b7d4bfdc-kl4xf -it -- bash
+```
+
+In your shell, list the root directory:
+
+```
+# Run this inside the container
+ls /
+```
+
+Running individual commands in a container
+
+```
+# drycc ps:exec python-getting-started-web-69b7d4bfdc-kl4xf -- date
+```
+
+Use "drycc ps --help" for a list of global command-line (applies to all commands).
+
 ## Autoscale
 
 Autoscale allows adding a minimum and maximum number of pods on a per process type basis. This is accomplished by specifying a target CPU usage across all available pods.
