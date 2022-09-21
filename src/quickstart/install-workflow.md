@@ -191,7 +191,7 @@ DRYCC_ADMIN_USERNAME                       | Required item, specify drycc's admi
 DRYCC_ADMIN_PASSWORD                       | Required item, specify drycc's admin password
 CERT_MANAGER_ENABLED                       | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                    | By default, `stable` channel will be installed. You can also specify `testing`
-REGISTRIES_FILE                            | The `registers.yaml` file path used by drycc registry
+CONTAINERD_FILE                            | The `config.yaml` file path used by containerd
 KUBE_API_SERVER_ADDRESS                    | Set with the IP address of the loadbalancer that was in front of kube-apiserver, The default is the IP address of the current node
 KUBE_API_SERVER_PORT                       | Set with the PORT of the loadbalancer that was in front of kube-apiserver, which is `6443` by default
 METALLB_CONFIG_FILE                        | The metallb config file path, layer 2 network is used by default
@@ -200,6 +200,7 @@ BUILDER_REPLICAS                           | Number of builder replicas to deplo
 CONTROLLER_API_REPLICAS                    | Number of controller api replicas to deploy
 CONTROLLER_CELERY_REPLICAS                 | Number of controller celery replicas to deploy
 CONTROLLER_WEBHOOK_REPLICAS                | Number of controller webhook replicas to deploy
+CONTROLLER_APP_RUNTIME_CLASS               | RuntimeClass is a feature for selecting the container runtime configuration.
 CONTROLLER_APP_STORAGE_CLASS               | StorageClass allocated by `drycc volumes`; default storageClass is used by default
 REDIS_REPLICAS                             | Number of redis replicas to deploy
 REDIS_PERSISTENCE_SIZE                     | The size of the persistence space allocated to `redis`, which is `5Gi` by default

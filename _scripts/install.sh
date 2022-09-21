@@ -39,7 +39,7 @@ init_registry() {
 function clean_before_exit {
     # delay before exiting, so stdout/stderr flushes through the logging system
     rm -rf /tmp/drycc-values.yaml 
-    configure_registries runtime
+    configure_containerd runtime
     sleep 3
 }
 trap clean_before_exit EXIT
@@ -88,55 +88,88 @@ function configure_os {
 }
 
 function configure_registries {
-  mkdir -p /etc/rancher/k3s
-  if [[ -f  "${REGISTRIES_FILE}" ]]; then
-    cat "${REGISTRIES_FILE}" > /etc/rancher/k3s/registries.yaml
-  elif [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]]; then
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]]; then
     if [[ "$1" == "runtime" ]] ; then
-      cat << EOF > "/etc/rancher/k3s/registries.yaml"
-configs:
-  "registry.drycc.cc":
-    auth:
-      username: anonymous
-      password: anonymous
-mirrors:
-  "docker.io":
-    endpoint:
-    - "https://hub-mirror.c.163.com"
-    - "https://registry-1.docker.io"
+      cat << EOF >> "/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl"
+[plugins.cri.registry.mirrors]
+[plugins.cri.registry.mirrors."docker.io"]
+  endpoint = ["https://docker-mirror.drycc.cc", "https://registry-1.docker.io"]
 EOF
     else
-      cat << EOF > "/etc/rancher/k3s/registries.yaml"
-configs:
-  "registry.drycc.cc":
-    auth:
-      username: anonymous
-      password: anonymous
-mirrors:
-  "docker.io":
-    endpoint:
-    - "https://docker-mirror.drycc.cc"
-    - "https://registry-1.docker.io"
-  "quay.io":
-    endpoint:
-    - "https://quay-mirror.drycc.cc"
-    - "https://quay.io"
-  "gcr.io":
-    endpoint:
-    - "https://gcr-mirror.drycc.cc"
-    - "https://gcr.io"
-  "k8s.gcr.io":
-    endpoint:
-    - "https://k8s-mirror.drycc.cc"
-    - "https://k8s.gcr.io"
+      cat << EOF >> "/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl"
+[plugins.cri.registry.mirrors]
+[plugins.cri.registry.mirrors."docker.io"]
+  endpoint = ["https://docker-mirror.drycc.cc", "https://registry-1.docker.io"]
+[plugins.cri.registry.mirrors."quay.io"]
+  endpoint = ["https://quay-mirror.drycc.cc", "https://quay.io"]
+[plugins.cri.registry.mirrors."gcr.io"]
+  endpoint = ["https://quay-mirror.drycc.cc", "https://gcr.io"]
+[plugins.cri.registry.mirrors."k8s.gcr.io"]
+  endpoint = ["https://k8s-mirror.drycc.cc", "https://k8s.gcr.io"]
 EOF
     fi
   fi
 }
 
+function download_runtime {
+  # download crun
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    crun_base_url="https://drycc-mirrors.drycc.cc/containers"
+  else
+    crun_base_url="https://github.com/containers"
+  fi
+  crun_version=$(curl -Ls ${crun_base_url}/crun/releases|grep /containers/crun/releases/tag/ | sed -E 's/.*\/containers\/crun\/releases\/tag\/([0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+  crun_download_url=${crun_base_url}/crun/releases/download/${crun_version}/crun-${crun_version}-linux-${ARCH}
+  curl -sfL "${crun_download_url}" -o /usr/local/bin/crun
+  chmod a+rx /usr/local/bin/crun
+
+  # download runsc
+  gvisor_download_url=https://storage.googleapis.com/gvisor/releases/release/latest/$(uname -m)
+  curl -sfL "${gvisor_download_url}/runsc" -o /usr/local/bin/runsc
+  curl -sfL "${gvisor_download_url}/containerd-shim-runsc-v1" -o /usr/local/bin/containerd-shim-runsc-v1
+  chmod a+rx /usr/local/bin/runsc /usr/local/bin/containerd-shim-runsc-v1
+}
+
+function configure_runtime {
+  cat << EOF > "/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl"
+[plugins.cri.containerd]
+  snapshotter = "overlayfs"
+  default_runtime_name = "crun"
+  disable_snapshot_annotations = true
+
+[plugins.cri.containerd.runtimes.crun]
+  runtime_type = "io.containerd.runc.v2"
+
+[plugins.cri.containerd.runtimes.crun.options]
+  SystemdCgroup = true
+
+[plugins.cri.containerd.runtimes.runc]
+  runtime_type = "io.containerd.runc.v2"
+
+[plugins.cri.containerd.runtimes.runc.options]
+	SystemdCgroup = true
+
+[plugins.cri.containerd.runtimes.runsc]
+  runtime_type = "io.containerd.runsc.v1"
+
+[plugins.cri.containerd.runtimes.runsc.options]
+  SystemdCgroup = true
+EOF
+}
+
+function configure_containerd {
+  mkdir -p /var/lib/rancher/k3s/agent/etc/containerd
+  if [[ -f  "${CONTAINERD_FILE}" ]]; then
+    cat "${CONTAINERD_FILE}" > /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+  else
+    configure_runtime
+    configure_registries $1
+  fi
+}
+
 function configure_mirrors {
   echo -e "\\033[32m---> Start configuring mirrors\\033[0m"
-  configure_registries
+  configure_containerd
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
     k3s_install_url="https://get-k3s.drycc.cc"
@@ -155,6 +188,7 @@ function configure_mirrors {
 
 function install_k3s_server {
   configure_os
+  download_runtime
   configure_mirrors
   INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=10.233.0.0/16"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
@@ -164,6 +198,27 @@ function install_k3s_server {
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
   fi
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
+  kubectl apply -f - <<EOF
+---
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: crun
+handler: crun
+---
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: runc
+handler: runc
+---
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: runsc
+handler: runsc
+---
+EOF
 }
 
 function install_k3s_agent {
@@ -367,7 +422,8 @@ controller:
   apiReplicas: ${CONTROLLER_API_REPLICAS}
   celeryReplicas: ${CONTROLLER_CELERY_REPLICAS}
   webhookReplicas: ${CONTROLLER_WEBHOOK_REPLICAS}
-  imageRegistry: ${DRYCC_REGISTRY} 
+  imageRegistry: ${DRYCC_REGISTRY}
+  appRuntimeClass: ${CONTROLLER_APP_RUNTIME_CLASS:-""}
   appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"drycc-storage"}
 
 redis:

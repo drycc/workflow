@@ -21,5 +21,5 @@ if [[ -n "${LONGHORN_DATA_PATH}" ]] ; then
 fi
 
 rm -rf /etc/rancher
-rm -rf /var/lib/longhorn
+rm -rf /usr/local/bin/*runsc* /usr/local/bin/crun
 rm -rf /usr/local/bin/helm ~/.config/helm
