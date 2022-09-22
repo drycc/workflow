@@ -223,6 +223,7 @@ EOF
 
 function install_k3s_agent {
   configure_os
+  download_runtime
   configure_mirrors
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
