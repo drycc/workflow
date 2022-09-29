@@ -31,6 +31,7 @@ not compatible with each other.
 
 # Working on Documentation
 [![Build Status](https://drone.drycc.cc/api/badges/drycc/workflow/status.svg)](https://drone.drycc.cc/drycc/workflow)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdrycc%2Fworkflow.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdrycc%2Fworkflow?ref=badge_shield)
 
 The Drycc project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
 
@@ -68,3 +69,7 @@ Then view the documentation on [http://localhost:8000](http://localhost:8000) or
 [issues]: https://github.com/drycc/workflow/issues
 [prs]: https://github.com/drycc/workflow/pulls
 [Drycc website]: https://www.drycc.cc/
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdrycc%2Fworkflow.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdrycc%2Fworkflow?ref=badge_large)
