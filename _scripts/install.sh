@@ -2,6 +2,8 @@
 set -eo pipefail
 shopt -s expand_aliases
 
+DRYCC_REGISTRY="${DRYCC_REGISTRY:-registry.drycc.cc}"
+
 # initArch discovers the architecture for this system.
 init_arch() {
   ARCH=$(uname -m)
@@ -15,25 +17,6 @@ init_arch() {
     i686) ARCH="386";;
     i386) ARCH="386";;
   esac
-}
-
-init_registry() {
-  CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
-  if [[ -z "$DRYCC_REGISTRY" ]] ; then
-    echo -e "\\033[32m---> Get the fastest drycc registry...\\033[0m"
-    registrys=(quay.io ccr.ccs.tencentyun.com sgccr.ccs.tencentyun.com jpccr.ccs.tencentyun.com uswccr.ccs.tencentyun.com useccr.ccs.tencentyun.com deccr.ccs.tencentyun.com saoccr.ccs.tencentyun.com)
-    delay=65535
-    DRYCC_REGISTRY=quay.io
-    for registry in ${registrys[@]}
-    do
-        time_total=$(curl -o /dev/null -s -w "%{time_total}" "https://$registry")
-        if [[ `echo "$delay>$time_total"|bc` -eq 1 ]];then
-            delay=$time_total
-            DRYCC_REGISTRY=$registry
-        fi
-    done
-  fi
-  echo -e "\\033[32m---> The drycc registry is: ${DRYCC_REGISTRY}\\033[0m"
 }
 
 function clean_before_exit {
@@ -562,17 +545,18 @@ function install_helmbroker {
   echo -e "\\033[32m---> Start installing helmbroker...\\033[0m"
 
   helm install helmbroker $CHARTS_URL/helmbroker \
-    --set ingressClass="traefik" \
-    --set platformDomain="cluster.local" \
+    --set global.rabbitmqLocation="off-cluster" \
+    --set global.ingressClass="traefik" \
+    --set global.clusterDomain="cluster.local" \
+    --set global.platformDomain=${PLATFORM_DOMAIN} \
+    --set global.certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
     --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"drycc-storage"} \
-    --set platformDomain=${PLATFORM_DOMAIN} \
-    --set certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
     --set replicas=${HELMBROKER_REPLICAS} \
     --set celeryReplicas=${HELMBROKER_CELERY_REPLICAS} \
-    --set environment.HELMBROKER_CELERY_BROKER="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
+    --set rabbitmqUrl="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
     --namespace drycc --create-namespace --wait -f - <<EOF
 repositories:
 - name: drycc-helm-broker
