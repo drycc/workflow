@@ -557,7 +557,7 @@ function install_helmbroker {
     --set replicas=${HELMBROKER_REPLICAS} \
     --set celeryReplicas=${HELMBROKER_CELERY_REPLICAS} \
     --set rabbitmqUrl="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
-    --namespace drycc --create-namespace --wait -f - <<EOF
+    --namespace drycc-helmbroker --create-namespace --wait -f - <<EOF
 repositories:
 - name: drycc-helm-broker
   url: ${addons_url}
