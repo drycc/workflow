@@ -326,7 +326,7 @@ function install_catalog() {
   echo -e "\\033[32m--->Start installing catalog...\\033[0m"
   helm install catalog $CHARTS_URL/catalog \
     --set asyncBindingOperationsEnabled=true \
-    --set image=docker.io/drycc/service-catalog:canary \
+    --set image=registry.drycc.cc/drycc-addons/service-catalog:canary \
     --namespace catalog \
     --create-namespace --wait
   echo -e "\\033[32m---> Catalog installed!\\033[0m"
