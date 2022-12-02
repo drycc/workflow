@@ -3,6 +3,7 @@ set -eo pipefail
 shopt -s expand_aliases
 
 DRYCC_REGISTRY="${DRYCC_REGISTRY:-registry.drycc.cc}"
+CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
 
 # initArch discovers the architecture for this system.
 init_arch() {
@@ -27,7 +28,6 @@ function clean_before_exit {
 }
 trap clean_before_exit EXIT
 init_arch
-init_registry
 
 function install_helm {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
