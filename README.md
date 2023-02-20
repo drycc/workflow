@@ -30,7 +30,7 @@ This project has been forked from [Deis](https://github.com/deis/deis) since 201
 not compatible with each other.
 
 # Working on Documentation
-[![Build Status](https://drone.drycc.cc/api/badges/drycc/workflow/status.svg)](https://drone.drycc.cc/drycc/workflow)
+[![Build Status](https://woodpecker.drycc.cc/api/badges/drycc/workflow/status.svg)](https://woodpecker.drycc.cc/drycc/workflow)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdrycc%2Fworkflow.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdrycc%2Fworkflow?ref=badge_shield)
 
 The Drycc project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
