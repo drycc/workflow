@@ -36,5 +36,5 @@ fi
 
 for tar in `ls $tmp | grep .tgz`
 do
-    helm push $tar oci://$DRYCC_REGISTRY/$([ -z $DRONE_TAG ] && echo charts-testing || echo charts)
+    helm push $tar oci://$DRYCC_REGISTRY/$([ -z $CI_COMMIT_TAG ] && echo charts-testing || echo charts)
 done
