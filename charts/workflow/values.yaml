@@ -42,6 +42,12 @@ global:
   # - on-cluster: Run Influxdb within the Kubernetes cluster
   # - off-cluster: Influxdb is running outside of the cluster and credentials and connection information will be provided.
   influxdbLocation: "on-cluster"
+  # Set the location of Workflow's influxdb cluster
+  #
+  # Valid values are:
+  # - on-cluster: Run prometheus within the Kubernetes cluster
+  # - off-cluster: prometheus is running outside of the cluster and credentials and connection information will be provided.
+  prometheusLocation: "on-cluster"
   # Set the location of Workflow's grafana instance
   #
   # Valid values are:
@@ -285,6 +291,29 @@ passport:
   ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
   databaseUrl: ""
   databaseReplicaUrl: ""
+
+prometheus:
+  ## prometheus-server configuration##
+  prometheus-server:
+    replicas: 1
+    retention: 15d
+    # persistence config
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      storageClass: ""
+  ## node-exporter configuration##
+  node-exporter:
+    enabled: true
+  ## kube-state-metrics configuration
+  ##
+  kube-state-metrics:
+    enabled: true
+  # Configure the following ONLY if using an off-cluster prometheus database
+  # URL configuration is only available in off-cluster prometheus database
+  url: "http://my.prometheus.url:9090"
+
 
 # acme configuration takes effect if and only if certManagerEnabled is true
 acme:

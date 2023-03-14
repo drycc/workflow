@@ -146,6 +146,12 @@ Helm Broker is a Service Broker that exposes Helm charts as Service Classes in S
 To do so, Helm Broker uses the concept of addons. An addon is an abstraction layer over a Helm chart
 which provides all information required to convert the chart into a Service Class.
 
+## Prometheus
+
+**Project Location:** [drycc/rabbitmq](https://github.com/drycc/prometheus)
+
+Prometheus is an open-source systemsmonitoring and alerting toolkit originally built atSoundCloud.
+
 ## See Also
 
 * [Workflow Concepts][concepts]

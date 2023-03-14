@@ -478,6 +478,14 @@ monitor:
   telegraf:
     imageRegistry: ${DRYCC_REGISTRY}
 
+prometheus:
+  prometheus-server:
+    retention: ${PROMETHEUS_SERVER_RETENTION:-"15d"}
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: ${PROMETHEUS_SERVER_PERSISTENCE_SIZE:-10Gi}
+      storageClass: ${PROMETHEUS_SERVER_PERSISTENCE_STORAGE_CLASS:-""}
 
 passport:
   replicas: ${PASSPORT_REPLICAS}

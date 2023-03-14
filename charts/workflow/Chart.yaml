@@ -42,6 +42,9 @@ dependencies:
 - name: passport
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x
+- name: prometheus
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 description: Drycc Workflow
 home: https://github.com/drycc/workflow
 maintainers:
