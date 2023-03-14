@@ -234,6 +234,9 @@ HELMBROKER_REPLICAS                        | Number of helmbroker api replicas t
 HELMBROKER_CELERY_REPLICAS                 | Number of helmbroker celery replicas to deploy
 HELMBROKER_PERSISTENCE_SIZE                | The size of the persistence space allocated to `helmbroker`, which is `5Gi` by default
 HELMBROKER_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `helmbroker`; default storangeclass is used by default
+PROMETHEUS_SERVER_RETENTION                | Prometheus data retention period (default if not specified is 15 days)
+PROMETHEUS_SERVER_PERSISTENCE_SIZE         | The size of the persistence space allocated to `prometheus-server`, which is `10Gi` by default
+PROMETHEUS_SERVER_PERSISTENCE_STORAGE_CLASS| StorangeClass of `prometheus-server`; default storangeclass is used by default
 K3S_DATA_DIR                               | The config of k3s data dir; If not set, the default path is used
 ACME_SERVER                                | ACME Server url, default use letsencrypt
 ACME_EAB_KEY_ID                            | The key ID of which your external account binding is indexed by the external account

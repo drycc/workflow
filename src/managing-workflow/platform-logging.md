@@ -39,29 +39,13 @@ Error: There are currently no log messages. Please check the following things:
                         │ Router │                  ┌────────┐     ┌─────┐
                         └────────┘                  │ Logger │◀───▶│Redis│
                             │                       └────────┘     └─────┘
-                         Log file                       ▲                
+                        Log file                        ▲                
                             │                           │                
                             ▼                           │                
-┌────────┐             ┌─────────┐    logs/metrics   ┌──────────────┐             
-│App Logs│──Log File──▶│ fluentd │───────topics─────▶│ Redis Stream │             
-└────────┘             └─────────┘                   └──────────────┘             
-                                                        │                
-                                                        │                
-┌─────────────┐                                         │                
-│ HOST        │                                         ▼                
-│  Telegraf   │───┐                                 ┌────────┐            
-└─────────────┘   │                                 │Telegraf│            
-                  │                                 └────────┘            
-┌─────────────┐   │                                      │                
-│ HOST        │   │    ┌───────────┐                     │                
-│  Telegraf   │───┼───▶│ InfluxDB  │◀────Wire ───────────┘                
-└─────────────┘   │    └───────────┘   Protocol                   
-                  │          ▲                                    
-┌─────────────┐   │          │                                    
-│ HOST        │   │          ▼                                    
-│  Telegraf   │───┘    ┌──────────┐                               
-└─────────────┘        │ Grafana  │                               
-                       └──────────┘                               
+┌────────┐             ┌─────────┐    logs/metrics   ┌──────────────┐     
+│App Logs│──Log File──▶│ fluentd │───────topics─────▶│ Redis Stream │     
+└────────┘             └─────────┘                   └──────────────┘     
+                                                                          
 ```
 
 ## Default Configuration

@@ -2,42 +2,31 @@
 
 ## Description
 
-We now include a monitoring stack for introspection on a running Kubernetes cluster. The stack includes 3 components:
+We now include a monitoring stack for introspection on a running Kubernetes cluster. The stack includes 4 components:
 
-* [Telegraf](https://docs.influxdata.com/telegraf) - Metrics collection daemon written by team behind InfluxDB.
-* [InfluxDB](https://docs.influxdata.com/influxdb) - Time series database
-* [Grafana](http://grafana.org/) - Graphing tool for time series data
+* [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics), kube-state-metrics (KSM) is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
+* [Node Exporter](http://github.com/prometheus/node_exporter), Prometheus exporter for hardware and OS metrics exposed by *NIX kernels.
+* [Prometheus](https://prometheus.io/), a [Cloud Native Computing Foundation](https://cncf.io/) project, is a systems and service monitoring system.
+* [Grafana](http://grafana.org/), Graphing tool for time series data
 
 ## Architecture Diagram
 
 ```
-                        ┌────────┐                                        
-                        │ Router │                  ┌────────┐     ┌─────┐
-                        └────────┘                  │ Logger │◀───▶│Redis│
-                            │                       └────────┘     └─────┘
-                        Log file                        ▲                
-                            │                           │                
-                            ▼                           │                
-┌────────┐             ┌─────────┐    logs/metrics   ┌──────────────┐             
-│App Logs│──Log File──▶│ fluentd │───────topics─────▶│ Redis Stream │             
-└────────┘             └─────────┘                   └──────────────┘             
-                                                        │                
-                                                        │                
-┌─────────────┐                                         │                
-│ HOST        │                                         ▼                
-│  Telegraf   │───┐                                 ┌────────┐            
-└─────────────┘   │                                 │Telegraf│            
-                  │                                 └────────┘            
-┌─────────────┐   │                                      │                
-│ HOST        │   │    ┌───────────┐                     │                
-│  Telegraf   │───┼───▶│ InfluxDB  │◀────Wire ───────────┘                
-└─────────────┘   │    └───────────┘   Protocol                   
-                  │          ▲                                    
-┌─────────────┐   │          │                                    
-│ HOST        │   │          ▼                                    
-│  Telegraf   │───┘    ┌──────────┐                               
-└─────────────┘        │ Grafana  │                               
-                       └──────────┘                               
+┌────────────────┐                                                        
+│ HOST           │                                                        
+│  node-exporter │◀──┐                       ┌──────────────────┐         
+└────────────────┘   │                       │kube-state-metrics│         
+                     │                       └──────────────────┘         
+┌────────────────┐   │                               ▲                    
+│ HOST           │   │    ┌────────────┐             │                    
+│  node-exporter │◀──┼────│ Prometheus │─────────────┘                    
+└────────────────┘   │    └────────────┘                                  
+                     │          ▲                                         
+┌───────────────┐    │          │                                         
+│ HOST          │    │          ▼                                         
+│  node-exporter│◀───┘    ┌──────────┐                                    
+└───────────────┘         │ Grafana  │                                    
+                          └──────────┘                                    
 ```
 
 ## [Grafana](https://grafana.com/)
@@ -75,44 +64,28 @@ If you wish to have persistence for Grafana you can set `enabled` to `true` in t
 
 If you wish to provide your own Grafana instance you can set `grafanaLocation` in the `values.yaml` file before running `helm install`.
 
-## [InfluxDB](https://docs.influxdata.com/influxdb)
-InfluxDB writes data to the host disk; however, if the InfluxDB pod dies and comes back on another host, the data will not be recovered. The InfluxDB Admin UI is also exposed through the router allowing users to access the query engine by going to `influx.mydomain.com`. You will need to configure where to find the `influx-api` endpoint by clicking the "gear" icon at the top right and changing the host to `influx-api.mydomain.com` and port to `80`.
+## [Prometheus](https://prometheus.io/)
+Prometheus writes data to the host disk; however, if the prometheus pod dies and comes back on another host, the data will not be recovered. The prometheus graph UI is also exposed through the router allowing users to access the query engine by going to `prometheus.mydomain.com`. 
 
 ### On Cluster Persistence
-If you wish to have persistence for InfluxDB you can set `enabled` to `true` in the `values.yaml` file before running `helm install`.
+You can set `node-exporter` and `kube-state-metrics` to `true` or `false` in the `values.yaml`.
+If you wish to have persistence for Prometheus you can set `enabled` to `true` in the `values.yaml` file before running `helm install`.
 
 ```
- influxdb:
-   # Configure the following ONLY if you want persistence for on-cluster grafana
-   # GCP PDs and EBS volumes are supported only
-   persistence:
-     enabled: true # Set to true to enable persistence
-     size: 5Gi # PVC size
+prometheus:
+  prometheus-server:
+    persistence:
+      enabled: true # Set to true to enable persistence
+      size: 10Gi # PVC size
+node-exporter:
+  enabled: true
+kube-state-metrics:
+  enabled: true
 ```
 
-### Off Cluster Influxdb
+### Off Cluster Prometheus
 
-To use off-cluster Influx v2, please provide the following values in the `values.yaml` file before running `helm install`.
+To use off-cluster Prometheus, please provide the following values in the `values.yaml` file before running `helm install`.
 
-* `influxdbLocation=off-cluster`
-* `url = "http://my-influxhost.com:8086"`
-* `bucket = "metrics"`
-* `org = "drycc"`
-* `token = "MysuperSecurePassword"`
-
-
-## [Telegraf](https://docs.influxdata.com/telegraf)
-
-Telegraf is the metrics collection daemon used within the monitoring stack. It will collect and send the following metrics to InfluxDB:
-
-* System level metrics such as CPU, Load Average, Memory, Disk, and Network stats
-* Container level metrics such as CPU and Memory
-* Kubernetes metrics such as API request latency, Pod Startup Latency, and number of running pods
-
-It is possible to send these metrics to other endpoints besides InfluxDB. For more information please consult the following [file](https://github.com/drycc/monitor/blob/main/telegraf/rootfs/config.toml.tpl)
-
-### Customizing the Monitoring Stack
-
-To learn more about customizing each of the above components please visit the [Tuning Component Settings][] section.
-
-[Tuning Component Settings]: tuning-component-settings.md#customizing-the-monitor
+* `global.prometheusLocation=off-cluster`
+* `url = "http://my.prometheus.url:9090"`
