@@ -226,7 +226,7 @@ function install_network() {
   helm install cilium $CHARTS_URL/cilium \
     --set tunnel=geneve \
     --set operator.replicas=1 \
-    --set bandwidthManager=true \
+    --set bandwidthManager.enabled=true \
     --set kubeProxyReplacement=strict \
     --set k8sServiceHost=${KUBE_API_SERVER_ADDRESS:-$api_server_address} \
     --set k8sServicePort=${KUBE_API_SERVER_PORT:-"6443"} \
