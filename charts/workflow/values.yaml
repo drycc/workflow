@@ -72,13 +72,9 @@ global:
   # - true: all RBAC-related manifests will be installed (in case your cluster supports RBAC)
   # - false: no RBAC-related manifests will be installed
   rbac: true
-  # Please check `kubernetes.io/ingress.class`
-  # The cert-manager component must be installed
-  # If you want to use HTTPSEnforced or allowlist functions, you must specify:
-  # - nginx
-  # - traefik
-  # Only the above options have been supported so far
-  ingressClass: ""
+  # GatewayClass is cluster-scoped resource defined by the infrastructure provider.
+  # This resource represents a class of Gateways that can be instantiated.
+  gatewayClass: ""
   # A domain name consists of one or more parts.
   # Periods (.) are used to separate these parts.
   # Each part must be 1 to 63 characters in length and can contain lowercase letters, digits, and hyphens (-).
@@ -314,11 +310,20 @@ prometheus:
   # URL configuration is only available in off-cluster prometheus database
   url: "http://my.prometheus.url:9090"
 
-
-# acme configuration takes effect if and only if certManagerEnabled is true
-acme:
-  server: https://acme-v02.api.letsencrypt.org/directory
-  #  EAB credentials
-  externalAccountBinding:
-    keyID: ""
-    keySecret: ""
+# Drycc Gateway is a gateway chart that integrates cert-manager.
+gateway:
+  # acme configuration takes effect if and only if certManagerEnabled is true
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    #  EAB credentials
+    externalAccountBinding:
+      keyID: ""
+      keySecret: ""
+  # This will be the hostname prefix that is used to build endpoints
+  domainPrefixs:
+  - drycc
+  - drycc-rabbitmq
+  - drycc-passport
+  - drycc-influxdb
+  - drycc-prometheus
+  - drycc-monitor-grafana

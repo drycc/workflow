@@ -15,6 +15,9 @@ dependencies:
 - name: fluentd
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x
+- name: gateway
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: redis
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x
