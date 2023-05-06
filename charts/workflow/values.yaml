@@ -85,7 +85,7 @@ global:
   # This will be the hostname that is used to build endpoints such as "drycc.$HOSTNAME"
   platformDomain: ""
   # Whether certManagerEnabled is true to automatically generate drycc certificates
-  certManagerEnabled: true
+  certManagerEnabled: false
   # Set the location of Workflow's passport
   #
   # Valid values are:
