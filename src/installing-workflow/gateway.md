@@ -1,13 +1,13 @@
-# Specify Ingress
+# Specify Gateway
 
-## Install Drycc Workflow (Specify ingress)
+## Install Drycc Workflow (Specify gateway)
 
-Now that Helm is installed and the repository has been added, install Workflow with a native ingress by running:
+Now that Helm is installed and the repository has been added, install Workflow with a native gateway by running:
 
 ```
 $ helm install drycc oci://registry.drycc.cc/charts/workflow \
     --namespace drycc \
-    --set global.ingressClass=nginx \
+    --set global.gatewayClass=istio \
     --set global.platformDomain=drycc.cc \
     --set builder.service.type=LoadBalancer
 ```
@@ -16,7 +16,7 @@ Of course, if you deploy it on a bare machine, you probably do not have Load Bal
 ```
 $ helm install drycc oci://registry.drycc.cc/charts/workflow \
     --namespace drycc \
-    --set global.ingressClass=nginx \
+    --set global.gatewayClass=istio \
     --set global.platformDomain=drycc.cc \
     --set builder.service.type=NodePort \
     --set builder.service.nodePort=32222
@@ -33,10 +33,10 @@ Wait for the pods that Helm launched to be ready. Monitor their status by runnin
 $ kubectl --namespace=drycc get pods
 ```
 
-You should also notice that several Kubernetes ingresses has been installed on your cluster. You can view it by running:
+You should also notice that several Kubernetes gatewayclass has been installed on your cluster. You can view it by running:
 
 ```
-$ kubectl get ingress --namespace drycc
+$ kubectl get gatewayclass --namespace drycc
 ```
 
 Depending on the order in which the Workflow components initialize, some pods may restart. This is common during the
@@ -55,36 +55,38 @@ drycc-database-rad1o           1/1       Running   0          5m
 drycc-logger-fluentd-1v8uk     1/1       Running   0          5m
 drycc-logger-fluentd-esm60     1/1       Running   0          5m
 drycc-logger-sm8b3             1/1       Running   0          5m
-drycc-storage-4ww3t              1/1       Running   0          5m
+drycc-storage-4ww3t            1/1       Running   0          5m
 drycc-registry-asozo           1/1       Running   1          5m
 drycc-rabbitmq-0               1/1       Running   0          5m
 ```
 
-## Install a Kubernetes Ingress Controller
+## Install a Kubernetes Gateway
 
-Now that Workflow has been deployed with the `global.ingressClass` , we will need a Kubernetes ingress controller in place to begin routing traffic.
+Now that Workflow has been deployed with the `global.gatewayClass` , we will need a Kubernetes gateway in place to begin routing traffic.
 
-Here is an example of how to use [traefik](https://traefik.io/) as an ingress controller for Workflow. Of course, you are welcome to use any controller you wish.
+Here is an example of how to use [istio](https://istio.io/) as an gateway for Workflow. Of course, you are welcome to use any controller you wish.
 
 ```
-$ helm install traefik oci://registry.drycc.cc/charts/traefik \
-    --name ingress \
-    --namespace kube-system \
-    --set ssl.enabled=true
+$ helm repo add istio https://istio-release.storage.googleapis.com/charts
+$ helm repo update
+$ kubectl create namespace istio-system
+$ helm install istio-base istio/base -n istio-system
+$ helm install istiod istio/istiod -n istio-system --wait
+$ kubectl create namespace istio-ingress
+$ helm install istio-ingress istio/gateway -n istio-ingress --wait
 ```
 
 ## Configure DNS
 
-User must to set up a hostname, and assumes the `*.$host` convention.
+User must install [drycc](../quickstart/install-workflow.md) and then set up a hostname, and assumes the `*.$host` convention.
 
-We need to point the `*.$host` record to the public IP address of your ingress controller. You can get the public IP using the following command. A wildcard entry is necessary here as apps will use the same rule after they are deployed.
+We need to point the `*.$host` record to the public IP address of your gateway. You can get the public IP using the following command. A wildcard entry is necessary here as apps will use the same rule after they are deployed.
 
 ```
-$ kubectl get svc ingress-traefik --namespace kube-system
-NAME              CLUSTER-IP   EXTERNAL-IP      PORT(S)                      AGE
-ingress-traefik   10.0.25.3    138.91.243.152   80:31625/TCP,443:30871/TCP   33m
+$ kubectl get gateway --namespace drycc
+NAME      CLASS   ADDRESS         PROGRAMMED   AGE
+gateway   istio   138.91.243.152  True         36d
 ```
-
 
 If we were using `drycc.cc` as a hostname, we would need to create the following A DNS records.
 
@@ -92,7 +94,7 @@ If we were using `drycc.cc` as a hostname, we would need to create the following
 | ---------------------------- |:-------------:| --------------:|
 | *.drycc.cc                   | A             | 138.91.243.152 |
 
-Once all of the pods are in the `READY` state, and `*.$host` resolves to the external IP found above, the preparation of ingress has been completed!
+Once all of the pods are in the `READY` state, and `*.$host` resolves to the external IP found above, the preparation of gateway has been completed!
 
 After installing Workflow, [register a user and deploy an application](../quickstart/deploy-an-app.md).
 

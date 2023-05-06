@@ -10,6 +10,7 @@ This repository contains the source code for Drycc Workflow documentation. If yo
 
 Please see below for links and descriptions of each component:
 
+- [gateway](https://github.com/drycc/gateway) - Workflow gateway charts
 - [passport](https://github.com/drycc/passport) - Workflow single sign on system
 - [controller](https://github.com/drycc/controller) - Workflow API server
 - [builder](https://github.com/drycc/builder) - Git server and source-to-image component

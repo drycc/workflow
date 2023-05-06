@@ -196,6 +196,6 @@ remove the certificate from Drycc and re-run the `certs:add` command.
 
 [RapidSSL]: https://www.rapidssl.com/
 [buy an SSL certificate with RapidSSL]: https://www.rapidssl.com/buy-ssl/
-[platform-ssl]: https://kubernetes.io/docs/concepts/services-networking/ingress/
+[platform-ssl]: https://gateway-api.sigs.k8s.io/guides/tls/
 [root CAs]: https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/included/
 [intermediary certificates]: http://en.wikipedia.org/wiki/Intermediate_certificate_authorities

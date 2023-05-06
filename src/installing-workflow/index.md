@@ -33,9 +33,9 @@ More rigorous installations would benefit from using outside sources for the fol
 * [Redis](../managing-workflow/platform-logging.md#configuring-off-cluster-redis) - Such as AWS Elasticache
 * [InfluxDB](../managing-workflow/platform-monitoring.md#configuring-off-cluster-influxdb) and [Grafana](../managing-workflow/platform-monitoring.md#off-cluster-grafana)
 
-#### Ingress
+#### Gateway
 
-Now, workflow requires that ingress and cert-manager must be installed. Any compatible Kubernetes entry controller can be used, but only ingress-nginx and ingress-traefik currently support enforced HTTPS and allowlist. Enable entries in accordance with [this guide](./ingress.md).
+Now, workflow requires that gateway and cert-manager must be installed. Any compatible Kubernetes entry controller can be used.
 
 ## Install Drycc Workflow
 

@@ -23,7 +23,7 @@ DNS for any applications using a "custom domain" (a fully-qualified domain name 
 Although it is dependent upon your distribution of Kubernetes and your underlying infrastructure, in many cases, the IP(s) or existing fully-qualified domain name of a load balancer can be determined directly using the `kubectl` tool:
 
 ```
-$ kubectl --namespace=ingress-nginx describe service | grep "LoadBalancer Ingress"
+$ kubectl --namespace=istio-nginx describe service | grep "LoadBalancer"
 LoadBalancer Ingress:	a493e4e58ea0511e5bb390686bc85da3-1558404688.us-west-2.elb.amazonaws.com
 ```
 
@@ -40,7 +40,7 @@ In general, for any IP, `a.b.c.d`, the fully-qualified domain name `any-subdomai
 To begin, find the node(s) hosting router instances using `kubectl`:
 
 ```
-$ kubectl --namespace=ingress-nginx describe pod | grep Node
+$ kubectl --namespace=istio-ingress describe pod | grep Node:
 Node:       ip-10-0-0-199.us-west-2.compute.internal/10.0.0.199
 Node:       ip-10-0-0-198.us-west-2.compute.internal/10.0.0.198
 ```
@@ -73,7 +73,7 @@ We'll assume the following in this section:
 Here are the steps for configuring cloud DNS to route to your drycc cluster:
 
 1. Get the load balancer IP or domain name
-  - If you are on Google Container Engine, you can run `kubectl get svc -n ingress-nginx` and look for the `LoadBalancer Ingress` column to get the IP address
+  - If you are on Google Container Engine, you can run `kubectl get svc -n istio-ingress` and look for the `LoadBalancer Ingress` column to get the IP address
 2. Create a new Cloud DNS Zone (on the console: `Networking` => `Cloud DNS`, then click on `Create Zone`)
 3. Name your zone, and set the DNS name to `mystuff.com.` (note the `.` at the end
 4. Click on the `Create` button

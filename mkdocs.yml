@@ -17,7 +17,7 @@ nav:
     - Components: understanding-workflow/components.md
   - Installing To Kubenetes:
     - System Requirements: installing-workflow/system-requirements.md
-    - Installing Ingress: installing-workflow/ingress.md
+    - Installing Gateway: installing-workflow/gateway.md
     - Installing Workflow: installing-workflow/index.md
     - Configuring Object Storage: installing-workflow/configuring-object-storage.md
     - Configuring Postgres: installing-workflow/configuring-postgres.md
@@ -35,6 +35,7 @@ nav:
     - Managing App Configuration: applications/managing-app-configuration.md
     - Managing App Lifecycle: applications/managing-app-lifecycle.md
     - Managing App Volumes: applications/managing-app-volumes.md
+    - Managing App Gateway: applications/managing-app-gateway.md
     - Managing App Resources: applications/managing-app-resources.md
     - Inter-app Communication: applications/inter-app-communication.md
     - Resource Limits: applications/managing-resource-limits.md
