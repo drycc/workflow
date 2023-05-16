@@ -327,3 +327,11 @@ gateway:
   - drycc-influxdb
   - drycc-prometheus
   - drycc-monitor-grafana
+  # custom listeners
+  customListeners:
+  - name: drycc-gateway-listener-builder-tcp
+    port: 2222
+    protocol: TCP
+    allowedRoutes:
+      namespaces:
+        from: All

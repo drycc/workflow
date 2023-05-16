@@ -2,6 +2,10 @@
 set -eo pipefail
 shopt -s expand_aliases
 
+# default vars
+GATEWAY_CLASS="istio"
+CLUSTER_DOMAIN="cluster.local"
+CERT_MANAGER_ENABLED="${CERT_MANAGER_ENABLED:false}"
 DRYCC_REGISTRY="${DRYCC_REGISTRY:-registry.drycc.cc}"
 CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
 
@@ -221,7 +225,7 @@ function check_metallb {
 }
 
 function install_network() {
-  echo -e "\\033[32m--->Start installing network...\\033[0m"
+  echo -e "\\033[32m---> Start installing network...\\033[0m"
   api_server_address=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
   helm install cilium $CHARTS_URL/cilium \
     --set tunnel=geneve \
@@ -239,15 +243,15 @@ function install_network() {
 
 function install_metallb() {
   check_metallb
-  echo -e "\\033[32m--->Start installing metallb...\\033[0m"
+  echo -e "\\033[32m---> Start installing metallb...\\033[0m"
   helm install metallb $CHARTS_URL/metallb \
     --set speaker.frr.enabled=true \
     --namespace metallb \
     --create-namespace
 
-  echo -e "\\033[32m--->Waiting metallb pods ready...\\033[0m"
+  echo -e "\\033[32m---> Waiting metallb pods ready...\\033[0m"
   kubectl wait pods -n metallb --all  --for condition=Ready --timeout=600s
-  echo -e "\\033[32m--->Waiting metallb webhook ready...\\033[0m"
+  echo -e "\\033[32m---> Waiting metallb webhook ready...\\033[0m"
   sleep 30s
 
   if [[ -z "${METALLB_CONFIG_FILE}" ]] ; then
@@ -260,6 +264,10 @@ metadata:
 spec:
   addresses:
   - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
+  serviceAllocation:
+    priority: 50
+    namespaces:
+    - drycc
 
 ---
 apiVersion: metallb.io/v1beta1
@@ -287,42 +295,38 @@ EOF
   echo -e "\\033[32m---> Metallb installed!\\033[0m"
 }
 
-function install_traefik() {
-  echo -e "\\033[32m--->Start installing traefik...\\033[0m"
-  helm install traefik $CHARTS_URL/traefik \
-    --namespace traefik \
-    --create-namespace --wait -f - <<EOF
-service:
-  annotations:
-    metallb.universe.tf/address-pool: public
-    metallb.universe.tf/allow-shared-ip: drycc 
-websecure:
-  tls:
-    enabled: true
-ingressClass:
-  enabled: true
-  isDefaultClass: true
-additionalArguments:
-- "--entrypoints.websecure.http.tls"
-- "--experimental.http3=true"
-- "--entrypoints.name.http3"
-- "--providers.kubernetesingress.allowEmptyServices=true"
-EOF
-  echo -e "\\033[32m---> Traefik installed!\\033[0m"
+function install_gateway() {
+  echo -e "\\033[32m---> Start installing gateway...\\033[0m"
+
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+    gateway_api_url=https://drycc-mirrors.drycc.cc/kubernetes-sigs/gateway-api
+  else
+    gateway_api_url=https://github.com/kubernetes-sigs/gateway-api
+  fi
+  version=$(curl -Ls $gateway_api_url/releases|grep /kubernetes-sigs/gateway-api/releases/tag/ | sed -E 's/.*\/kubernetes-sigs\/gateway-api\/releases\/tag\/(v[0-9\.]{1,}(-rc[0-9]{1,})?)".*/\1/g' | head -1)
+
+  helm repo add istio https://drycc-mirrors.drycc.cc/istio-charts
+  helm repo update
+  kubectl apply -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
+  helm install istio-base istio/base -n istio-system --create-namespace
+  helm install istio-istiod istio/istiod -n istio-system --wait
+  helm install istio-gateway istio/gateway -n istio-system --wait
+  echo -e "\\033[32m---> Gateway installed!\\033[0m"
 }
 
 function install_cert_manager() {
-  echo -e "\\033[32m--->Start installing cert-manager...\\033[0m"
+  echo -e "\\033[32m---> Start installing cert-manager...\\033[0m"
   helm install cert-manager $CHARTS_URL/cert-manager \
     --namespace cert-manager \
     --create-namespace \
     --set clusterResourceNamespace=drycc \
+    --set "extraArgs={--feature-gates=ExperimentalGatewayAPISupport=true}" \
     --set installCRDs=true --wait
   echo -e "\\033[32m---> Cert-manager installed!\\033[0m"
 }
 
 function install_catalog() {
-  echo -e "\\033[32m--->Start installing catalog...\\033[0m"
+  echo -e "\\033[32m---> Start installing catalog...\\033[0m"
   helm install catalog $CHARTS_URL/catalog \
     --set asyncBindingOperationsEnabled=true \
     --set image=registry.drycc.cc/drycc-addons/service-catalog:canary \
@@ -334,7 +338,7 @@ function install_catalog() {
 function install_components {
   install_network
   install_metallb
-  install_traefik
+  install_gateway
   install_cert_manager
   install_catalog
 }
@@ -372,19 +376,14 @@ function install_drycc {
 
 cat << EOF > "/tmp/drycc-values.yaml"
 global:
-  clusterDomain: cluster.local
+  clusterDomain: ${CLUSTER_DOMAIN}
   platformDomain: ${PLATFORM_DOMAIN}
-  certManagerEnabled: ${CERT_MANAGER_ENABLED:-true}
-  ingressClass: traefik
+  certManagerEnabled: ${CERT_MANAGER_ENABLED}
+  gatewayClass: ${GATEWAY_CLASS}
 
 builder:
   replicas: ${BUILDER_REPLICAS}
   imageRegistry: ${DRYCC_REGISTRY}
-  service:
-    type: LoadBalancer
-    annotations:
-      metallb.universe.tf/address-pool: public
-      metallb.universe.tf/allow-shared-ip: drycc
 
 database:
   replicas: ${DATABASE_REPLICAS}
@@ -553,27 +552,22 @@ function install_helmbroker {
 
   helm install helmbroker $CHARTS_URL/helmbroker \
     --set global.rabbitmqLocation="off-cluster" \
-    --set global.ingressClass="traefik" \
-    --set global.clusterDomain="cluster.local" \
+    --set global.gatewayClass=${GATEWAY_CLASS} \
+    --set global.clusterDomain=${CLUSTER_DOMAIN} \
     --set global.platformDomain=${PLATFORM_DOMAIN} \
-    --set global.certManagerEnabled=${CERT_MANAGER_ENABLED:-true} \
+    --set global.certManagerEnabled=${CERT_MANAGER_ENABLED} \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
     --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"drycc-storage"} \
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
     --set replicas=${HELMBROKER_REPLICAS} \
     --set celeryReplicas=${HELMBROKER_CELERY_REPLICAS} \
-    --set rabbitmqUrl="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq.drycc.svc.cluster.local:5672/drycc" \
+    --set rabbitmqUrl="amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@drycc-rabbitmq.drycc.svc.${CLUSTER_DOMAIN}:5672/drycc" \
     --namespace drycc-helmbroker --create-namespace --wait -f - <<EOF
 repositories:
-- name: drycc-helm-broker
+- name: drycc-helmbroker
   url: ${addons_url}
 EOF
-  if [[ "${CERT_MANAGER_ENABLED:-true}" == "true" ]] ; then
-    BROKER_URL="https://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}"
-  else
-    BROKER_URL="http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.${PLATFORM_DOMAIN}"
-  fi
 
   kubectl apply -f - <<EOF
 apiVersion: servicecatalog.k8s.io/v1beta1
@@ -589,7 +583,7 @@ metadata:
 spec:
   relistBehavior: Duration
   relistRequests: 5
-  url: ${BROKER_URL}
+  url: http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.drycc-helmbroker.svc.${CLUSTER_DOMAIN}
 EOF
 
   echo -e "\\033[32m---> Helmbroker username: $HELMBROKER_USERNAME\\033[0m"
@@ -610,7 +604,7 @@ if [[ -z "$@" ]] ; then
 else
   for command in "$@"
   do
-      $command
-      echo -e "\\033[32m---> Execute $command complete, enjoy life...\\033[0m"
+    $command
+    echo -e "\\033[32m---> Execute $command complete, enjoy life...\\033[0m"
   done
 fi

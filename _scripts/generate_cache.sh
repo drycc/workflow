@@ -14,13 +14,11 @@ cd $tmp
 
 helm repo add cilium https://helm.cilium.io/
 helm repo add metallb https://metallb.github.io/metallb
-helm repo add traefik https://helm.traefik.io/traefik
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 
 helm fetch cilium/cilium
 helm fetch metallb/metallb
-helm fetch traefik/traefik
 helm fetch jetstack/cert-manager
 
 # remove v from cert-manager version
