@@ -69,6 +69,10 @@ function configure_os {
   if [ ! -n "$nr_hugepages" ] || [ 1024 -gt $nr_hugepages ] ;then
     echo 'vm.nr_hugepages = 1024' >> /etc/sysctl.conf
   fi
+  max_user_instances=$(sysctl -ne fs.inotify.max_user_instances)
+  if [ ! -n "$max_user_instances" ] || [ 65535 -gt $max_user_instances ] ;then
+    echo 'fs.inotify.max_user_instances = 65535' >> /etc/sysctl.conf
+  fi
   sysctl -p
   echo -e "\\033[32m---> Configuring kernel parameters finish\\033[0m"
 }
