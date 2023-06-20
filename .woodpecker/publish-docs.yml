@@ -11,6 +11,7 @@ pipeline:
   - cp _scripts/* _build/html
   - cd _build/html && echo "www.drycc.cc" > CNAME  && echo "drycc.cc" >> CNAME && git init
   secrets:
+  - codename
   - drycc_registry
   when:
     event:
