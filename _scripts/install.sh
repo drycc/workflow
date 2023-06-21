@@ -9,6 +9,8 @@ CERT_MANAGER_ENABLED="${CERT_MANAGER_ENABLED:false}"
 DRYCC_REGISTRY="${DRYCC_REGISTRY:-registry.drycc.cc}"
 CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
 
+source urlencode.sh
+
 # initArch discovers the architecture for this system.
 init_arch() {
   ARCH=$(uname -m)
@@ -172,6 +174,8 @@ function configure_mirrors {
   if [ -z "${INSTALL_K3S_VERSION}" ]; then
     INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}[rc0-9\-]{0,}%2Bk3s[0-9])".*/\1/g' | head -1)
     export INSTALL_K3S_VERSION
+  else 
+    INSTALL_K3S_VERSION=$(urlencode "$INSTALL_K3S_VERSION")
   fi
   echo -e "\\033[32m---> Configuring mirrors finish\\033[0m"
 }
