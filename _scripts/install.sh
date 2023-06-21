@@ -33,6 +33,28 @@ function clean_before_exit {
 trap clean_before_exit EXIT
 init_arch
 
+urlencode() {
+  # urlencode <string>
+
+  old_lang=$LANG
+  LANG=C
+  
+  old_lc_collate=$LC_COLLATE
+  LC_COLLATE=C
+
+  local length="${#1}"
+  for (( i = 0; i < length; i++ )); do
+      local c="${1:i:1}"
+      case $c in
+          [a-zA-Z0-9.~_-]) printf "$c" ;;
+          *) printf '%%%02X' "'$c" ;;
+      esac
+  done
+
+  LANG=$old_lang
+  LC_COLLATE=$old_lc_collate
+}
+
 function install_helm {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     version=$(curl -Ls https://drycc-mirrors.drycc.cc/helm/helm/releases|grep /helm/helm/releases/tag/ | sed -E 's/.*\/helm\/helm\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
@@ -171,8 +193,10 @@ function configure_mirrors {
   fi
   if [ -z "${INSTALL_K3S_VERSION}" ]; then
     INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}[rc0-9\-]{0,}%2Bk3s[0-9])".*/\1/g' | head -1)
-    export INSTALL_K3S_VERSION
+  else 
+    INSTALL_K3S_VERSION=$(urlencode "$INSTALL_K3S_VERSION")
   fi
+  export INSTALL_K3S_VERSION
   echo -e "\\033[32m---> Configuring mirrors finish\\033[0m"
 }
 
