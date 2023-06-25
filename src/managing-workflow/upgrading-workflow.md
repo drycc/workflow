@@ -47,7 +47,6 @@ drycc-builder-2448122224-3cibz            1/1       Running   0          5m
 drycc-controller-1410285775-ipc34         1/1       Running   3          5m
 drycc-controller-celery-694f75749b-cmxxn  3/3       Running   0          5m
 drycc-database-e7c5z                      1/1       Running   0          5m
-drycc-influxdb-ah8io                      1/1       Running   0          5m
 drycc-logger-cgjup                        1/1       Running   3          5m
 drycc-logger-fluentd-45h7j                1/1       Running   0          5m
 drycc-logger-fluentd-4z7lw                1/1       Running   0          5m

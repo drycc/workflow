@@ -218,9 +218,6 @@ STORAGE_META_TIKV_PERSISTENCE_SIZE         | The size of the persistence space a
 STORAGE_META_TIKV_PERSISTENCE_STORAGE_CLASS| StorangeClass of `storage meta tikv`; default storangeclass is used by default
 MONITOR_GRAFANA_PERSISTENCE_SIZE           | The size of the persistence space allocated to `monitor.grafana`, which is `5Gi` by default
 MONITOR_GRAFANA_PERSISTENCE_STORAGE_CLASS  | StorangeClass of `monitor` grafana; default storangeclass is used by default
-INFLUXDB_REPLICAS                          | Number of influxdb replicas to deploy
-INFLUXDB_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `influxdb`, which is `5Gi` by default
-INFLUXDB_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `influxdb`; default storangeclass is used by default
 LOGGER_REPLICAS                            | Number of logger replicas to deploy
 RABBITMQ_REPLICAS                          | Number of rabbitmq replicas to deploy
 RABBITMQ_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `rabbitmq`, which is `5Gi` by default

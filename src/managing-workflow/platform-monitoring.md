@@ -30,7 +30,7 @@ We now include a monitoring stack for introspection on a running Kubernetes clus
 ```
 
 ## [Grafana](https://grafana.com/)
-Grafana allows users to create custom dashboards that visualize the data captured to the running InfluxDB component. By default Grafana is exposed using a [service annotation](https://github.com/drycc/router#how-it-works) through the router at the following URL: `http://grafana.mydomain.com`. The default login is `admin/admin`. If you are interested in changing these values please see [Tuning Component Settings][].
+Grafana allows users to create custom dashboards that visualize the data captured to the running Prometheus component. By default Grafana is exposed using a [service annotation](https://github.com/drycc/router#how-it-works) through the router at the following URL: `http://grafana.mydomain.com`. The default login is `admin/admin`. If you are interested in changing these values please see [Tuning Component Settings][].
 
 Grafana will preload several dashboards to help operators get started with monitoring Kubernetes and Drycc Workflow.
 These dashboards are meant as starting points and don't include every item that might be desirable to monitor in a

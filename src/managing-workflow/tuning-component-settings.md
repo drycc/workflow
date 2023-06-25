@@ -161,8 +161,8 @@ For a list of other options you can set by using environment variables please se
 ### [Telegraf](https://docs.influxdata.com/telegraf)
 For a list of configuration values that can be set by using environment variables please see the following [configuration file](https://github.com/drycc/monitor/blob/main/telegraf/rootfs/config.toml.tpl).
 
-### [InfluxDB](https://docs.influxdata.com/influxdb)
-You can find a list of values that can be set using environment variables [here](https://github.com/drycc/influxdb/blob/main/rootfs/home/influxdb/config.toml.tpl).
+### [Prometheus](https://prometheus.io)
+You can find a list of values that can be set using environment variables [here](https://github.com/drycc/prometheus).
 
 ## Customizing the Registry
 

@@ -116,20 +116,22 @@ The monitoring subsystem consists of two components: Telegraf and Grafana.
 
 Telegraf is the is the metrics collection agent that runs using the daemon set API. It runs on
 every worker node in the cluster, fetches information about the pods currently running and ships it
-to InfluxDB.
+to Prometheus.
 
-Grafana is a standalone graphing application. It natively supports InfluxDB as a datasource and
+Grafana is a standalone graphing application. It natively supports Prometheus as a datasource and
 provides a robust engine for creating dashboards on top of timeseries data. Workflow provides a few
 dashboards out of the box for monitoring Drycc Workflow and Kubernetes. The dashboards can be used
 as a starting point for creating more custom dashboards to suit a user's needs.
 
-## InfluxDB
+## Prometheus
 
-**Project Location:** [drycc/influxdb](https://github.com/drycc/influxdb)
+**Project Location:** [drycc/prometheus](https://github.com/drycc/prometheus)
 
-InfluxDB is a database that stores the metrics collected by Telegraf. Out of the box, it does not
-persist to disk, but you can set it up to back it with a persisitent volume or swap this out with
-a more robust InfluxDB setup in a production setting.
+Prometheus is a system monitoring and alerting system. It was opensourced by SoundCloud in 2012 and is
+the second project both to join and to graduate within Cloud Native Computing Foundation after Kubernetes.
+Prometheus stores all metrics data as time series, i.e metrics information is stored along with the
+timestamp at which it was recorded, optional key-value pairs called as labels can also be stored along
+with metrics.
 
 ## Rabbitmq
 

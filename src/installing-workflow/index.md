@@ -31,7 +31,7 @@ More rigorous installations would benefit from using outside sources for the fol
 * [Postgres](configuring-postgres.md) - For example AWS RDS.
 * [Registry](configuring-registry.md) - This includes [quay.io](https://quay.io), [dockerhub](https://hub.docker.com), [Amazon ECR](https://aws.amazon.com/ecr/), and [Google GCR](https://cloud.google.com/container-registry/).
 * [Redis](../managing-workflow/platform-logging.md#configuring-off-cluster-redis) - Such as AWS Elasticache
-* [InfluxDB](../managing-workflow/platform-monitoring.md#configuring-off-cluster-influxdb) and [Grafana](../managing-workflow/platform-monitoring.md#off-cluster-grafana)
+* [Grafana](../managing-workflow/platform-monitoring.md#off-cluster-grafana)
 
 #### Gateway
 
@@ -70,7 +70,6 @@ $ helm install drycc oci://registry.drycc.cc/charts/workflow \
     --set database.imageRegistry=quay.io \
     --set fluentd.imageRegistry=quay.io \
     --set redis.imageRegistry=quay.io \
-    --set influxdb.imageRegistry=quay.io \
     --set rabbitmq.imageRegistry=quay.io \
     --set logger.imageRegistry=quay.io \
     --set storage.imageRegistry=quay.io \
@@ -106,7 +105,6 @@ drycc-builder-574483744-l15zj             1/1       Running   0          4m
 drycc-controller-3953262871-pncgq         1/1       Running   2          4m
 drycc-controller-celery-cmxxn             3/3       Running   0          4m
 drycc-database-83844344-47ld6             1/1       Running   0          4m
-drycc-influxdb-2729788615-m9b5n           1/1       Running   0          4m
 drycc-logger-176328999-wjckx              1/1       Running   4          4m
 drycc-logger-fluentd-zxnqb                1/1       Running   0          4m
 drycc-redis-304849759-1f35p               1/1       Running   0          4m

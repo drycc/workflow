@@ -37,9 +37,6 @@ dependencies:
 - name: registry-proxy
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x
-- name: influxdb
-  repository: oci://registry.drycc.cc/charts-testing
-  version: x.x.x
 - name: rabbitmq
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x

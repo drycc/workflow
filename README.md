@@ -20,7 +20,6 @@ Please see below for links and descriptions of each component:
 - [registry](https://github.com/drycc/registry) - The Docker registry
 - [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
 - [monitor](https://github.com/drycc/monitor) - The platform monitoring components
-- [influxdb](https://github.com/drycc/influxdb) - The controller app metrics database
 - [prometheus](https://github.com/drycc/prometheus) - The monitor database
 - [rabbitmq](https://github.com/drycc/rabbitmq) - RabbitMQ is a message broker used with controller celery
 - [storage](https://github.com/drycc/storage) - The in-cluster, kubernetes storage, s3 api compatible, hybrid storage system.
