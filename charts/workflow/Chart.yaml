@@ -13,6 +13,9 @@ dependencies:
 - name: database
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x
+- name: timeseries
+  repository: oci://registry.drycc.cc/charts-testing
+  version: x.x.x
 - name: fluentd
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x

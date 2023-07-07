@@ -420,6 +420,16 @@ database:
     size: ${DATABASE_PERSISTENCE_SIZE:-5Gi}
     storageClass: ${DATABASE_PERSISTENCE_STORAGE_CLASS:-""}
 
+timeseries:
+  replicas: ${TIMESERIES_REPLICAS}
+  imageRegistry: ${DRYCC_REGISTRY}
+  limitsMemory: "256Mi"
+  limitsHugepages2Mi: "256Mi"
+  persistence:
+    enabled: true
+    size: ${TIMESERIES_PERSISTENCE_SIZE:-5Gi}
+    storageClass: ${TIMESERIES_PERSISTENCE_STORAGE_CLASS:-""}
+
 fluentd:
   imageRegistry: ${DRYCC_REGISTRY} 
   daemonEnvironment:

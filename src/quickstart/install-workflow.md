@@ -225,6 +225,9 @@ RABBITMQ_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `rabbitmq`; defaul
 DATABASE_REPLICAS                          | Number of database replicas to deploy
 DATABASE_PERSISTENCE_SIZE                  | The size of the persistence space allocated to `database`, which is `5Gi` by default
 DATABASE_PERSISTENCE_STORAGE_CLASS         | StorangeClass of `database`; default storangeclass is used by default
+TIMESERIES_REPLICAS                        | Number of timeseries replicas to deploy
+TIMESERIES_PERSISTENCE_SIZE                | The size of the persistence space allocated to `timeseries`, which is `5Gi` by default
+TIMESERIES_PERSISTENCE_STORAGE_CLASS       | StorangeClass of `timeseries`; default storangeclass is used by default
 PASSPORT_REPLICAS                          | Number of passport replicas to deploy
 REGISTRY_REPLICAS                          | Number of registry replicas to deploy
 HELMBROKER_REPLICAS                        | Number of helmbroker api replicas to deploy
