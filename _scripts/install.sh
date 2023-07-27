@@ -96,6 +96,13 @@ function configure_os {
     echo 'fs.inotify.max_user_instances = 65535' >> /etc/sysctl.conf
   fi
   sysctl -p
+  
+  cpufreq=$(ls /sys/devices/system/cpu/cpu*/cpufreq >/dev/null 2>&1 || echo "false")
+  if [[ $cpufreq != "false" ]]; then
+    for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
+      echo performance > $cpu
+    done
+  fi
   echo -e "\\033[32m---> Configuring kernel parameters finish\\033[0m"
 }
 
@@ -116,6 +123,8 @@ EOF
   endpoint = ["https://quay-mirror.drycc.cc", "https://quay.io"]
 [plugins.cri.registry.mirrors."gcr.io"]
   endpoint = ["https://quay-mirror.drycc.cc", "https://gcr.io"]
+[plugins.cri.registry.mirrors."k8s.gcr.io"]
+  endpoint = ["https://k8s-mirror.drycc.cc", "https://registry.k8s.io"]
 [plugins.cri.registry.mirrors."registry.k8s.io"]
   endpoint = ["https://k8s-mirror.drycc.cc", "https://registry.k8s.io"]
 EOF
@@ -256,15 +265,15 @@ function install_network() {
   echo -e "\\033[32m---> Start installing network...\\033[0m"
   api_server_address=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
   helm install cilium $CHARTS_URL/cilium \
-    --set tunnel=vxlan \
     --set operator.replicas=1 \
+    --set bpf.masquerade=true \
     --set bandwidthManager.enabled=true \
+    --set bandwidthManager.bbr=true \
     --set kubeProxyReplacement=strict \
+    --set hubble.enabled=false \
+    --set hostPort.enabled=true \
     --set k8sServiceHost=${KUBE_API_SERVER_ADDRESS:-$api_server_address} \
     --set k8sServicePort=${KUBE_API_SERVER_PORT:-"6443"} \
-    --set global.containerRuntime.integration="containerd" \
-    --set global.containerRuntime.socketPath="/var/run/k3s/containerd/containerd.sock" \
-    --set hostPort.enabled=true \
     --namespace kube-system --wait
   echo -e "\\033[32m---> Network installed!\\033[0m"
 }
