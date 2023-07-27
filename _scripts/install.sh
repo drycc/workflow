@@ -116,8 +116,8 @@ EOF
   endpoint = ["https://quay-mirror.drycc.cc", "https://quay.io"]
 [plugins.cri.registry.mirrors."gcr.io"]
   endpoint = ["https://quay-mirror.drycc.cc", "https://gcr.io"]
-[plugins.cri.registry.mirrors."k8s.gcr.io"]
-  endpoint = ["https://k8s-mirror.drycc.cc", "https://k8s.gcr.io"]
+[plugins.cri.registry.mirrors."registry.k8s.io"]
+  endpoint = ["https://k8s-mirror.drycc.cc", "https://registry.k8s.io"]
 EOF
     fi
   fi
@@ -256,7 +256,7 @@ function install_network() {
   echo -e "\\033[32m---> Start installing network...\\033[0m"
   api_server_address=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
   helm install cilium $CHARTS_URL/cilium \
-    --set tunnel=geneve \
+    --set tunnel=vxlan \
     --set operator.replicas=1 \
     --set bandwidthManager.enabled=true \
     --set kubeProxyReplacement=strict \
