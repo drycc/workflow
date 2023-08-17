@@ -313,18 +313,3 @@ gateway:
     externalAccountBinding:
       keyID: ""
       keySecret: ""
-  # This will be the hostname prefix that is used to build endpoints
-  domainPrefixs:
-  - drycc
-  - drycc-rabbitmq
-  - drycc-passport
-  - drycc-prometheus
-  - drycc-monitor-grafana
-  # custom listeners
-  customListeners:
-  - name: drycc-gateway-listener-builder-tcp
-    port: 2222
-    protocol: TCP
-    allowedRoutes:
-      namespaces:
-        from: All

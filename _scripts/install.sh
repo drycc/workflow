@@ -4,7 +4,8 @@ shopt -s expand_aliases
 
 # default vars
 GATEWAY_CLASS="istio"
-CLUSTER_DOMAIN="cluster.local"
+CLUSTER_CIDR=${CLUSTER_CIDR:-"10.43.0.0/16"}
+CLUSTER_DOMAIN=${CLUSTER_DOMAIN:-"cluster.local"}
 CERT_MANAGER_ENABLED="${CERT_MANAGER_ENABLED:false}"
 DRYCC_REGISTRY="${DRYCC_REGISTRY:-registry.drycc.cc}"
 CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
@@ -213,7 +214,7 @@ function install_k3s_server {
   configure_os
   download_runtime
   configure_mirrors
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=10.233.0.0/16"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=${CLUSTER_CIDR} --cluster-domain=${CLUSTER_DOMAIN}"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
@@ -345,9 +346,9 @@ function install_gateway() {
   helm repo add istio https://drycc-mirrors.drycc.cc/istio-charts
   helm repo update
   kubectl apply -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
-  helm install istio-base istio/base -n istio-system --create-namespace
+  helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace --wait
   helm install istio-istiod istio/istiod -n istio-system --wait
-  helm install istio-gateway istio/gateway -n istio-system --wait
+  helm install istio-gateway istio/gateway -n istio-gateway --create-namespace --wait
   echo -e "\\033[32m---> Gateway installed!\\033[0m"
 }
 
