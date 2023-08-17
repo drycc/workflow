@@ -115,26 +115,18 @@ Setting           | Description
 BACKUP_FREQUENCY  | how often the database should perform a base backup (default: "12h")
 BACKUPS_TO_RETAIN | number of base backups the backing store should retain (default: 5)
 
-## Customizing Fluentd
+## Customizing Fluentbit
 
-The following values can be changed in the `values.yaml` file or by using the `--set` flag with the Helm CLI.
+The following values can be changed in the `values.yaml` file or by using the `--values` flag with the Helm CLI.
 
-Key               | Default | Description
-------------------| --------| ---------------------------------
-syslog.host | "" | Host value of a syslog endpoint
-syslog.port | "" | Port value of a syslog endpoint
-sources.startScript | false | Capture kubernetes start script logs
-sources.docker | false | Capture docker daemon logs
-sources.etcd | false | Capture etcd logs
-sources.kubelet | false | Capture kubelet logs
-sources.kubeApi | false | Capture Kubernetes API logs
-sources.controller | false | Capture Kubernetes Controller logs
-sources.scheduler | false | Capture Kubernetes Scheduler logs
-output.disableDrycc | false | Disable the Drycc output plugin
-boot.installBuildTools | false | Install the build tools package. This is useful when using custom plugins
-daemonEnvironment | | Takes key-value pairs and turns them into environment variables.
+Key               | Description
+------------------| ---------------------------------
+config.service    | The service section defines the global properties of the service.
+config.inputs     | An input section defines a source (related to an input plugin).
+config.filters    | A filter section defines a filter (related to a filter plugin)
+config.outputs    | The outputs section specify a destination that certain records should follow after a Tag match.
 
-For more information about the various environment variables that can be set please see the [README](https://github.com/drycc/fluentd/blob/main/README.md)
+For more information about the various variables that can be set please see the [fluentbit](https://github.com/drycc/fluentbit).
 
 ## Customizing the Logger
 
@@ -203,7 +195,7 @@ API_VERSION       | The version number Workflow Manager sends to the versions AP
 [downward-api]: http://kubernetes.io/docs/user-guide/downward-api/
 [gunicorn]: http://gunicorn.org/
 [kubernetes-deployment-revision]: http://kubernetes.io/docs/user-guide/deployments/#revision-history-limit
-[logger]: ../understanding-workflow/components.md#logger-fluentd-logger
+[logger]: ../understanding-workflow/components.md#logger-fluentbit-logger
 [monitor]: ../understanding-workflow/components.md#monitor
 [pull-policy]: http://kubernetes.io/docs/user-guide/images/
 [registry]: ../understanding-workflow/components.md#registry

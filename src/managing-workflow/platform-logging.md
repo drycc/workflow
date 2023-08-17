@@ -1,8 +1,8 @@
 # Platform Logging
 
-The logging platform is made up of 2 components - [Fluentd](https://github.com/drycc/fluentd) and [Logger](https://github.com/drycc/logger).
+The logging platform is made up of 2 components - [Fluentbit](https://github.com/drycc/fluentbit) and [Logger](https://github.com/drycc/logger).
 
-[Fluentd](https://github.com/drycc/fluentd) runs on every worker node of the cluster and is deployed as a [Daemon Set](http://kubernetes.io/v1.1/docs/admin/daemons.html). The Fluentd pods capture all of the stderr and stdout streams of every container running on the host (even those not hosted directly by kubernetes). Once the log message arrives in our [custom fluentd plugin](https://github.com/drycc/fluentd/tree/main/rootfs/opt/fluentd/drycc-output) we determine where the message originated.
+[Fluentbit](https://github.com/drycc/fluentbit) runs on every worker node of the cluster and is deployed as a [Daemon Set](http://kubernetes.io/v1.1/docs/admin/daemons.html). The Fluentbit pods capture all of the stderr and stdout streams of every container running on the host (even those not hosted directly by kubernetes). Once the log message arrives in our [custom fluentbit plugin](https://github.com/drycc/fluentbit/tree/main/plugin) we determine where the message originated.
 
 If the message was from the [Workflow Controller](https://github.com/drycc/controller) or from an application deployed via workflow we send it to the logs topic on the local [Redis Stream](http://redis.io) instance.
 
@@ -27,9 +27,9 @@ If the `drycc logs` command encounters an error it will return the following mes
 
 ```
 Error: There are currently no log messages. Please check the following things:
-1) Logger and fluentd pods are running.
+1) Logger and fluentbit pods are running.
 2) The application is writing logs to the logger component by checking that an entry in the ring buffer was created: kubectl  --namespace=drycc logs <logger pod>
-3) Making sure that the container logs were mounted properly into the fluentd pod: kubectl --namespace=drycc exec <fluentd pod> ls /var/log/containers
+3) Making sure that the container logs were mounted properly into the fluentbit pod: kubectl --namespace=drycc exec <fluentbit pod> ls /var/log/containers
 ```
 
 ## Architecture Diagram
@@ -43,78 +43,12 @@ Error: There are currently no log messages. Please check the following things:
                             │                           │                
                             ▼                           │                
 ┌────────┐             ┌─────────┐    logs/metrics   ┌──────────────┐     
-│App Logs│──Log File──▶│ fluentd │───────topics─────▶│ Redis Stream │     
+│App Logs│──Log File──▶│Fluentbit│───────topics─────▶│ Redis Stream │     
 └────────┘             └─────────┘                   └──────────────┘     
                                                                           
 ```
 
 ## Default Configuration
 
-By default the Fluentd pod can be configured to talk to numerous syslog endpoints. So for example it is possible to have Fluentd send log messages to both the Logger component and [Papertrail](https://papertrailapp.com/). This allows production deployments of Drycc to satisfy stringent logging requirements such as offsite backups of log data.
-
-Configuring Fluentd to talk to multiple syslog endpoints means modifying the Fluentd daemonset
-manifest.
-This means you will need to fetch the chart with `helm fetch oci://registry.drycc.cc/charts/workflow --untar`, then
-modify `workflow/charts/fluentd/templates/logger-fluentd-daemon.yaml` with the following:
-
-```
-env:
-- name: "SYSLOG_HOST_1"
-  value: "my.syslog.host"
-- name: "SYSLOG_PORT_1"
-  value: "5144"
-  ....
-- name: "SYSLOG_HOST_N"
-  value: "my.syslog.host.n"
-- name: "SYSLOG_PORT_N"
-  value: "51333"
-```
-
-If you only need to talk to 1 Syslog endpoint you can use the following configuration within your chart:
-
-```
-env:
-- name: "SYSLOG_HOST"
-  value: "my.syslog.host"
-- name: "SYSLOG_PORT"
-  value: "5144"
-```
-
-Then run `helm install ./workflow --namespace drycc` to install the modified chart.
-
-### Customizing:
-
-We currently support logging information to Syslog, Elastic Search, and Sumo Logic. However, we will gladly accept pull requests that add support to other locations. For more information please visit the [fluentd repository](https://github.com/drycc/fluentd).
-
-
-### Custom Fluentd Plugins
-
-That are many output plugins available for [Fluentd](https://github.com/search?q=fluentd+output&ref=opensearch). But, we purposefully do not ship our Fluentd image with these installed. Instead, we provide a mechanism that allows users to install a plugin at startup time of the container and configure it. 
-
-If you would like to install a plugin you can set an environment variable such as the following: `FLUENTD_PLUGIN_N=some-fluentd-plugin` where N is a positive integer that is incremented for every plugin you wish to install. After you set this value you must then set the configuration text for the `FILTER` or `STORE` plugin you are installing. You can do that by setting `CUSTOM_STORE_N=configuration text` where N is the corresponding index value of the plugin you just installed.
-
-Here is an example of setting the values directly in the manifest of the daemonset. 
-
-```
-env:
-  - name: "FLUENTD_PLUGIN_1"
-    value: "fluent-plugin-kafka"
-  - name: "CUSTOM_STORE_1"
-    value: |
-      <store>
-        @type kafka \
-        default_topic some_topic
-      </store>
-```
-
-Or you could configure it using the `daemonEnvironment` key in the `values.yaml`:
-
-```
-fluentd:
-  daemonEnvironment:
-    FLUENTD_PLUGIN_1: "fluent-plugin-kafka"
-    CUSTOM_STORE_1: "|\n              <store>\n                @type kafka\n                        default_topic some_topic\n                        </store>"
-    INSTALL_BUILD_TOOLS: "|\n              true"
-```
-
-For more information please see the [Custom Plugins](https://github.com/drycc/fluentd#custom-plugins) section of the README.
+Fluent Bit is based in a pluggable architecture where different plugins plays a major role in the data pipeline, more than 70 built-in plugins available.
+Please refer to charts [values.yaml](https://github.com/drycc/fluentbit/blob/main/charts/fluentbit/values.yaml) for specific configurations.

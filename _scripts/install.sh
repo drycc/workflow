@@ -439,10 +439,8 @@ timeseries:
     size: ${TIMESERIES_PERSISTENCE_SIZE:-5Gi}
     storageClass: ${TIMESERIES_PERSISTENCE_STORAGE_CLASS:-""}
 
-fluentd:
-  imageRegistry: ${DRYCC_REGISTRY} 
-  daemonEnvironment:
-    CONTAINER_TAIL_PARSER_TYPE: "/^(?<time>.+) (?<stream>stdout|stderr)( (?<tags>.))? (?<log>.*)$/"
+fluentbit:
+  imageRegistry: ${DRYCC_REGISTRY}
 
 controller:
   apiReplicas: ${CONTROLLER_API_REPLICAS}

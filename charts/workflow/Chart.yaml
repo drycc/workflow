@@ -16,7 +16,7 @@ dependencies:
 - name: timeseries
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x
-- name: fluentd
+- name: fluentbit
   repository: oci://registry.drycc.cc/charts-testing
   version: x.x.x
 - name: gateway

@@ -88,22 +88,22 @@ images generated from the builder component. Registry persists the Docker image
 images to either local storage (in development mode) or to object storage
 configured for the cluster.
 
-## Logger: fluentd, logger
+## Logger: fluentbit, logger
 
-The logging subsystem consists of two components. Fluentd handles log shipping
+The logging subsystem consists of two components. Fluentbit handles log shipping
 and logger maintains a ring-buffer of application logs.
 
 
-**Project Location:** [drycc/fluentd](https://github.com/drycc/fluentd)
+**Project Location:** [drycc/fluentbit](https://github.com/drycc/fluentbit)
 
-Fluentd is deployed to your Kubernetes cluster via Daemon Sets. Fluentd
+Fluentbit is deployed to your Kubernetes cluster via Daemon Sets. Fluentbit
 subscribes to all container logs, decorates the output with Kubernetes metadata
 and can be configured to drain logs to multiple destinations. By default,
-fluentd ships logs to the logger component, which powers `drycc logs`.
+Fluentbit ships logs to the logger component, which powers `drycc logs`.
 
 **Project Location:** [drycc/logger](https://github.com/drycc/logger)
 
-The `logger` component receives log streams from `fluentd`, collating by
+The `logger` component receives log streams from `fluentbit`, collating by
 Application name. Logger does not persist logs to disk, instead maintaining an
 in-memory ring buffer. For more information on logger see the [project
 documentation][logger-documentation].

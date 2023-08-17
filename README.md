@@ -15,7 +15,7 @@ Please see below for links and descriptions of each component:
 - [controller](https://github.com/drycc/controller) - Workflow API server
 - [builder](https://github.com/drycc/builder) - Git server and source-to-image component
 - [imagebuilder](https://github.com/drycc/imagebuilder) - The builder for [Docker](https://www.docker.com/) and [CNCF Buildpacks](https://buildpacks.io/) based applications
-- [fluentd](https://github.com/drycc/fluentd) - Backend log shipping mechanism for `drycc logs`
+- [fluentbit](https://github.com/drycc/fluentbit) - Backend log shipping mechanism for `drycc logs`
 - [postgres](https://github.com/drycc/postgres) - The central database
 - [registry](https://github.com/drycc/registry) - The Docker registry
 - [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
