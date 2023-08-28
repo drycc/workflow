@@ -1,6 +1,6 @@
 ## Inter-app Communication
 
-A common architecture pattern of multi-process applications is to have one process serve public requests while having multiple other processes supporting the public one to, for example, perform actions on a schedule or process work items from a queue. To implement this system of apps in Drycc Workflow, set up the apps to communicate using DNS resolution, as shown above, and hide the supporting processes from public view by removing them from the Drycc Workflow router. See [Drycc Blog: Private Applications on Workflow](https://www.drycc.cc/blog/2016/private-applications-on-drycc-workflow/) for more details, which walks through an example of removing an app from the router.
+A common architecture pattern of multi-process applications is to have one process serve public requests while having multiple other processes supporting the public one to, for example, perform actions on a schedule or process work items from a queue. To implement this system of apps in Drycc Workflow, set up the apps to communicate using DNS resolution, as shown above, and hide the supporting processes from public view by removing them from the Drycc Workflow router.
 
 ### DNS Service Discovery
 
