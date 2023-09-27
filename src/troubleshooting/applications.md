@@ -34,8 +34,8 @@ We can then describe the pod and determine why it is failing to boot:
 	  FirstSeen     LastSeen        Count   From                            SubobjectPath                           Type            Reason          Message
 	  ---------     --------        -----   ----                            -------------                           --------        ------          -------
 	  43s           43s             1       {default-scheduler }                                                    Normal          Scheduled       Successfully assigned myapp-cmd-1585713350-3brbo to kubernetes-node-1
-	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Normal          Created         Created container with docker id b86bd851a61f
-	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Normal          Started         Started container with docker id b86bd851a61f
+	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Normal          Created         Created container with container id b86bd851a61f
+	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Normal          Started         Started container with container id b86bd851a61f
 	  37s           35s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Warning         Unhealthy       Liveness probe failed: Get http://10.246.39.13:8000/healthz: dial tcp 10.246.39.13:8000: getsockopt: connection refused
 
 In this instance, we set the healthcheck initial delay timeout for the application at 1 second,

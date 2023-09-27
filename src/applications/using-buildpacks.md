@@ -51,11 +51,11 @@ Use `git push drycc master` to deploy your application.
     ---> Waiting caddy running.
     ---> Process caddy started.
     ---> Building pack
-    ---> Using builder docker.io/drycc/buildpacks:20
-    Builder 'docker.io/drycc/buildpacks:20' is trusted
-    Pulling image 'index.docker.io/drycc/buildpacks:20'
+    ---> Using builder registry.drycc.cc/drycc/buildpacks:bookworm
+    Builder 'registry.drycc.cc/drycc/buildpacks:bookworm' is trusted
+    Pulling image 'registry.drycc.cc/drycc/buildpacks:bookworm'
     Resolving "drycc/buildpacks" using unqualified-search registries (/etc/containers/registries.conf)
-    Trying to pull docker.io/drycc/buildpacks:20...
+    Trying to pull registry.drycc.cc/drycc/buildpacks:bookworm...
     Getting image source signatures
     ...
     ---> Skip generate base layer
@@ -124,7 +124,7 @@ are pushing.
 To use a custom buildpack, you need create a `.pack_builder` file in your root path app.
 
     $  tee > .pack_builder << EOF
-       > docker.io/drycc/buildpacks:20
+       > registry.drycc.cc/drycc/buildpacks:bookworm
        > EOF
 
 On your next `git push`, the custom buildpack will be used.
@@ -144,7 +144,7 @@ key exists in your [GitHub settings][]. Then set `SSH_KEY` to the corresponding 
 and set `.pack_builder` to the builder image:
 
     $  tee > .pack_builder << EOF
-       > docker.io/drycc/buildpacks:20
+       > registry.drycc.cc/drycc/buildpacks:bookworm
        > EOF
     $ git add .buildpack
     $ git commit -m "chore(buildpack): modify the pack_builder"

@@ -11,14 +11,14 @@ If you're just getting into the Drycc codebase, look for GitHub issues with the 
 
 ## Prerequisites
 
-In order to successfully compile and test Drycc binaries and build Docker images of Drycc components, the following are required:
+In order to successfully compile and test Drycc binaries and build Container images of Drycc components, the following are required:
 
 - [git][git]
 - Go 1.5 or later, with support for compiling to `linux/amd64`
 - [glide][glide]
 - [golint][golint]
 - [shellcheck][shellcheck]
-- [Docker][docker] (in a non-Linux environment, you will additionally want [Docker Machine][machine])
+- [Podman][podman] (in a non-Linux environment, you will additionally want [Podman Machine][machine])
 
 For [drycc/controller][controller], in particular, you will also need:
 
@@ -29,7 +29,7 @@ In most cases, you should simply install according to the instructions. There ar
 
 ### Configuring Go
 
-If your local workstation does not support the `linux/amd64` target environment, you will have to install Go from source with cross-compile support for that environment. This is because some of the components are built on your local machine and then injected into a Docker container.
+If your local workstation does not support the `linux/amd64` target environment, you will have to install Go from source with cross-compile support for that environment. This is because some of the components are built on your local machine and then injected into a container.
 
 Homebrew users can just install with cross compiling support:
 
@@ -49,35 +49,6 @@ $ GOOS=linux GOARCH=amd64 ./make.bash --no-clean
 ```
 
 Once you can compile to `linux/amd64`, you should be able to compile Drycc components as normal.
-
-### Configuring Docker Machine (Mac)
-
-Drycc needs Docker for building images.  Docker utilizes a client/server architecture, and while the Docker client is available for Mac OS, the Docker server is dependent upon the Linux kernel.  Therefore, in order to use Docker on Mac OS, [Docker Machine][machine] is used to facilitate running the Docker server within a [VirtualBox][vbox] VM.
-
-Install Docker Machine according to the normal installation instructions, then use it to create a new VM:
-
-```
-$ docker-machine create drycc-docker \
-    --driver=virtualbox \
-    --virtualbox-disk-size=100000 \
-    --engine-insecure-registry 10.0.0.0/8 \
-    --engine-insecure-registry 172.16.0.0/12 \
-    --engine-insecure-registry 192.168.0.0/16 \
-    --engine-insecure-registry 100.64.0.0/10
-```
-
-This will create a new virtual machine named `drycc-docker` that will take up as much as 100,000 MB of disk space. The images you build may be large, so allocating a big disk is a good idea.
-
-Once the `drycc-docker` machine exists, source its values into your environment so your docker client knows how to use the new machine. You may even choose to add this to your bash profile or similar.
-
-```
-$ eval "$(docker-machine env drycc-docker)"
-```
-
-After following these steps, some Docker Machine users report a slight delay (30 - 60 seconds) before the Docker server is ready.
-
-!!! note
-    In subsequent steps, you may run a Docker registry within the `drycc-docker` VM. Such a registry will not have a valid SSL certificate and will use HTTP instead of HTTPS. Such registries are implicitly untrusted by the Docker server (which is also running on the `drycc-docker` VM).  In order for the Docker server to trust the insecure registry, `drycc-docker` is explicitly created to trust all registries in the IP ranges that that are reserved for use by private networks.  The VM (and therefore the registry) will exist within such a range.  This will effectively permit Docker pulls and pushes to such a registry.
 
 ## Fork the Repository
 
@@ -139,9 +110,9 @@ To run a Kubernetes cluster locally or elsewhere to support your development act
 
 ### Using a Development Registry
 
-To facilitate deploying Docker images containing your changes to your Kubernetes cluster, you will need to make use of a Docker registry.  This is a location to where you can push your custom-built images and from where your Kubernetes cluster can retrieve those same images.
+To facilitate deploying Container images containing your changes to your Kubernetes cluster, you will need to make use of a Container registry.  This is a location to where you can push your custom-built images and from where your Kubernetes cluster can retrieve those same images.
 
-If your development cluster runs locally (in Minikube, for instance), the most efficient and economical means of achieving this is to run a Docker registry locally _as_ a Docker container.
+If your development cluster runs locally (in Minikube, for instance), the most efficient and economical means of achieving this is to run a Container registry locally _as_ a Container container.
 
 To facilitate this, most Drycc components provide a make target to create such a registry:
 
@@ -158,7 +129,7 @@ export DRYCC_REGISTRY=<IP of the host machine>:5000
 In non-Linux environments:
 
 ```
-export DRYCC_REGISTRY=<IP of the drycc-docker Docker Machine VM>:5000
+export DRYCC_REGISTRY=<IP of the drycc Container Machine VM>:5000
 ```
 
 If your development cluster runs on a cloud provider such as Google Container Engine, a local registry such as the one above will not be accessible to your Kubernetes nodes.  In such cases, a public registry such as [DockerHub][dh] or [quay.io][quay] will suffice.
@@ -166,7 +137,7 @@ If your development cluster runs on a cloud provider such as Google Container En
 To use DockerHub for this purpose, for instance:
 
 ```
-$ export DRYCC_REGISTRY="docker.io"
+$ export DRYCC_REGISTRY="registry.drycc.cc"
 $ export IMAGE_PREFIX=<your DockerHub username>
 ```
 
@@ -186,7 +157,7 @@ With a functioning Kubernetes cluster and the officially released Drycc componen
 In the general case, this workflow looks like this:
 
 1. Update source code and commit your changes using `git`
-2. Use `make build` to build a new Docker image
+2. Use `make build` to build a new Container image
 3. Use `make dev-release` to generate Kubernetes manifest(s)
 4. Use `make deploy` to restart the component using the updated manifest
 
@@ -243,13 +214,11 @@ things you should do when proposing a change to any Drycc component.
 [glide]: https://github.com/Masterminds/glide
 [golint]: https://github.com/golang/lint
 [shellcheck]: https://github.com/koalaman/shellcheck
-[docker]: https://www.docker.com/
-[machine]: http://docs.docker.com/machine/install-machine/
+[podman]: https://podman.io/
 [controller]: https://github.com/drycc/controller
 [vbox]: https://www.virtualbox.org/
 [testing]: testing.md
 [k8s]: http://kubernetes.io/
 [k8s-getting-started]: http://kubernetes.io/gettingstarted/
 [pr]: submitting-a-pull-request.md
-[dh]: https://hub.docker.com/
 [quay]: https://quay.io/

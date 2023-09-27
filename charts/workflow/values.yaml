@@ -62,7 +62,7 @@ global:
   #
   # Valid values are:
   # - on-cluster: Run registry within the Kubernetes cluster
-  # - off-cluster: Use registry outside the Kubernetes cluster (example: dockerhub,quay.io,self-hosted)
+  # - off-cluster: Use registry outside the Kubernetes cluster (example: drycc registry,self-hosted)
   registryLocation: "on-cluster"
   # Prefix for the imagepull secret created when using private registry
   registrySecretPrefix: "private-registry"

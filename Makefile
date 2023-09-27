@@ -13,7 +13,7 @@ VERSION ?= git-$(shell git rev-parse --short HEAD)
 IMAGE := ${SHORT_NAME}:${VERSION}
 REPO_PATH := github.com/drycc/${SHORT_NAME}
 DEV_ENV_WORK_DIR := /src/${REPO_PATH}
-DEV_ENV_PREFIX := docker run --rm -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR} -p 8000:8000
+DEV_ENV_PREFIX := podman run --rm -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR} -p 8000:8000
 DEV_ENV_CMD := ${DEV_ENV_PREFIX} ${DEV_ENV_IMAGE}
 
 BUILD_CMD := $(MKDOCSBUILD) --site-dir $(BUILDDIR) && \
@@ -39,17 +39,17 @@ deps:
 test: build
 	$(TEST_CMD)
 
-docker-build-docs:
+podman-build-docs:
 	$(shell chown -R 1001:1001 ${CURDIR})
 	$(DEV_ENV_CMD) ${IMAGE} $(BUILD_CMD)
 
-docker-test: docker-build-docs
+podman-test: podman-build-docs
 	${DEV_ENV_CMD} ${IMAGE} $(TEST_CMD)
 
-docker-build:
-	docker build ${DOCKER_BUILD_FLAGS} --build-arg CODENAME=${CODENAME} -t ${IMAGE} .
+podman-build:
+	podman build --build-arg CODENAME=${CODENAME} -t ${IMAGE} .
 
-docker-serve:
+podman-serve:
 	${DEV_ENV_CMD} ${IMAGE} $(MKDOCSSERVE)
 
-run: docker-build docker-serve
+run: podman-build podman-serve

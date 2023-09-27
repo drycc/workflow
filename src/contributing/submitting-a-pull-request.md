@@ -28,7 +28,7 @@ Changes to any Drycc Workflow component that could affect a user's experience al
 
 ## Cross-repo commits
 
-If a pull request is part of a larger piece of work involving one or more additional commits in other Workflow repositories, these commits can be referenced in the last PR to be submitted.  The downstream [e2e test job](https://ci.drycc.info/job/workflow-e2e-pr/) will then supply every referenced commit (derived from PR issue number supplied) to the test runner so it can source the necessary Docker images for inclusion in the generated Workflow chart to be tested.
+If a pull request is part of a larger piece of work involving one or more additional commits in other Workflow repositories, these commits can be referenced in the last PR to be submitted.  The downstream [e2e test job](https://ci.drycc.info/job/workflow-e2e-pr/) will then supply every referenced commit (derived from PR issue number supplied) to the test runner so it can source the necessary Container images for inclusion in the generated Workflow chart to be tested.
 
 For example, consider paired commits in [drycc/controller](https://github.com/drycc/controller) and [drycc/workflow-e2e](https://github.com/drycc/workflow-e2e).  The commit body for the first PR in `drycc/workflow-e2e` would look like:
 

@@ -1,6 +1,6 @@
 # Configuring Object Storage
 
-A variety of Drycc Workflow components rely on an object storage system to do their work including storing application slugs, Docker images and database logs.
+A variety of Drycc Workflow components rely on an object storage system to do their work including storing application slugs, Container images and database logs.
 
 Drycc Workflow ships with [Storage][storage] by default, which provides in-cluster.
 

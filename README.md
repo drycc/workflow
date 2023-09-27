@@ -14,10 +14,10 @@ Please see below for links and descriptions of each component:
 - [passport](https://github.com/drycc/passport) - Workflow single sign on system
 - [controller](https://github.com/drycc/controller) - Workflow API server
 - [builder](https://github.com/drycc/builder) - Git server and source-to-image component
-- [imagebuilder](https://github.com/drycc/imagebuilder) - The builder for [Docker](https://www.docker.com/) and [CNCF Buildpacks](https://buildpacks.io/) based applications
+- [imagebuilder](https://github.com/drycc/imagebuilder) - The builder for Container Image and [CNCF Buildpacks](https://buildpacks.io/) based applications
 - [fluentbit](https://github.com/drycc/fluentbit) - Backend log shipping mechanism for `drycc logs`
 - [postgres](https://github.com/drycc/postgres) - The central database
-- [registry](https://github.com/drycc/registry) - The Docker registry
+- [registry](https://github.com/drycc/registry) - The Container registry
 - [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
 - [monitor](https://github.com/drycc/monitor) - The platform monitoring components
 - [prometheus](https://github.com/drycc/prometheus) - The monitor database
@@ -44,7 +44,7 @@ The Drycc project welcomes contributions from all developers. The high level pro
 
 ## Requirements
 
-The documentation site requires either a local installation of [MkDocs][] or access to Docker.
+The documentation site requires either a local installation of [MkDocs][] or access to Container.
 
 ### Local Installation
 
@@ -56,13 +56,13 @@ make deps
 
 ## Building Documentation
 
-To build the documentation run: `make build` or `make docker-build`.
+To build the documentation run: `make build` or `make podman-build`.
 
 ## Serve Documentation Locally
 
-To serve documenation run: `make serve` or `make docker-serve`.
+To serve documenation run: `make serve` or `make podman-serve`.
 
-Then view the documentation on [http://localhost:8000](http://localhost:8000) or `http://DOCKER_IP:8000`.
+Then view the documentation on [http://localhost:8000](http://localhost:8000) or `http://PODMAN_IP:8000`.
 
 [k8s-home]: http://kubernetes.io
 [install-k8s]: http://kubernetes.io/gettingstarted/

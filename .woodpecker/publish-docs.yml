@@ -7,7 +7,7 @@ pipeline:
 - name: build-docs
   image: bash
   commands:
-  - make docker-build docker-build-docs
+  - make podman-build podman-build-docs
   - cp _scripts/* _build/html
   - cd _build/html && echo "www.drycc.cc" > CNAME  && echo "drycc.cc" >> CNAME && git init
   secrets:
@@ -22,7 +22,7 @@ pipeline:
   image: bash
   commands:
   - chown -R root:root _build/html
-  - docker run --rm
+  - podman run --rm
       -e DRONE_COMMIT_AUTHOR="$CI_COMMIT_AUTHOR"
       -e DRONE_COMMIT_AUTHOR_EMAIL="$CI_COMMIT_AUTHOR_EMAIL"
       -e PLUGIN_SSH_KEY="$SSH_DEPLOY_KEY"
@@ -34,7 +34,7 @@ pipeline:
       -e PLUGIN_COMMIT_MESSAGE="init repo"
       -v "$(pwd):$(pwd)"
       -w "$(pwd)"
-      appleboy/drone-git-push
+      docker.io/appleboy/drone-git-push
   secrets:
   - ssh_deploy_key
   when:

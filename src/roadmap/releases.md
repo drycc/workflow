@@ -18,7 +18,7 @@ and easier for users to obtain specific fixes. Continuous delivery also reduces 
 necessary to release a product such as Drycc Workflow, which integrates several components.
 
 "Components" applies not just to Drycc Workflow projects, but also to development and release
-tools, to Docker base images, and to other Drycc projects that do [semantic version][] releases.
+tools, to Container base images, and to other Drycc projects that do [semantic version][] releases.
 
 See "[How to Release a Component](#how-to-release-a-component)" for more detail.
 
@@ -53,7 +53,7 @@ upgrading to a patch or to a minor release will not break anything.
 
 ## How to Release a Component
 
-Most Drycc projects are "components" which produce a Docker image or binary executable as a
+Most Drycc projects are "components" which produce a Container image or binary executable as a
 deliverable. This section leads a maintainer through creating a component release.
 
 ### Step 1: Update Code and Run the Release Tool
@@ -120,7 +120,7 @@ Tagging the component (see [Step 1](/roadmap/releases/#step-1-update-code-and-ru
 starts a CI job that eventually results in an artifact being made available for public download.
 Please see the [CI flow diagrams](https://github.com/drycc/jenkins-jobs/#flow) for details.
 
-Double-check that the artifact is available, either by a `docker pull` command or by running the
+Double-check that the artifact is available, either by a `podman pull` command or by running the
 appropriate installer script.
 
 If the artifact can't be downloaded, ensure that its CI release jobs are still in progress, or

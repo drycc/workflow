@@ -27,11 +27,11 @@ Notes from past meetings are below, along with links to a recording of the entir
 
 ## Credits
 
-Thanks to [Amy Lindburg][] and our friends at [Docker][] for their inspiration.
+Thanks to [Amy Lindburg][] and our friends at [Podman][] for their inspiration.
 
 [Amy Lindburg]: https://twitter.com/amylindburg
 [community]: ../contributing/community.md
-[Docker]: https://www.docker.com/
+[Podman]: https://podman.io/
 [event]: https://goo.gl/q27Jyh
 [Maintainers]: ../contributing/maintainers.md
 [Release Schedule]: releases.md

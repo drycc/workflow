@@ -5,7 +5,7 @@ project maintainers.
 
 # What is a maintainer?
 
-(Unabashedly stolen from the [Docker](https://github.com/docker/docker/blob/master/MAINTAINERS) project)
+(Unabashedly stolen from the [Podman](https://github.com/containers/podman/blob/master/MAINTAINERS) project)
 
 There are different types of maintainers, with different responsibilities, but
 all maintainers have 3 things in common:

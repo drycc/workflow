@@ -20,7 +20,7 @@ When Config is changed, a new Release is created automatically.
 
 ## Container
 
-Drycc containers are instances of Docker containers used to run Applications. Containers perform the actual work of an Application by servicing requests or by running background tasks as part of the cluster.
+Drycc containers are instances of containers used to run Applications. Containers perform the actual work of an Application by servicing requests or by running background tasks as part of the cluster.
 
 
 ### Ephemeral Filesystem
@@ -69,7 +69,7 @@ Containers that host an application use these release versions to pull the corre
 
 ## Scheduler
 
-The Scheduler is responsible for creating, starting, stopping, and destroying Containers. For example, a command such as `drycc scale cmd=10` tells the Scheduler to run ten Containers from the Docker image for your Application.
+The Scheduler is responsible for creating, starting, stopping, and destroying Containers. For example, a command such as `drycc scale cmd=10` tells the Scheduler to run ten Containers from the Container image for your Application.
 
 The Scheduler must decide which machines are eligible to run these container jobs. Scheduler backends vary in the details of their job allocation policies and whether or not they are resource-aware, among other features.
 

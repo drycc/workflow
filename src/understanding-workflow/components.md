@@ -55,11 +55,11 @@ Builder currently supports both buildpack and Dockerfile based builds.
 For Buildpack-based deploys, the builder component will launch a one-shot Job
 in the `drycc` namespace. This job runs `imagebuilder` component which handles
 default and custom buildpacks (specified by `.packbuilder`). The completed image
-is pushed to the managed Docker registry on cluster. For more information
+is pushed to the managed Container registry on cluster. For more information
 about buildpacks see [using buildpacks][using-buildpacks].
 
 Unlike buildpack-based, For Applications which contain a `Dockerfile` in the root
-of the repository, it generates a Docker image (using the underlying Docker engine).
+of the repository, it generates a Container image (using the underlying Container engine).
 For more information see [using Dockerfiles][using-dockerfiles].
 
 ## Object Storage
@@ -68,7 +68,7 @@ For more information see [using Dockerfiles][using-dockerfiles].
 
 All of the Workflow components that need to persist data will ship them to the
 object storage that was configured for the cluster.For example, database ships
-its WAL files, registry stores Docker images, and slugbuilder stores slugs.
+its WAL files, registry stores Container images, and slugbuilder stores slugs.
 
 Workflow supports either on or off-cluster storage. For production deployments
 we highly recommend that you configure [off-cluster object storage][configure-objectstorage].
@@ -83,8 +83,8 @@ configure storage to use persistent storage available in your environment.
 
 **Project Location:** [drycc/registry](https://github.com/drycc/registry)
 
-The registry component is a managed docker registry which holds application
-images generated from the builder component. Registry persists the Docker image
+The registry component is a managed container registry which holds application
+images generated from the builder component. Registry persists the Container image
 images to either local storage (in development mode) or to object storage
 configured for the cluster.
 

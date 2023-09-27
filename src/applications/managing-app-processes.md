@@ -28,10 +28,10 @@ Dockerfile's `CMD` directive unmodified:
     CMD python -m SimpleHTTPServer 5000
     EXPOSE 5000
 
-For the above Dockerfile-based application, the `cmd` process type would run the Docker `CMD` of `python -m SimpleHTTPServer 5000`.
+For the above Dockerfile-based application, the `cmd` process type would run the Container `CMD` of `python -m SimpleHTTPServer 5000`.
 
-Applications utilizing [remote Docker images][docker image], a `cmd` process type is also implied, and runs the `CMD`
-specified in the Docker image.
+Applications utilizing [remote Container images][container image], a `cmd` process type is also implied, and runs the `CMD`
+specified in the Container image.
 
 !!! note
     The `web` and `cmd` process types are special as they’re the only process types that will
@@ -60,7 +60,7 @@ web: bundle exec ruby web.rb -p ${PORT:-5000}
 sleeper: sleep 900
 ```
 
-If you are using [remote Docker images][docker image], you may define process types by either running `drycc pull` with a
+If you are using [remote Container images][container image], you may define process types by either running `drycc pull` with a
 `Procfile` in your working directory, or by passing a stringified Procfile to the `--procfile` CLI option.
 
 For example, passing process types inline:
@@ -152,7 +152,7 @@ scenic-icehouse-web-3291896318-background-yf8kh up (v2)
 ```
 
 !!! note
-    The default process type for Dockerfile and Docker Image applications is 'cmd' rather than 'web'.
+    The default process type for Dockerfile and Container Image applications is 'cmd' rather than 'web'.
 
 Scaling a process down, by reducing the process count, sends a `TERM` signal to the processes, followed by a `SIGKILL`
 if they have not exited within 30 seconds. Depending on your application, scaling down may interrupt long-running HTTP
@@ -246,14 +246,14 @@ Scale up can only happen if there was no rescaling within the last 3 minutes. Sc
 ## Web vs Cmd Process Types
 
 When deploying to Drycc Workflow using a Heroku Buildpack, Workflow boots the `web` process type to
-boot the application server. When you deploy an application that has a Dockerfile or uses [Docker
-images][docker image], Workflow boots the `cmd` process type. Both act similarly in that
+boot the application server. When you deploy an application that has a Dockerfile or uses [Container
+images][container image], Workflow boots the `cmd` process type. Both act similarly in that
 they are exposed to the router as web applications. However, the `cmd` process type is special
 because, if left undefined, it is equivalent to running the [container][] without any additional
-arguments.  (i.e. The process specified by the Dockerfile or Docker image's `CMD` directive will
+arguments.  (i.e. The process specified by the Dockerfile or Container image's `CMD` directive will
 be used.)
 
-If migrating an application from Heroku Buildpacks to a Docker-based deployment, Workflow will not
+If migrating an application from Heroku Buildpacks to a Container-based deployment, Workflow will not
 automatically convert the `web` process type to `cmd`. To do this, you'll have to manually scale
 down the old process type and scale the new process type up.
 
@@ -287,6 +287,6 @@ the Pod to a new node.
 [process model]: https://devcenter.heroku.com/articles/process-model
 [buildpacks]: ../applications/using-buildpacks.md
 [dockerfile]: ../applications/using-dockerfiles.md
-[docker image]: ../applications/using-docker-images.md
+[container image]: ../applications/using-container-images.md
 [HPA]: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 [autoscale-algo]: https://github.com/kubernetes/community/blob/master/contributors/design-proposals/horizontal-pod-autoscaler.md#autoscaling-algorithm

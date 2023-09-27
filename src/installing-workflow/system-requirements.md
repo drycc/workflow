@@ -19,7 +19,7 @@ Workflow also supports the [OSB](https://github.com/openservicebrokerapi/service
 ## Storage Requirements
 
 A variety of Drycc Workflow components rely on an object storage system to do their work, including storing application
-slugs, Docker images and database logs.
+slugs, Container images and database logs.
 
 Drycc Workflow ships with drycc storage by default, which provides in-cluster.
 
@@ -45,16 +45,3 @@ application footprint as well.
 
 Running smaller machines will likely result in increased system load and has been known to result in component failures
 and instability.
-
-!!! warning
-	Workflow versions prior to 2.2 require '--insecure-registry' to function properly. Depending on
-	your Kubernetes and Docker configuration, setting
-	`EXTRA_DOCKER_OPTS="--insecure-registry=10.0.0.0/8"` may be sufficient.
-
-## SELinux + OverlayFS
-
-If you are using Docker with OverlayFS, you must disable SELinux by adding `--selinux-enabled=false` to
-`EXTRA_DOCKER_OPTS`. For more background information, see:
-
-* [https://github.com/docker/docker/issues/7952](https://github.com/docker/docker/issues/7952)
-* [https://github.com/drycc/workflow/issues/63](https://github.com/drycc/postgres/issues/63)

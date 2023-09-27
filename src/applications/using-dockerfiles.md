@@ -1,6 +1,6 @@
 # Using Dockerfiles
 
-Drycc supports deploying applications via Dockerfiles.  A [Dockerfile][] automates the steps for crafting a [Docker Image][].
+Drycc supports deploying applications via Dockerfiles.  A [Dockerfile][] automates the steps for crafting a [Container Image][].
 Dockerfiles are incredibly powerful but require some extra work to define your exact application runtime environment.
 
 ## Add SSH Key
@@ -34,7 +34,7 @@ In order to deploy Dockerfile applications, they must conform to the following r
 * The Dockerfile must use the `EXPOSE` directive to expose exactly one port.
 * That port must be listening for an HTTP connection.
 * The Dockerfile must use the `CMD` directive to define the default process that will run within the container.
-* The Docker image must contain [bash](https://www.gnu.org/software/bash/) to run processes.
+* The Container image must contain [bash](https://www.gnu.org/software/bash/) to run processes.
 
 !!! note
     Note that if you are using a private registry of any kind (`gcr` or other) the application environment must include a `$PORT` config variable that matches the `EXPOSE`'d port, example: `drycc config:set PORT=5000`. See [Configuring Registry](../installing-workflow/configuring-registry/#configuring-off-cluster-private-registry) for more info.
@@ -123,10 +123,10 @@ process type directly changes the number of [containers][container]
 running that process.
 
 
-## Docker Build Arguments
+## Container Build Arguments
 
-As of Workflow v2.13.0, users can inject their application config into the Docker image using
-[Docker build arguments][build-args]. To opt into this, users must add a new environment variable
+As of Workflow v2.13.0, users can inject their application config into the Container image using
+[Container build arguments][build-args]. To opt into this, users must add a new environment variable
 to their application:
 
 ```

@@ -4,7 +4,7 @@ An [Application][] is deployed to Drycc using `git push` or the `drycc` client.
 
 ## Supported Applications
 
-Drycc Workflow can deploy any application or service that can run inside a Docker container.  In order to be scaled
+Drycc Workflow can deploy any application or service that can run inside a container.  In order to be scaled
 horizontally, applications must follow the [Twelve-Factor App][] methodology and store any application state in external
 backing services.
 
@@ -46,13 +46,13 @@ Dockerfiles are a powerful way to define a portable execution environment built 
 Learn how to deploy applications [using Dockerfiles](../applications/using-dockerfiles.md).
 
 
-### Docker Image
+### Container Image
 
-Deploying a Docker image onto Drycc allows you to take a Docker image from either a public
+Deploying a Container image onto Drycc allows you to take a Container image from either a public
 or a private registry and copy it over bit-for-bit, ensuring that you are running the same
 image in development or in your CI pipeline as you are in production.
 
-Learn how to deploy applications [using Docker images](../applications/using-docker-images.md).
+Learn how to deploy applications [using Container images](../applications/using-container-images.md).
 
 ## Tuning Application Settings
 

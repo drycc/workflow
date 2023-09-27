@@ -45,20 +45,6 @@ If the version of helm is 3.0 +; you need to create the namespace in advance:
 kubectl create ns drycc
 ```
 
-Now that Helm is installed and the repository has been added, install Workflow by running:
-
-```
-$ helm install drycc oci://registry.drycc.cc/charts/workflow \
-    --namespace drycc \
-    --set global.platformDomain=drycc.cc
-```
-
-By default, registry uses docker hub, at present, we support three registries. They are:
-
-* redhat quay `quay.io`
-* docker hub `docker.io`
-* aliyun cr `registry.cn-hangzhou.aliyuncs.com`
-
 If you want to change it, set the variable when using helm.
 
 ```

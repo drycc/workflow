@@ -30,7 +30,7 @@ nav:
     - Deploying Apps: applications/deploying-apps.md
     - Buildpacks: applications/using-buildpacks.md
     - Dockerfiles: applications/using-dockerfiles.md
-    - Docker Images: applications/using-docker-images.md
+    - Container Images: applications/using-container-images.md
     - Managing App Processes: applications/managing-app-processes.md
     - Managing App Configuration: applications/managing-app-configuration.md
     - Managing App Lifecycle: applications/managing-app-lifecycle.md

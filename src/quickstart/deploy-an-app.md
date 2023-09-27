@@ -19,7 +19,7 @@ Configuration file written to /root/.drycc/client.json
 ## Deploy an Application
 
 Drycc Workflow supports three different types of applications, Buildpacks,
-Dockerfiles and Docker Images. Our first application will be a simple Docker
+Dockerfiles and Container Images. Our first application will be a simple Container
 Image-based application, so you don't have to wrestle with checking out code.
 
 Run `drycc create` to create a new application on Drycc Workflow. If you do not
@@ -60,11 +60,11 @@ to read configuration from the environment. By using `drycc config:set` we can
 change how the application behaves:
 
 ```
-$ drycc config:set POWERED_BY="Docker Images + Kubernetes" -a proper-barbecue
+$ drycc config:set POWERED_BY="Container Images + Kubernetes" -a proper-barbecue
 Creating config... done
 
 === proper-barbecue Config
-POWERED_BY      Docker Images + Kubernetes
+POWERED_BY      Container Images + Kubernetes
 ```
 
 Behind the scenes, Workflow creates a new release for your application and uses
@@ -74,7 +74,7 @@ Validate that our configuration change has worked:
 
 ```
 $ curl http://proper-barbecue.104.197.125.75.nip.io
-Powered by Docker Images + Kubernetes
+Powered by Container Images + Kubernetes
 ```
 
 ## Scale Your Application

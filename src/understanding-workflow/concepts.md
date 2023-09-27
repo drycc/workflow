@@ -34,17 +34,17 @@ at home running Workflow.
 
 See the [components][components] overview for more detail.
 
-## Docker
+## Container
 
-[Docker][] is an open source project to build, ship and run any
+[Container][] is an open source project to build, ship and run any
 application as a lightweight, portable, self-sufficient container.
 
 If you have not yet converted your application to containers, Workflow provides
-a simple and straightforward "source to Docker image" capability. Supporting
+a simple and straightforward "source to Container image" capability. Supporting
 multiple language runtimes via community [buildpacks][], building your application
 in a container can be as easy as `git push drycc master`.
 
-Applications which use either a Dockerfile or reference external Docker
+Applications which use either a Dockerfile or reference external Container
 images are launched unmodified.
 
 ## Applications
@@ -55,7 +55,7 @@ Applications come in one of three forms:
 
 1. a collection of source files stored in a `git` repository
 2. a Dockerfile and associated source files stored in a `git` repository
-3. a reference to an existing image at a Docker repository
+3. a reference to an existing image at a Container repository
 
 Applications are identified by a unique name for easy reference. If you do not
 specify a name when creating your application, Workflow generates one for you.
@@ -77,12 +77,12 @@ application artifact is stored by the platform for execution during the run
 stage.
 
 If instead builder finds a [Dockerfile][dockerfile], it follows those instructions to
-create a Docker image. The resulting artifact is stored in a Drycc-managed registry which
+create a Container image. The resulting artifact is stored in a Drycc-managed registry which
 will be referenced during the run stage.
 
 If another system already builds and packages your application, that container
-artifact can be used directly. When referencing an [external Docker
-image][dockerimage], the builder component doesn't attempt to repackage your
+artifact can be used directly. When referencing an [external Container
+image][containerimage], the builder component doesn't attempt to repackage your
 app.
 
 ### Release Stage
@@ -119,7 +119,7 @@ to external or third-party vendor services.
 * [Workflow Components][components]
 
 [Build and Run]: http://12factor.net/build-release-run
-[Docker]: https://www.docker.com/
+[Podman]: https://podman.io/
 [Kubernetes]: https://kubernetes.io
 [Twelve-Factor App]: http://12factor.net/
 [application]: ../reference-guide/terms.md#application
@@ -132,7 +132,7 @@ to external or third-party vendor services.
 [components]: components.md
 [config]: ../reference-guide/terms.md#config
 [dockerfile]: ../applications/using-dockerfiles.md
-[dockerimage]: ../applications/using-docker-images.md
+[containerimage]: ../applications/using-container-images.md
 [environment variables]: http://12factor.net/config
 [helm]: https://github.com/kubernetes/helm
 [release]: ../reference-guide/terms.md#release
