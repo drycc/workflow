@@ -417,11 +417,11 @@ global:
   gatewayClass: ${GATEWAY_CLASS}
 
 builder:
-  replicas: ${BUILDER_REPLICAS}
+  replicas: ${BUILDER_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
 
 database:
-  replicas: ${DATABASE_REPLICAS}
+  replicas: ${DATABASE_REPLICAS:-2}
   imageRegistry: ${DRYCC_REGISTRY}
   limitsMemory: "256Mi"
   limitsHugepages2Mi: "256Mi"
@@ -431,7 +431,7 @@ database:
     storageClass: ${DATABASE_PERSISTENCE_STORAGE_CLASS:-""}
 
 timeseries:
-  replicas: ${TIMESERIES_REPLICAS}
+  replicas: ${TIMESERIES_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
   limitsMemory: "256Mi"
   limitsHugepages2Mi: "256Mi"
@@ -444,15 +444,15 @@ fluentbit:
   imageRegistry: ${DRYCC_REGISTRY}
 
 controller:
-  apiReplicas: ${CONTROLLER_API_REPLICAS}
-  celeryReplicas: ${CONTROLLER_CELERY_REPLICAS}
-  webhookReplicas: ${CONTROLLER_WEBHOOK_REPLICAS}
+  apiReplicas: ${CONTROLLER_API_REPLICAS:-1}
+  celeryReplicas: ${CONTROLLER_CELERY_REPLICAS:-1}
+  webhookReplicas: ${CONTROLLER_WEBHOOK_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
   appRuntimeClass: ${CONTROLLER_APP_RUNTIME_CLASS:-""}
   appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"drycc-storage"}
 
 redis:
-  replicas: ${REDIS_REPLICAS}
+  replicas: ${REDIS_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
   persistence:
     enabled: true
@@ -460,31 +460,46 @@ redis:
     storageClass: ${REDIS_PERSISTENCE_STORAGE_CLASS:-""}
 
 storage:
-  minio:
-    zone: ${STORAGE_MINIO_ZONE:-1}
-    drives: ${STORAGE_MINIO_DRIVES:-4}
-    replicas: ${STORAGE_MINIO_REPLICAS:-1}
-    imageRegistry: ${DRYCC_REGISTRY}
-    persistence:
-      enabled: true
-      size: ${STORAGE_MINIO_PERSISTENCE_SIZE:-20Gi}
-      storageClass: ${STORAGE_MINIO_PERSISTENCE_STORAGE_CLASS:-""}
-  meta:
-    pd:
-      replicas: ${STORAGE_META_PD_REPLICAS}
+  csi:
+    statefulset:
+      replicas: ${STORAGE_CSI_STATEFULSET_REPLICAS:-1}
+  mainnode:
+    tipd:
+      replicas: ${STORAGE_MAINNODE_TIPD_REPLICAS:-1}
       persistence:
         enabled: true
-        size: ${STORAGE_META_PD_PERSISTENCE_SIZE:-10Gi}
-        storageClass: ${STORAGE_META_PD_PERSISTENCE_STORAGE_CLASS:-""}
+        size: ${STORAGE_MAINNODE_TIPD_PERSISTENCE_SIZE:-5Gi}
+        storageClass: "${STORAGE_MAINNODE_TIPD_PERSISTENCE_STORAGE_CLASS}"
+    weed:
+      replicas: ${STORAGE_MAINNODE_WEED_REPLICAS:-1}
+      persistence:
+        enabled: true
+        size: ${STORAGE_MAINNODE_WEED_PERSISTENCE_SIZE:-5Gi}
+        storageClass: "${STORAGE_MAINNODE_WEED_PERSISTENCE_STORAGE_CLASS}"
+  metanode:
     tikv:
-      replicas: ${STORAGE_META_TIKV_REPLICAS}
+      replicas: ${STORAGE_METANODE_TIKV_REPLICAS:-1}
       persistence:
         enabled: true
-        size: ${STORAGE_META_TIKV_PERSISTENCE_SIZE:-10Gi}
-        storageClass: ${STORAGE_META_TIKV_PERSISTENCE_STORAGE_CLASS:-""}
+        size: ${STORAGE_METANODE_TIKV_PERSISTENCE_SIZE:-5Gi}
+        storageClass: "${STORAGE_METANODE_TIKV_PERSISTENCE_STORAGE_CLASS}"
+    weed:
+      replicas: ${STORAGE_METANODE_WEED_REPLICAS:-1}
+      persistence:
+        enabled: true
+        size: ${STORAGE_METANODE_WEED_PERSISTENCE_SIZE:-5Gi}
+        storageClass: "${STORAGE_METANODE_WEED_PERSISTENCE_STORAGE_CLASS}"
+  datanode:
+    weed:
+      replicas: ${STORAGE_DATANODE_WEED_REPLICAS:-3}
+      persistence:
+        hdd:
+          enabled: true
+          size: ${STORAGE_DATANODE_WEED_PERSISTENCE_SIZE:-10Gi}
+          storageClass: "${STORAGE_DATANODE_WEED_PERSISTENCE_STORAGE_CLASS}"
 
 rabbitmq:
-  replicas: ${RABBITMQ_REPLICAS}
+  replicas: ${RABBITMQ_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
   username: "${RABBITMQ_USERNAME}"
   password: "${RABBITMQ_PASSWORD}"
@@ -497,7 +512,7 @@ imagebuilder:
   imageRegistry: ${DRYCC_REGISTRY}
 
 logger:
-  replicas: ${LOGGER_REPLICAS}
+  replicas: ${LOGGER_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
 
 monitor:
@@ -520,13 +535,13 @@ prometheus:
       storageClass: ${PROMETHEUS_SERVER_PERSISTENCE_STORAGE_CLASS:-""}
 
 passport:
-  replicas: ${PASSPORT_REPLICAS}
+  replicas: ${PASSPORT_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
   adminUsername: ${DRYCC_ADMIN_USERNAME}
   adminPassword: ${DRYCC_ADMIN_PASSWORD}
 
 registry:
-  replicas: ${REGISTRY_REPLICAS}
+  replicas: ${REGISTRY_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
 
 registry-proxy:
