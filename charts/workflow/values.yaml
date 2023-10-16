@@ -97,29 +97,57 @@ global:
   passportLocation: "on-cluster"
 
 storage:
-  minio:
-    # Storage zone count
-    zones: 1
-    # Device count of per replica
-    drives: 4
-    # Number of replicas per zone
-    replicas: 1
-    persistence:
-      enabled: false
-      accessMode: ReadWriteOnce
-      size: 5Gi
-      storageClass: ""
-  meta:
-    pd:
+  # The following parameters are configured only when using an on-cluster Storage instance
+  csi:
+    statefulset:
+      replicas: 1
+  mainnode:
+    tipd:
+      replicas: 3
       persistence:
         enabled: false
         size: 5Gi
         storageClass: ""
+    weed:
+      replicas: 3
+      persistence:
+        enabled: false
+        size: 5Gi
+        storageClass: ""
+  metanode:
     tikv:
+      replicas: 3
       persistence:
         enabled: false
         size: 5Gi
         storageClass: ""
+    weed:
+      replicas: 3
+      persistence:
+        enabled: false
+        size: 5Gi
+        storageClass: ""
+  datanode:
+    weed:
+      replicas: 3
+      persistence:
+        ssd:
+          enabled: false
+          size: 5Gi
+          storageClass: ""
+        hdd:
+          enabled: false
+          size: 5Gi
+          storageClass: ""
+  # The following parameters are configured only when using an off-cluster Storage instance
+  lookup: path
+  health: ""
+  endpoint: ""
+  builderBucket: ""
+  registryBucket: ""
+  # The following parameters are general parameters
+  accesskey: ""
+  secretkey: ""
 
 # Set the default (global) way of how Application (your own) images are
 # pulled from within the Controller.
