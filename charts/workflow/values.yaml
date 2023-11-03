@@ -341,3 +341,39 @@ gateway:
     externalAccountBinding:
       keyID: ""
       keySecret: ""
+  # gateway apps
+  apps:
+    - name: drycc-builder
+      port: 2222
+      protocol: TCP
+      services:
+      - name: drycc-builder
+        port: 2222
+    - name: drycc-controller
+      port: 80
+      hostname: drycc.{{ .Values.global.platformDomain }}
+      protocol: HTTP
+      services:
+      - name: drycc-controller-api
+        port: 80
+    - name: drycc-rabbitmq
+      port: 80
+      hostname: drycc-rabbitmq.{{ .Values.global.platformDomain }}
+      protocol: HTTP
+      services:
+      - name: drycc-rabbitmq
+        port: 15672
+    - name: drycc-prometheus
+      port: 80
+      hostname: drycc-prometheus.{{ .Values.global.platformDomain }}
+      protocol: HTTP
+      services:
+      - name: drycc-prometheus
+        port: 9090
+    - name: drycc-monitor-grafana
+      port: 80
+      hostname: drycc-monitor-grafana.{{ .Values.global.platformDomain }}
+      protocol: HTTP
+      services:
+      - name: drycc-monitor-grafana
+        port: 80
