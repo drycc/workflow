@@ -192,8 +192,8 @@ DRYCC_ADMIN_PASSWORD                            | Required item, specify drycc's
 CERT_MANAGER_ENABLED                            | Whether to use automatic certificate. It is `true` by default
 CHANNEL                                         | By default, `stable` channel will be installed. You can also specify `testing`
 CONTAINERD_FILE                                 | The `config.yaml` file path used by containerd
-KUBE_API_SERVER_ADDRESS                         | Set with the IP address of the loadbalancer that was in front of kube-apiserver, The default is the IP address of the current node
-KUBE_API_SERVER_PORT                            | Set with the PORT of the loadbalancer that was in front of kube-apiserver, which is `6443` by default
+KUBERNETES_SERVICE_HOST                         | Set with the IP address of the loadbalancer that was in front of kube-apiserver, The default is the IP address of the current node
+KUBERNETES_SERVICE_PORT                            | Set with the PORT of the loadbalancer that was in front of kube-apiserver, which is `6443` by default
 METALLB_CONFIG_FILE                             | The metallb config file path, layer 2 network is used by default
 INSTALL_DRYCC_MIRROR                            | Specify the accelerated mirror location. Currently, only `cn` is supported
 BUILDER_REPLICAS                                | Number of builder replicas to deploy
