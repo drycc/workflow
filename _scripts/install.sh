@@ -264,8 +264,7 @@ function check_metallb {
 
 function install_network() {
   echo -e "\\033[32m---> Start installing network...\\033[0m"
-  kubernetes_service_host=(`kubectl get svc kubernetes -o jsonpath='{$.spec.clusterIP}'`)
-  kubernetes_service_port=(`kubectl get svc kubernetes -o jsonpath='{$.spec.ports[0].port}'`)
+  kubernetes_service_host=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
   helm install cilium $CHARTS_URL/cilium \
     --set endpointHealthChecking.enabled=false \
     --set healthChecking=false \
@@ -273,11 +272,11 @@ function install_network() {
     --set bpf.masquerade=true \
     --set bandwidthManager.enabled=true \
     --set bandwidthManager.bbr=true \
-    --set kubeProxyReplacement=strict \
+    --set kubeProxyReplacement=true \
     --set hubble.enabled=false \
     --set hostPort.enabled=true \
     --set k8sServiceHost=${KUBERNETES_SERVICE_HOST:-$kubernetes_service_host} \
-    --set k8sServicePort=${KUBERNETES_SERVICE_PORT:-$kubernetes_service_port} \
+    --set k8sServicePort=${KUBERNETES_SERVICE_PORT:-6443} \
     --set prometheus.enabled=true \
     --set operator.prometheus.enabled=true \
     --namespace kube-system --wait
