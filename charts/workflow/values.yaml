@@ -132,14 +132,9 @@ storage:
     weed:
       replicas: 3
       persistence:
-        ssd:
-          enabled: false
-          size: 5Gi
-          storageClass: ""
-        hdd:
-          enabled: false
-          size: 5Gi
-          storageClass: ""
+        enabled: false
+        size: 5Gi
+        storageClass: ""
   # The following parameters are configured only when using an off-cluster Storage instance
   lookup: path
   health: ""

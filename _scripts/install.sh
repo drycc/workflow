@@ -495,12 +495,11 @@ storage:
         storageClass: "${STORAGE_METANODE_WEED_PERSISTENCE_STORAGE_CLASS}"
   datanode:
     weed:
-      replicas: ${STORAGE_DATANODE_WEED_REPLICAS:-3}
+      replicas: ${STORAGE_DATANODE_WEED_REPLICAS:-4}
       persistence:
-        hdd:
-          enabled: true
-          size: ${STORAGE_DATANODE_WEED_PERSISTENCE_SIZE:-10Gi}
-          storageClass: "${STORAGE_DATANODE_WEED_PERSISTENCE_STORAGE_CLASS}"
+        enabled: true
+        size: ${STORAGE_DATANODE_WEED_PERSISTENCE_SIZE:-10Gi}
+        storageClass: "${STORAGE_DATANODE_WEED_PERSISTENCE_STORAGE_CLASS}"
 
 rabbitmq:
   replicas: ${RABBITMQ_REPLICAS:-1}

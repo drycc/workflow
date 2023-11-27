@@ -2,10 +2,13 @@
 set -eo pipefail
 shopt -s expand_aliases
 
+# clean cilium
 ip link delete cilium_host > /dev/null 2>&1 || true
 ip link delete cilium_net > /dev/null 2>&1 || true
 ip link delete cilium_vxlan > /dev/null 2>&1 || true
 ip link delete nodelocaldns > /dev/null 2>&1 || true
+iptables-save | grep -iv cilium | iptables-restore || true
+ip6tables-save | grep -iv cilium | ip6tables-restore || true
 
 /usr/local/bin/k3s-killall.sh
 
