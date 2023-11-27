@@ -2,25 +2,10 @@
 set -eo pipefail
 shopt -s expand_aliases
 
-ip link show cilium_host > /dev/null 2>&1
-if [[ $? -eq 0 ]] ; then
-    ip link delete cilium_host
-fi
-
-ip link show cilium_net > /dev/null 2>&1
-if [[ $? -eq 0 ]] ; then
-    ip link delete cilium_net
-fi
-
-ip link show cilium_vxlan > /dev/null 2>&1
-if [[ $? -eq 0 ]] ; then
-    ip link delete cilium_vxlan
-fi
-
-ip link show nodelocaldns > /dev/null 2>&1
-if [[ $? -eq 0 ]] ; then
-    ip link delete nodelocaldns
-fi
+ip link delete cilium_host > /dev/null 2>&1 || true
+ip link delete cilium_net > /dev/null 2>&1 || true
+ip link delete cilium_vxlan > /dev/null 2>&1 || true
+ip link delete nodelocaldns > /dev/null 2>&1 || true
 
 /usr/local/bin/k3s-killall.sh
 
