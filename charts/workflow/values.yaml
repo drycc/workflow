@@ -327,6 +327,9 @@ prometheus:
   # Configure the following ONLY if using an off-cluster prometheus database
   # URL configuration is only available in off-cluster prometheus database
   url: "http://my.prometheus.url:9090"
+  # The username and password to be used by the on-cluster database.
+  username: "admin"
+  password: "admin"
 
 # Drycc Gateway is a gateway chart that integrates cert-manager.
 gateway:
