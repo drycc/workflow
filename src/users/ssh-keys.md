@@ -47,9 +47,9 @@ You can always view the keys associated with your user as well:
 
 ```
 $ drycc keys:list
-=== admin Keys
-admin@plinth-23437.local ssh-rsa AAAAB3Nz...3437.local
-admin@subgenius.local ssh-rsa AAAAB3Nz...nius.local
+ID                              OWNER    KEY                           
+admin@plinth-23437.local        admin    ssh-rsa abc AAAAB3Nz...3437.local
+admin@subgenius.local           admin    ssh-rsa 123 AAAAB3Nz...nius.local
 ```
 
 Remove keys by their name:

@@ -54,9 +54,9 @@ a public registry.
     $ curl -s http://example-dockerfile-http.local3.dryccapp.com
     Powered by Drycc
 
-Because you are deploying a Docker image, the `cmd` process type is automatically scaled to 1 on first deploy.
+Because you are deploying a Docker image, the `web` process type is automatically scaled to 1 on first deploy.
 
-Use `drycc scale cmd=3` to increase `cmd` processes to 3, for example. Scaling a
+Use `drycc scale web=3` to increase `web` processes to 3, for example. Scaling a
 process type directly changes the number of [Containers][container]
 running that process.
 

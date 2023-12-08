@@ -116,9 +116,9 @@ Use `git push drycc master` to deploy your application.
     Welcome to Drycc!
     See the documentation at http://docs.drycc.cc/ for more information.
 
-Because a Dockerfile application is detected, the `cmd` process type is automatically scaled to 1 on first deploy.
+Because a Dockerfile application is detected, the `web` process type is automatically scaled to 1 on first deploy.
 
-Use `drycc scale cmd=3` to increase `cmd` processes to 3, for example. Scaling a
+Use `drycc scale web=3` to increase `web` processes to 3, for example. Scaling a
 process type directly changes the number of [containers][container]
 running that process.
 

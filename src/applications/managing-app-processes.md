@@ -18,7 +18,7 @@ the application server. Rails 4, for example, has the following process type:
 
     web: bundle exec rails server -p $PORT
 
-All applications utilizing [Dockerfiles][dockerfile] have an implied `cmd` process type, which runs the
+All applications utilizing [Dockerfiles][dockerfile] have an implied `web` process type, which runs the
 Dockerfile's `CMD` directive unmodified:
 
     $ cat Dockerfile
@@ -28,13 +28,13 @@ Dockerfile's `CMD` directive unmodified:
     CMD python -m SimpleHTTPServer 5000
     EXPOSE 5000
 
-For the above Dockerfile-based application, the `cmd` process type would run the Container `CMD` of `python -m SimpleHTTPServer 5000`.
+For the above Dockerfile-based application, the `web` process type would run the Container `CMD` of `python -m SimpleHTTPServer 5000`.
 
-Applications utilizing [remote Container images][container image], a `cmd` process type is also implied, and runs the `CMD`
+Applications utilizing [remote Container images][container image], a `web` process type is also implied, and runs the `CMD`
 specified in the Container image.
 
 !!! note
-    The `web` and `cmd` process types are special as they’re the only process types that will
+    The `web` process type is special as they’is the default process type that will
     receive HTTP traffic from Workflow’s routers. Other process types can be named arbitrarily.
 
 ## Declaring Process Types
@@ -66,7 +66,7 @@ If you are using [remote Container images][container image], you may define proc
 For example, passing process types inline:
 
 ```
-$ drycc pull drycc/example-go:latest --procfile="cmd: /app/bin/boot"
+$ drycc pull drycc/example-go:latest --procfile="web: /app/bin/boot"
 ```
 
 Read a `Procfile` in another directory:
@@ -79,7 +79,7 @@ Or via a Procfile located in your current, working directory:
 
 ```
 $ cat Procfile
-cmd: /bin/boot
+web: /bin/boot
 sleeper: echo "sleeping"; sleep 900
 
 
@@ -89,15 +89,14 @@ Creating build... done
 $ drycc scale sleeper=1 -a steely-mainsail
 Scaling processes... but first, coffee!
 done in 0s
-=== steely-mainsail Processes
---- cmd (started): 1
-steely-mainsail-cmd-3291896318-nyrim up (v3)
---- sleeper (started): 1
-steely-mainsail-sleeper-3291896318-oq1jr up (v3)
+
+NAME                                        RELEASE    STATE    TYPE       STARTED
+steely-mainsail-sleeper-76c45b967c-4qm6w    v3         up       sleeper    2023-12-08T02:25:00UTC
+steely-mainsail-web-c4f44c4b4-7p7dh         v3         up       web        2023-12-08T02:25:00UTC
 ```
 
 !!! note
-    Only process types of `web` and `cmd` will be scaled to 1 automatically. If you have additional process types
+    Only process types of `web` will be scaled to 1 automatically. If you have additional process types
     remember to scale the process counts after creation.
 
 To remove a process type simply scale it to 0:
@@ -106,10 +105,9 @@ To remove a process type simply scale it to 0:
 $ drycc scale sleeper=0 -a steely-mainsail
 Scaling processes... but first, coffee!
 done in 3s
-=== steely-mainsail Processes
---- cmd (started): 1
-steely-mainsail-cmd-3291896318-nyrim up (v3)
---- sleeper (started): 0
+
+NAME                                        RELEASE    STATE    TYPE       STARTED
+steely-mainsail-web-c4f44c4b4-7p7dh         v3         up       web        2023-12-08T02:25:00UTC
 ```
 
 ## Scaling Processes
@@ -118,16 +116,16 @@ Applications deployed on Drycc Workflow scale out via the [process model][]. Use
 [containers][container] that power your app.
 
 ```
-$ drycc scale cmd=5 -a iciest-waggoner
+$ drycc scale web=5 -a iciest-waggoner
 Scaling processes... but first, coffee!
 done in 3s
-=== iciest-waggoner Processes
---- cmd (started): 5
-iciest-waggoner-web-3291896318-09j0o up (v2)
-iciest-waggoner-web-3291896318-3r7kp up (v2)
-iciest-waggoner-web-3291896318-gc4xv up (v2)
-iciest-waggoner-web-3291896318-lviwo up (v2)
-iciest-waggoner-web-3291896318-kt7vu up (v2)
+
+NAME                                        RELEASE    STATE    TYPE       STARTED
+iciest-waggoner-web-c4f44c4b4-7p7dh         v3         up       web        2023-12-08T02:25:00UTC
+iciest-waggoner-web-c4f44c4b4-8p7dh         v3         up       web        2023-12-08T02:25:00UTC
+iciest-waggoner-web-c4f44c4b4-9p7dh         v3         up       web        2023-12-08T02:25:00UTC
+iciest-waggoner-web-c4f44c4b4-1p7dh         v3         up       web        2023-12-08T02:25:00UTC
+iciest-waggoner-web-c4f44c4b4-2p7dh         v3         up       web        2023-12-08T02:25:00UTC
 ```
 
 If you have multiple process types for your application you may scale the process count for each type separately. For
@@ -140,19 +138,16 @@ In this example, we are scaling the process type `web` to 5 but leaving the proc
 $ drycc scale web=5
 Scaling processes... but first, coffee!
 done in 4s
-=== scenic-icehouse Processes
---- web (started): 5
-scenic-icehouse-web-3291896318-7lord up (v2)
-scenic-icehouse-web-3291896318-jn957 up (v2)
-scenic-icehouse-web-3291896318-rsekj up (v2)
-scenic-icehouse-web-3291896318-vwhnh up (v2)
-scenic-icehouse-web-3291896318-vokg7 up (v2)
---- background (started): 1
-scenic-icehouse-web-3291896318-background-yf8kh up (v2)
-```
 
-!!! note
-    The default process type for Dockerfile and Container Image applications is 'cmd' rather than 'web'.
+NAME                                                RELEASE    STATE    TYPE       STARTED
+scenic-icehouse-web-3291896318-7lord                v3         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-jn957                v3         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-rsekj                v3         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-vwhnh                v3         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-vokg7                v3         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-vokg7                v3         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-background-3291896318-yf8kh         v3         up       web        2023-12-08T02:25:00UTC
+```
 
 Scaling a process down, by reducing the process count, sends a `TERM` signal to the processes, followed by a `SIGKILL`
 if they have not exited within 30 seconds. Depending on your application, scaling down may interrupt long-running HTTP
@@ -164,13 +159,12 @@ For example, scaling from 5 processes to 3:
 $ drycc scale web=3
 Scaling processes... but first, coffee!
 done in 1s
-=== scenic-icehouse Processes
---- background (started): 1
-scenic-icehouse-web-3291896318-background-yf8kh up (v2)
---- web (started): 3
-scenic-icehouse-web-3291896318-7lord up (v2)
-scenic-icehouse-web-3291896318-rsekj up (v2)
-scenic-icehouse-web-3291896318-vokg7 up (v2)
+
+NAME                                                RELEASE    STATE    TYPE       STARTED
+scenic-icehouse-web-3291896318-vwhnh                v2         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-vokg7                v2         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-vokg9                v2         up       web        2023-12-08T02:25:00UTC
+scenic-icehouse-background-3291896318-yf8kh         v2         up       web        2023-12-08T02:25:00UTC
 ```
 
 ## Get a Shell to a Running Container
@@ -179,6 +173,9 @@ Verify that the container is running:
 
 ```
 # drycc ps
+NAME                                                RELEASE    STATE    TYPE       STARTED
+python-getting-started-web-69b7d4bfdc-kl4xf         v2         up       web        2023-12-08T02:25:00UTC
+
 === python-getting-started Processes
 --- web:
 python-getting-started-web-69b7d4bfdc-kl4xf up (v2)
@@ -223,12 +220,8 @@ And then review the scaling rule that was created for `web`
 
 ```
 $ drycc autoscale:list
-=== scenic-icehouse Autoscale
-
---- web:
-Min Replicas: 3
-Max Replicas: 8
-CPU: 75%
+UUID                                    TYPE    PERCENT    MIN    MAX
+e916b333-53c1-4d4c-ac5a-23e6961fb544    web     75         3      8
 ```
 
 Remove scaling rule
@@ -242,21 +235,6 @@ For autoscaling to work CPU requests have to be specified on each application Po
 
 Scale up can only happen if there was no rescaling within the last 3 minutes. Scale down will wait for 5 minutes from the last rescaling. That information and more can be found at [HPA algorithm page][autoscale-algo].
 
-
-## Web vs Cmd Process Types
-
-When deploying to Drycc Workflow using a Heroku Buildpack, Workflow boots the `web` process type to
-boot the application server. When you deploy an application that has a Dockerfile or uses [Container
-images][container image], Workflow boots the `cmd` process type. Both act similarly in that
-they are exposed to the router as web applications. However, the `cmd` process type is special
-because, if left undefined, it is equivalent to running the [container][] without any additional
-arguments.  (i.e. The process specified by the Dockerfile or Container image's `CMD` directive will
-be used.)
-
-If migrating an application from Heroku Buildpacks to a Container-based deployment, Workflow will not
-automatically convert the `web` process type to `cmd`. To do this, you'll have to manually scale
-down the old process type and scale the new process type up.
-
 ## Restarting an Application Processes
 
 If you need to restart an application process, you may use `drycc ps:restart`. Behind the scenes, Drycc Workflow instructs
@@ -264,19 +242,18 @@ Kubernetes to terminate the old process and launch a new one in its place.
 
 ```
 $ drycc ps
-=== scenic-icehouse Processes
---- web (started): 3
-scenic-icehouse-web-3291896318-7lord up (v2)
-scenic-icehouse-web-3291896318-rsekj up (v2)
-scenic-icehouse-web-3291896318-vokg7 up (v2)
---- background (started): 1
-scenic-icehouse-background-3291896318-yf8kh up (v2)
+NAME                                               RELEASE    STATE       TYPE       STARTED
+scenic-icehouse-web-3291896318-vokg7               v2         up          web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-rsekj               v2         up          web        2023-12-08T02:50:21UTC
+scenic-icehouse-web-3291896318-vokg7               v2         up          web        2023-12-08T02:25:00UTC
+scenic-icehouse-background-3291896318-yf8kh        v2         up          web        2023-12-08T02:25:00UTC
+
 $ drycc ps:restart scenic-icehouse-background-3291896318-yf8kh
-Restarting processes... but first, coffee!
-done in 6s
-=== scenic-icehouse Processes
---- background (started): 1
-scenic-icehouse-background-3291896318-yd87g up (v2)
+NAME                                               RELEASE    STATE       TYPE       STARTED
+scenic-icehouse-web-3291896318-vokg7               v2         up          web        2023-12-08T02:25:00UTC
+scenic-icehouse-web-3291896318-rsekj               v2         up          web        2023-12-08T02:50:21UTC
+scenic-icehouse-web-3291896318-vokg7               v2         up          web        2023-12-08T02:25:00UTC
+scenic-icehouse-background-3291896318-yf8kh        v2         starting    web        2023-12-08T02:25:00UTC
 ```
 
 Notice that the process name has changed from `scenic-icehouse-background-3291896318-yf8kh` to

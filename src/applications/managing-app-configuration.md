@@ -106,28 +106,20 @@ zero is considered a pass, while a non-zero status code is considered a fail.
 healthy if the check can establish a connection. `tcpSocket` probes accept a port number to perform
 the socket connection on the Container.
 
-Health checks can be configured on a per-proctype basis for each application using `drycc healthchecks:set`. If no type is mentioned then the health checks are applied to default proc types, web or cmd, whichever is present. To
+Health checks can be configured on a per-proctype basis for each application using `drycc healthchecks:set`. If no type is mentioned then the health checks are applied to default proc type web, whichever is present. To
 configure a `httpGet` liveness probe:
 
 ```
-$ drycc healthchecks:set liveness httpGet 80 --type cmd
-=== peachy-waxworks Healthchecks
+$ drycc healthchecks:set liveness httpGet 80 --type web
+Applying livenessProbe healthcheck... done
 
-cmd:
-Liveness
---------
-Initial Delay (seconds): 50
-Timeout (seconds): 50
-Period (seconds): 10
-Success Threshold: 1
-Failure Threshold: 3
-Exec Probe: N/A
-HTTP GET Probe: Path="/" Port=80 HTTPHeaders=[]
-TCP Socket Probe: N/A
-
-Readiness
----------
-No readiness probe configured.
+App:             peachy-waxworks
+UUID:            afd84067-29e9-4a5f-9f3a-60d91e938812
+Owner:           dev
+Created:         2023-12-08T10:25:00Z
+Updated:         2023-12-08T10:25:00Z
+Healthchecks:
+                 liveness web http-get headers=[] path=/ port=80 delay=50s timeout=50s period=10s #success=1 #failure=3
 ```
 
 If the application relies on certain headers being set (such as the `Host` header) or a specific
@@ -137,69 +129,45 @@ URL path relative to the root, you can also send specific HTTP headers:
 $ drycc healthchecks:set liveness httpGet 80 \
     --path /welcome/index.html \
     --headers "X-Client-Version:v1.0,X-Foo:bar"
-=== peachy-waxworks Healthchecks
+Applying livenessProbe healthcheck... done
 
-web/cmd:
-Liveness
---------
-Initial Delay (seconds): 50
-Timeout (seconds): 50
-Period (seconds): 10
-Success Threshold: 1
-Failure Threshold: 3
-Exec Probe: N/A
-HTTP GET Probe: Path="/welcome/index.html" Port=80 HTTPHeaders=[X-Client-Version=v1.0]
-TCP Socket Probe: N/A
-
-Readiness
----------
-No readiness probe configured.
+App:             peachy-waxworks
+UUID:            afd84067-29e9-4a5f-9f3a-60d91e938812
+Owner:           dev
+Created:         2023-12-08T10:25:00Z
+Updated:         2023-12-08T10:25:00Z
+Healthchecks:
+                 liveness web http-get headers=[X-Client-Version=v1.0] path=/welcome/index.html port=80 delay=50s timeout=50s period=10s #success=1 #failure=3
 ```
 
 To configure an `exec` readiness probe:
 
 ```
-$ drycc healthchecks:set readiness exec -- /bin/echo -n hello --type cmd
-=== peachy-waxworks Healthchecks
+$ drycc healthchecks:set readiness exec -- /bin/echo -n hello --type web
+Applying readinessProbe healthcheck... done
 
-cmd:
-Liveness
---------
-No liveness probe configured.
-
-Readiness
----------
-Initial Delay (seconds): 50
-Timeout (seconds): 50
-Period (seconds): 10
-Success Threshold: 1
-Failure Threshold: 3
-Exec Probe: Command=[/bin/echo -n hello]
-HTTP GET Probe: N/A
-TCP Socket Probe: N/A
+App:             peachy-waxworks
+UUID:            afd84067-29e9-4a5f-9f3a-60d91e938812
+Owner:           dev
+Created:         2023-12-08T10:25:00Z
+Updated:         2023-12-08T10:25:00Z
+Healthchecks:
+                 readiness web exec /bin/echo -n hello delay=50s timeout=50s period=10s #success=1 #failure=3
 ```
 
 You can overwrite a probe by running `drycc healthchecks:set` again:
 
 ```
-$ drycc healthchecks:set readiness httpGet 80 --type cmd
-=== peachy-waxworks Healthchecks
+$ drycc healthchecks:set readiness httpGet 80 --type web
+Applying livenessProbe healthcheck... done
 
-cmd:
-Liveness
---------
-No liveness probe configured.
-
-Readiness
----------
-Initial Delay (seconds): 50
-Timeout (seconds): 50
-Period (seconds): 10
-Success Threshold: 1
-Failure Threshold: 3
-Exec Probe: N/A
-HTTP GET Probe: Path="/" Port=80 HTTPHeaders=[]
-TCP Socket Probe: N/A
+App:             peachy-waxworks
+UUID:            afd84067-29e9-4a5f-9f3a-60d91e938812
+Owner:           dev
+Created:         2023-12-08T10:25:00Z
+Updated:         2023-12-08T10:25:00Z
+Healthchecks:
+                 liveness web http-get headers=[] path=/ port=80 delay=50s timeout=50s period=10s #success=1 #failure=3
 ```
 
 Configured health checks also modify the default application deploy behavior. When starting a new

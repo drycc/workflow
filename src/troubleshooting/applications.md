@@ -25,7 +25,7 @@ state by examining the pod deployed in the application's namespace. To do that, 
 
 	$ kubectl --namespace=myapp get pods
 	NAME                          READY     STATUS                RESTARTS   AGE
-	myapp-cmd-1585713350-3brbo    0/1       CrashLoopBackOff      2          43s
+	myapp-web-1585713350-3brbo    0/1       CrashLoopBackOff      2          43s
 
 We can then describe the pod and determine why it is failing to boot:
 
@@ -33,10 +33,10 @@ We can then describe the pod and determine why it is failing to boot:
 	Events:
 	  FirstSeen     LastSeen        Count   From                            SubobjectPath                           Type            Reason          Message
 	  ---------     --------        -----   ----                            -------------                           --------        ------          -------
-	  43s           43s             1       {default-scheduler }                                                    Normal          Scheduled       Successfully assigned myapp-cmd-1585713350-3brbo to kubernetes-node-1
-	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Normal          Created         Created container with container id b86bd851a61f
-	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Normal          Started         Started container with container id b86bd851a61f
-	  37s           35s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-cmd}              Warning         Unhealthy       Liveness probe failed: Get http://10.246.39.13:8000/healthz: dial tcp 10.246.39.13:8000: getsockopt: connection refused
+	  43s           43s             1       {default-scheduler }                                                    Normal          Scheduled       Successfully assigned myapp-web-1585713350-3brbo to kubernetes-node-1
+	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-web}              Normal          Created         Created container with container id b86bd851a61f
+	  41s           41s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-web}              Normal          Started         Started container with container id b86bd851a61f
+	  37s           35s             1       {kubelet kubernetes-node-1}     spec.containers{myapp-web}              Warning         Unhealthy       Liveness probe failed: Get http://10.246.39.13:8000/healthz: dial tcp 10.246.39.13:8000: getsockopt: connection refused
 
 In this instance, we set the healthcheck initial delay timeout for the application at 1 second,
 which is too aggressive. The application needs some time to set up the API server after the

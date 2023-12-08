@@ -63,8 +63,8 @@ change how the application behaves:
 $ drycc config:set POWERED_BY="Container Images + Kubernetes" -a proper-barbecue
 Creating config... done
 
-=== proper-barbecue Config
-POWERED_BY      Container Images + Kubernetes
+UUID                                    OWNER    NAME                 VALUE
+04bb6e45-9221-4843-a1f9-acc7fded3b06    dev      POWERED_BY           Container Images + Kubernetes
 ```
 
 Behind the scenes, Workflow creates a new release for your application and uses
@@ -83,13 +83,13 @@ Last, let's scale our application by adding more application processes. Using th
 additional processes to service requests:
 
 ```
-$ drycc scale cmd=2 -a proper-barbecue
+$ drycc scale web=2 -a proper-barbecue
 Scaling processes... but first, coffee!
 done in 36s
-=== proper-barbecue Processes
---- cmd (started): 2
-proper-barbecue-v18-cmd-rk644 up (v18)
-proper-barbecue-v18-cmd-0ag04 up (v18)
+
+NAME                                RELEASE    STATE    TYPE       STARTED
+proper-barbecue-v18-web-rk644       v18        up       web        2023-12-08T03:09:25UTC
+proper-barbecue-v18-web-0ag04       v18        up       web        2023-12-08T03:09:25UTC
 ```
 
 Congratulations! You have deployed, configured, and scaled your first application using Drycc Workflow.

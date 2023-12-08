@@ -12,11 +12,10 @@ You can see a record of changes to your application using `drycc releases`:
 
 ```
 $ drycc releases
-=== peachy-waxworks Releases
-v4      3 minutes ago                     gabrtv deployed d3ccc05
-v3      1 hour 17 minutes ago             gabrtv added DATABASE_URL
-v2      6 hours 2 minutes ago             gabrtv deployed 7cb3321
-v1      6 hours 2 minutes ago             gabrtv deployed drycc/helloworld
+UUID                                    OWNER    VERSION    CREATED                 SUMMARY
+d2646499-b0b5-402e-a4e9-710bfee15701    dev      v3         2023-12-04T10:17:46Z    dev deleted PIP_INDEX_URL, DISABLE_COLLECTSTATIC
+e8ad8e2e-b8fe-4319-9fa7-933460e19dd4    dev      v2         2023-12-01T10:20:22Z    dev added IMAGE_PULL_POLICY, PIP_INDEX_URL, PORT, DISABLE_COLLEC[...]
+d5e8f2ae-4af3-44b4-8e1a-bdb3a20bee71    dev      v1         2023-11-30T17:54:57Z    dev created initial release
 ```
 
 ## Rollback a Release
@@ -34,22 +33,20 @@ and configuration from release v2:
 
 ```
 $ drycc releases
-=== folksy-offshoot Releases
-v4      4 minutes ago                     gabrtv deployed d3ccc05
-v3      1 hour 18 minutes ago             gabrtv added DATABASE_URL
-v2      6 hours 2 minutes ago             gabrtv deployed 7cb3321
-v1      6 hours 3 minutes ago             gabrtv deployed drycc/helloworld
+UUID                                    OWNER    VERSION    CREATED                 SUMMARY
+d2646499-b0b5-402e-a4e9-710bfee15701    dev      v3         2023-12-04T10:17:46Z    dev deleted PIP_INDEX_URL, DISABLE_COLLECTSTATIC
+e8ad8e2e-b8fe-4319-9fa7-933460e19dd4    dev      v2         2023-12-01T10:20:22Z    dev added IMAGE_PULL_POLICY, PIP_INDEX_URL, PORT, DISABLE_COLLEC[...]
+d5e8f2ae-4af3-44b4-8e1a-bdb3a20bee71    dev      v1         2023-11-30T17:54:57Z    dev created initial release
 
 $ drycc rollback v2
 Rolled back to v2
 
 $ drycc releases
-=== folksy-offshoot Releases
-v5      Just now                          gabrtv rolled back to v2
-v4      4 minutes ago                     gabrtv deployed d3ccc05
-v3      1 hour 18 minutes ago             gabrtv added DATABASE_URL
-v2      6 hours 2 minutes ago             gabrtv deployed 7cb3321
-v1      6 hours 3 minutes ago             gabrtv deployed drycc/helloworld
+UUID                                    OWNER    VERSION    CREATED                 SUMMARY
+d2646499-b0b5-402e-a4e9-710bfee15701    dev      v4         2023-12-04T10:20:46Z    dev rolled back to v2
+d2646499-b0b5-402e-a4e9-710bfee15701    dev      v3         2023-12-04T10:17:46Z    dev deleted PIP_INDEX_URL, DISABLE_COLLECTSTATIC
+e8ad8e2e-b8fe-4319-9fa7-933460e19dd4    dev      v2         2023-12-01T10:20:22Z    dev added IMAGE_PULL_POLICY, PIP_INDEX_URL, PORT, DISABLE_COLLEC[...]
+d5e8f2ae-4af3-44b4-8e1a-bdb3a20bee71    dev      v1         2023-11-30T17:54:57Z    dev created initial release
 ```
 
 ## Run One-off Administration Tasks
