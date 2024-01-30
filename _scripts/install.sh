@@ -351,7 +351,7 @@ function install_gateway() {
   helm repo update
   kubectl apply -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
   helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace --wait
-  helm install istio-istiod istio/istiod -n istio-system --wait
+  helm install istio-istiod istio/istiod -n istio-system --set pilot.env.PILOT_ENABLE_ALPHA_GATEWAY_API=true --wait
   helm install istio-gateway istio/gateway -n istio-gateway --create-namespace --wait
   echo -e "\\033[32m---> Gateway installed!\\033[0m"
 }
