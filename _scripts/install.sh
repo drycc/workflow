@@ -176,6 +176,12 @@ function configure_runtime {
 
 [plugins.cri.containerd.runtimes.runsc.options]
   SystemdCgroup = true
+  TypeUrl = "io.containerd.runsc.v1.options"
+  ConfigPath = "/var/lib/rancher/k3s/agent/etc/containerd/runsc.toml"
+EOF
+  cat << EOF > "/var/lib/rancher/k3s/agent/etc/containerd/runsc.toml"
+[runsc_config]
+network = "host"
 EOF
 }
 
