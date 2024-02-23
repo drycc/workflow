@@ -482,6 +482,7 @@ storage:
         storageClass: "${STORAGE_MAINNODE_TIPD_PERSISTENCE_STORAGE_CLASS}"
     weed:
       replicas: ${STORAGE_MAINNODE_WEED_REPLICAS:-1}
+      defaultReplication: "${STORAGE_MAINNODE_WEED_DEFAULT_REPLICATION:-000}"
       persistence:
         enabled: true
         size: ${STORAGE_MAINNODE_WEED_PERSISTENCE_SIZE:-5Gi}
@@ -501,7 +502,7 @@ storage:
         storageClass: "${STORAGE_METANODE_WEED_PERSISTENCE_STORAGE_CLASS}"
   datanode:
     weed:
-      replicas: ${STORAGE_DATANODE_WEED_REPLICAS:-4}
+      replicas: ${STORAGE_DATANODE_WEED_REPLICAS:-1}
       persistence:
         enabled: true
         size: ${STORAGE_DATANODE_WEED_PERSISTENCE_SIZE:-10Gi}

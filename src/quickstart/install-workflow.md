@@ -21,29 +21,6 @@ Some basic software needs to be installed before installing drycc workflow.
 K8s requires a large number of ports. If you are not sure what they are, please close the local firewall or open these ports.
 At the same time, because k8s you need system time, you need to ensure that the system time is correct.
 
-### Installing open-iscsi
-
-The command used to install open-iscsi differs depending on the Linux distribution.
-We recommend using Ubuntu as the guest OS image since it contains open-iscsi already.
-You may need to edit the cluster security group to allow SSH access.
-For SUSE and openSUSE, use this command:
-
-```
-$ zypper install open-iscsi
-```
-
-For Debian and Ubuntu, use this command:
-
-```
-$ apt-get install open-iscsi
-```
-
-For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image, use this command:
-
-```
-$ yum install iscsi-initiator-utils
-```
-
 ### Installing NFSv4 client
 
 The command used to install a NFSv4 client differs depending on the Linux distribution.
@@ -72,20 +49,6 @@ For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image
 
 ```
 $ yum install curl
-```
-
-### Installing bc
-
-For Debian and Ubuntu, use this command:
-
-```
-$ apt-get install bc
-```
-
-For RHEL, CentOS, and EKS with EKS Kubernetes Worker AMI with AmazonLinux2 image, use this command:
-
-```
-$ yum install bc
 ```
 
 ## Hardware
@@ -210,6 +173,7 @@ STORAGE_MAINNODE_TIPD_REPLICAS                  | Number of storage mainode tipd
 STORAGE_MAINNODE_TIPD_PERSISTENCE_SIZE          | The size of the persistence space allocated to `mainnode tipd`, which is `10Gi` by default
 STORAGE_MAINNODE_TIPD_PERSISTENCE_STORAGE_CLASS | StorangeClass of `mainnode tipd`; default storangeclass is used by default
 STORAGE_MAINNODE_WEED_REPLICAS                  | Number of storage mainode weed replicas to deploy
+STORAGE_MAINNODE_WEED_DEFAULT_REPLICATION       | default replication type if not specified, which is `000` by default
 STORAGE_MAINNODE_WEED_PERSISTENCE_SIZE          | The size of the persistence space allocated to `mainnode weed`, which is `10Gi` by default
 STORAGE_MAINNODE_WEED_PERSISTENCE_STORAGE_CLASS | StorangeClass of `mainnode weed`; default storangeclass is used by default
 STORAGE_METANODE_TIKV_REPLICAS                  | Number of storage metanode tikv replicas to deploy
