@@ -482,6 +482,8 @@ storage:
         storageClass: "${STORAGE_MAINNODE_TIPD_PERSISTENCE_STORAGE_CLASS}"
     weed:
       replicas: ${STORAGE_MAINNODE_WEED_REPLICAS:-1}
+      volumePreallocate: ${STORAGE_MAINNODE_WEED_PREALLOCATE:-false}
+      volumeSizeLimitMB: ${STORAGE_MAINNODE_WEED_SIZE_LIMIT_MB:-512}
       defaultReplication: "${STORAGE_MAINNODE_WEED_DEFAULT_REPLICATION:-000}"
       persistence:
         enabled: true

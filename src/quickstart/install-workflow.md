@@ -173,6 +173,8 @@ STORAGE_MAINNODE_TIPD_REPLICAS                  | Number of storage mainode tipd
 STORAGE_MAINNODE_TIPD_PERSISTENCE_SIZE          | The size of the persistence space allocated to `mainnode tipd`, which is `10Gi` by default
 STORAGE_MAINNODE_TIPD_PERSISTENCE_STORAGE_CLASS | StorangeClass of `mainnode tipd`; default storangeclass is used by default
 STORAGE_MAINNODE_WEED_REPLICAS                  | Number of storage mainode weed replicas to deploy
+STORAGE_MAINNODE_WEED_PREALLOCATE               | Preallocate disk space for volumes, `false` is used by default
+STORAGE_MAINNODE_WEED_SIZE_LIMIT_MB             | Master stops directing writes to oversized volumes, `30000` is used by default
 STORAGE_MAINNODE_WEED_DEFAULT_REPLICATION       | default replication type if not specified, which is `000` by default
 STORAGE_MAINNODE_WEED_PERSISTENCE_SIZE          | The size of the persistence space allocated to `mainnode weed`, which is `10Gi` by default
 STORAGE_MAINNODE_WEED_PERSISTENCE_STORAGE_CLASS | StorangeClass of `mainnode weed`; default storangeclass is used by default
