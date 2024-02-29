@@ -1,7 +1,0 @@
-## Inter-app Communication
-
-A common architecture pattern of multi-process applications is to have one process serve public requests while having multiple other processes supporting the public one to, for example, perform actions on a schedule or process work items from a queue. To implement this system of apps in Drycc Workflow, set up the apps to communicate using DNS resolution, as shown above, and hide the supporting processes from public view by removing them from the Drycc Workflow router.
-
-### DNS Service Discovery
-
-Drycc Workflow supports deploying a single app composed of a system of processes. Each Drycc Workflow app communicates on a single port, so communicating with another Workflow app means finding that app's address and port. All Workflow apps are mapped to port 80 externally, so finding its IP address is the only challenge. Workflow creates a [Kubernetes Service](https://kubernetes.io/docs/user-guide/services/) for each app, which effectively assigns a name and one cluster-internal IP address to an app. The DNS service running in the cluster adds and removes DNS records which point from the app name to its IP address as services are added and removed. Drycc Workflow apps, then, can simply send requests to the domain name given to the service, which is "app-name.app-namespace".
