@@ -2,52 +2,52 @@ apiVersion: v2
 appVersion: 1.0.0
 dependencies:
 - name: builder
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: imagebuilder
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: controller
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: database
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: timeseries
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: fluentbit
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: gateway
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: redis
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: logger
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: storage
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: monitor
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: registry
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: registry-proxy
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: rabbitmq
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: passport
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 - name: prometheus
-  repository: oci://registry.drycc.cc/charts-testing
+  repository: {{repository}}
   version: x.x.x
 description: Drycc Workflow
 home: https://github.com/drycc/workflow

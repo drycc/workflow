@@ -11,8 +11,7 @@ pipeline:
   - export IMAGE_TAG=$([ ! -z $CI_COMMIT_TAG ] && echo \"$VERSION\" || echo \"canary\")
   - export APP_VERSION=$([ ! -z $CI_COMMIT_TAG ] && echo $VERSION || echo 1.0.0)
   - export CHART_VERSION=$([ -z $CI_COMMIT_TAG ] && echo 1.0.0 || echo $VERSION)
-  - pip install -r requirements.txt
-  - python3 _scripts/dependency_update.py "oci://$DRYCC_REGISTRY/$([ -z $CI_COMMIT_TAG ] && echo charts-testing || echo charts)" "charts/workflow/Chart.yaml" 
+  - sed -i s#{{repository}}#oci://$DRYCC_REGISTRY/$([ -z $CI_COMMIT_TAG ] && echo charts-testing || echo charts)#g charts/workflow/Chart.yaml
   - helm dependency update charts/workflow
   - helm package -u charts/$${CI_REPO_NAME} --version $CHART_VERSION --app-version $APP_VERSION
   - echo $CONTAINER_PASSWORD | helm registry login $DRYCC_REGISTRY -u $CONTAINER_USERNAME --password-stdin
