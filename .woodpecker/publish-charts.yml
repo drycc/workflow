@@ -1,9 +1,8 @@
-platform: linux/amd64
-
 labels:
   type: exec
+  platform: linux/amd64
 
-pipeline:
+steps:
 - name: publish-charts
   image: bash
   commands:
