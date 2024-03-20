@@ -8,7 +8,7 @@ steps:
   commands:
   - export VERSION=$(sed 's#v##' <<< $CI_COMMIT_TAG)
   - export IMAGE_TAG=$([ ! -z $CI_COMMIT_TAG ] && echo \"$VERSION\" || echo \"canary\")
-  - export APP_VERSION=$([ ! -z $CI_COMMIT_TAG ] && echo $VERSION || echo 1.0.0)
+  - export APP_VERSION=$([ -z $CI_COMMIT_TAG ] && echo $CI_COMMIT_SHA || echo $VERSION)
   - export CHART_VERSION=$([ -z $CI_COMMIT_TAG ] && echo 1.0.0 || echo $VERSION)
   - sed -i s#{{repository}}#oci://$DRYCC_REGISTRY/$([ -z $CI_COMMIT_TAG ] && echo charts-testing || echo charts)#g charts/workflow/Chart.yaml
   - helm dependency update charts/workflow
