@@ -17,12 +17,11 @@ Please see below for links and descriptions of each component:
 - [builder](https://github.com/drycc/builder) - Git server and source-to-image component
 - [imagebuilder](https://github.com/drycc/imagebuilder) - The builder for Container Image and [CNCF Buildpacks](https://buildpacks.io/) based applications
 - [fluentbit](https://github.com/drycc/fluentbit) - Backend log shipping mechanism for `drycc logs`
-- [postgres](https://github.com/drycc/postgres) - The central database
+- [database](https://github.com/drycc/database) - Central database based on PostgreSQL
 - [registry](https://github.com/drycc/registry) - The Container registry
 - [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
-- [monitor](https://github.com/drycc/monitor) - The platform monitoring components
-- [timeseries](https://github.com/drycc/timeseries) - The monitor database for telegraf
-- [prometheus](https://github.com/drycc/prometheus) - The monitor database for drycc component
+- [grafana](https://github.com/drycc/grafana) - Central monitor grafana
+- [prometheus](https://github.com/drycc/prometheus) - The monitor database
 - [rabbitmq](https://github.com/drycc/rabbitmq) - RabbitMQ is a message broker used with controller celery
 - [storage](https://github.com/drycc/storage) - The in-cluster, kubernetes storage, s3 api compatible, hybrid storage system.
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`

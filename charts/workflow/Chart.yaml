@@ -13,9 +13,6 @@ dependencies:
 - name: database
   repository: {{repository}}
   version: x.x.x
-- name: timeseries
-  repository: {{repository}}
-  version: x.x.x
 - name: fluentbit
   repository: {{repository}}
   version: x.x.x
@@ -31,7 +28,7 @@ dependencies:
 - name: storage
   repository: {{repository}}
   version: x.x.x
-- name: monitor
+- name: grafana
   repository: {{repository}}
   version: x.x.x
 - name: registry
