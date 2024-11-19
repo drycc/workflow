@@ -34,12 +34,12 @@ global:
   # - off-cluster: Run PostgreSQL outside the Kubernetes cluster
   timeseriesLocation: "on-cluster"
 
-  # Set the location of Workflow's Redis instance
+  # Set the location of Workflow's Valkey instance
   #
   # Valid values are:
-  # - on-cluster: Run Redis within the Kubernetes cluster
-  # - off-cluster: Run Redis outside the Kubernetes cluster (configure in redis section)
-  redisLocation: "on-cluster"
+  # - on-cluster: Run Valkey within the Kubernetes cluster
+  # - off-cluster: Run Valkey outside the Kubernetes cluster (configure in valkey section)
+  valkeyLocation: "on-cluster"
   # Set the location of Workflow's rabbitmq instance
   # Valid values are:
   # - on-cluster: Run Rabbitmq within the Kubernetes cluster
@@ -230,11 +230,11 @@ timeseries:
     ## If the PV uses a different storage class, specify that here.
     storageClass: ""
 
-redis:
-  # The addrs parameters are configured only when using an off-cluster Redis instance
+valkey:
+  # The addrs parameters are configured only when using an off-cluster Valkey instance
   addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
-  password: "redis password" # "" == no password
-  # The following parameters are configured only when using an on-cluster Redis instance
+  password: "valkey password" # "" == no password
+  # The following parameters are configured only when using an on-cluster Valkey instance
   replicas: 1
   persistence:
     enabled: false # Set to true to enable persistence

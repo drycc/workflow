@@ -19,7 +19,7 @@ dependencies:
 - name: gateway
   repository: {{repository}}
   version: x.x.x
-- name: redis
+- name: valkey
   repository: {{repository}}
   version: x.x.x
 - name: logger
