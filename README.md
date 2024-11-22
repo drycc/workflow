@@ -22,7 +22,6 @@ Please see below for links and descriptions of each component:
 - [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
 - [grafana](https://github.com/drycc/grafana) - Central monitor grafana
 - [prometheus](https://github.com/drycc/prometheus) - The monitor database
-- [rabbitmq](https://github.com/drycc/rabbitmq) - RabbitMQ is a message broker used with controller celery
 - [storage](https://github.com/drycc/storage) - The in-cluster, kubernetes storage, s3 api compatible, hybrid storage system.
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`
 

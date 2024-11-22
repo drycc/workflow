@@ -37,9 +37,6 @@ dependencies:
 - name: registry-proxy
   repository: {{repository}}
   version: x.x.x
-- name: rabbitmq
-  repository: {{repository}}
-  version: x.x.x
 - name: passport
   repository: {{repository}}
   version: x.x.x

@@ -1,7 +1,6 @@
 # This is the global configuration file for Workflow
 
 # If the service is used by a component alone, it needs to be configured inside the component.
-# Refer to rabbitmqUrl and databaseUrl of the controller component. 
 # If the service is dependent on multiple components and there is state synchronization,
 # it needs to be configured separately, such as storage.
 
@@ -40,11 +39,6 @@ global:
   # - on-cluster: Run Valkey within the Kubernetes cluster
   # - off-cluster: Run Valkey outside the Kubernetes cluster (configure in valkey section)
   valkeyLocation: "on-cluster"
-  # Set the location of Workflow's rabbitmq instance
-  # Valid values are:
-  # - on-cluster: Run Rabbitmq within the Kubernetes cluster
-  # - off-cluster: Run Rabbitmq outside the Kubernetes cluster (configure in controller section)
-  rabbitmqLocation: "on-cluster"
   # Set the location of Workflow's prometheus cluster
   #
   # Valid values are:
@@ -177,8 +171,6 @@ controller:
   ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
   databaseUrl: ""
   databaseReplicaUrl: ""
-  # Configuring this will no longer use the built-in rabbitmq component
-  rabbitmqUrl: ""
 
 database:
   # The following parameters are configured only when using an on-cluster Database instance
@@ -239,26 +231,6 @@ valkey:
   persistence:
     enabled: false # Set to true to enable persistence
     size: 5Gi
-    storageClass: ""
-
-rabbitmq:
-  # The following parameters are configured only when using an on-cluster Rabbitmq instance
-  # If left empty they will be generated using randAlphaNum
-  username: ""
-  password: ""
-  # GCP PDs and EBS volumes are supported only
-  persistence:
-    enabled: false # Set to true to enable persistence
-    size: 5Gi # PVC size
-    ## rabbitmq data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    ## Storage class of PV to bind. By default it looks for standard storage class.
-    ## If the PV uses a different storage class, specify that here.
     storageClass: ""
 
 fluentbit:
