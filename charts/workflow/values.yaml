@@ -23,16 +23,6 @@ global:
   #   configured above)
   # - off-cluster: Run PostgreSQL outside the Kubernetes cluster
   databaseLocation: "on-cluster"
-
-  # Set the location of Workflow's Timeseries database
-  #
-  # Valid values are:
-  # - on-cluster: Run PostgreSQL within the Kubernetes cluster (credentials are generated
-  #   automatically; backups are sent to object storage
-  #   configured above)
-  # - off-cluster: Run PostgreSQL outside the Kubernetes cluster
-  timeseriesLocation: "on-cluster"
-
   # Set the location of Workflow's Valkey instance
   #
   # Valid values are:
@@ -197,31 +187,6 @@ database:
     ## If the PV uses a different storage class, specify that here.
     storageClass: ""
 
-timeseries:
-  # The following parameters are configured only when using an on-cluster Database instance
-  # The username and password to be used by the on-cluster database.
-  # If left empty they will be generated
-  # The user name should be set to lowercase letters 
-  superuser: "postgres"
-  superuserPassword: ""
-  replicator: "standby"
-  replicatorPassword: ""
-  user: ""
-  password: ""
-  persistence:
-    enabled: false # Set to true to enable persistence
-    size: 5Gi # PVC size
-    ## database data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    ## Storage class of PV to bind. By default it looks for standard storage class.
-    ## If the PV uses a different storage class, specify that here.
-    storageClass: ""
-
 valkey:
   # The addrs parameters are configured only when using an off-cluster Valkey instance
   addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
@@ -237,25 +202,24 @@ fluentbit:
   # Interval to flush output (seconds)
   flush: 5
 
-monitor:
-  grafana:
-    # Configure the following ONLY if you want persistence for on-cluster grafana
-    # GCP PDs and EBS volumes are supported only
-    persistence:
-      enabled: false # Set to true to enable persistence
-      accessMode: ReadWriteOnce
-      size: 5Gi # PVC size
-      ## grafana data Persistent Volume Storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      ## Storage class of PV to bind. By default it looks for standard storage class.
-      ## If the PV uses a different storage class, specify that here.
-      storageClass: ""
-      volumeName: ""
+grafana:
+  # Configure the following ONLY if you want persistence for on-cluster grafana
+  # GCP PDs and EBS volumes are supported only
+  persistence:
+    enabled: false # Set to true to enable persistence
+    accessMode: ReadWriteOnce
+    size: 5Gi # PVC size
+    ## grafana data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## Storage class of PV to bind. By default it looks for standard storage class.
+    ## If the PV uses a different storage class, specify that here.
+    storageClass: ""
+    volumeName: ""
 
 registry:
   # The host parameters is configured only when using an off-cluster Registry instance
