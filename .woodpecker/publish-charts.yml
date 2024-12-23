@@ -16,10 +16,13 @@ steps:
   - echo $CONTAINER_PASSWORD | helm registry login $DRYCC_REGISTRY -u $CONTAINER_USERNAME --password-stdin
   - helm push $${CI_REPO_NAME}-$CHART_VERSION.tgz oci://$DRYCC_REGISTRY/$([ -z $CI_COMMIT_TAG ] && echo charts-testing || echo charts)
   - bash _scripts/generate_cache.sh 
-  secrets:
-  - drycc_registry
-  - container_username
-  - container_password
+  environment:
+    DRYCC_REGISTRY:
+      from_secret: drycc_registry
+    CONTAINER_USERNAME:
+      from_secret: container_username
+    CONTAINER_PASSWORD:
+      from_secret: container_password
   when:
     event:
     - tag
