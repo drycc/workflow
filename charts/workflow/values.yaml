@@ -81,47 +81,8 @@ global:
   passportLocation: "on-cluster"
 
 storage:
-  # The following parameters are configured only when using an on-cluster Storage instance
-  csi:
-    storageClassName: drycc-storage
-    statefulset:
-      replicas: 1
-  mainnode:
-    tipd:
-      replicas: 3
-      persistence:
-        enabled: false
-        size: 5Gi
-        storageClass: ""
-    weed:
-      replicas: 3
-      persistence:
-        enabled: false
-        size: 5Gi
-        storageClass: ""
-  metanode:
-    tikv:
-      replicas: 3
-      persistence:
-        enabled: false
-        size: 5Gi
-        storageClass: ""
-    weed:
-      replicas: 3
-      persistence:
-        enabled: false
-        size: 5Gi
-        storageClass: ""
-  datanode:
-    weed:
-      replicas: 3
-      persistence:
-        enabled: false
-        size: 5Gi
-        storageClass: ""
   # The following parameters are configured only when using an off-cluster Storage instance
   lookup: path
-  health: ""
   endpoint: ""
   builderBucket: ""
   registryBucket: ""
@@ -153,7 +114,7 @@ controller:
   # admin_only - allows for registration by an admin only.
   registrationMode: "admin_only"
   # Set storageClassName, It is used for application mount.
-  appStorageClass: "{{ .Values.storage.csi.storageClassName }}"
+  appStorageClass: "longhorn"
   # Set controller deployment  replicas
   replicas: 1
   # Set celery replicas
@@ -245,7 +206,7 @@ passport:
 prometheus:
   ## prometheus-server configuration##
   prometheus-server:
-    replicas: 1
+    replicas: 2
     retention: 15d
     # persistence config
     persistence:
