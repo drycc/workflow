@@ -10,39 +10,43 @@ dependencies:
 - name: controller
   repository: {{repository}}
   version: x.x.x
-- name: database
-  repository: {{repository}}
-  version: x.x.x
 - name: fluentbit
   repository: {{repository}}
   version: x.x.x
 - name: gateway
   repository: {{repository}}
   version: x.x.x
-- name: valkey
-  repository: {{repository}}
-  version: x.x.x
 - name: logger
   repository: {{repository}}
   version: x.x.x
+- name: valkey
+  repository: {{repository}}
+  version: x.x.x
+  condition: valkey.enabled
 - name: storage
   repository: {{repository}}
   version: x.x.x
+  condition: storage.enabled
 - name: grafana
   repository: {{repository}}
   version: x.x.x
+  condition: grafana.enabled
+- name: database
+  repository: {{repository}}
+  version: x.x.x
+  condition: database.enabled
 - name: registry
   repository: {{repository}}
   version: x.x.x
-- name: registry-proxy
-  repository: {{repository}}
-  version: x.x.x
+  condition: registry.enabled
 - name: passport
   repository: {{repository}}
   version: x.x.x
+  condition: passport.enabled
 - name: prometheus
   repository: {{repository}}
   version: x.x.x
+  condition: prometheus.enabled
 description: Drycc Workflow
 home: https://github.com/drycc/workflow
 maintainers:

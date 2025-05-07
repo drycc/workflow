@@ -7,49 +7,6 @@
 global:
   # Admin email, used for each component to send email to administrator
   email: "drycc@drycc.cc"
-
-  # Set the location of Workflow's Object Storage
-  #
-  # Valid values are:
-  # - on-cluster: Run drycc storage within the Kubernetes cluster
-  # - off-cluster: Run Storage outside the Kubernetes cluster (Compatible with s3 API)
-  storageLocation: "on-cluster"
-
-  # Set the location of Workflow's PostgreSQL database
-  #
-  # Valid values are:
-  # - on-cluster: Run PostgreSQL within the Kubernetes cluster (credentials are generated
-  #   automatically; backups are sent to object storage
-  #   configured above)
-  # - off-cluster: Run PostgreSQL outside the Kubernetes cluster
-  databaseLocation: "on-cluster"
-  # Set the location of Workflow's Valkey instance
-  #
-  # Valid values are:
-  # - on-cluster: Run Valkey within the Kubernetes cluster
-  # - off-cluster: Run Valkey outside the Kubernetes cluster (configure in valkey section)
-  valkeyLocation: "on-cluster"
-  # Set the location of Workflow's prometheus cluster
-  #
-  # Valid values are:
-  # - on-cluster: Run prometheus within the Kubernetes cluster
-  # - off-cluster: prometheus is running outside of the cluster and credentials and connection information will be provided.
-  prometheusLocation: "on-cluster"
-  # Set the location of Workflow's grafana instance
-  #
-  # Valid values are:
-  # - on-cluster: Run Grafana within the Kubernetes cluster
-  # - off-cluster: Grafana is running outside of the cluster
-  grafanaLocation: "on-cluster"
-
-  # Set the location of Workflow's Registry
-  #
-  # Valid values are:
-  # - on-cluster: Run registry within the Kubernetes cluster
-  # - off-cluster: Use registry outside the Kubernetes cluster (example: drycc registry,self-hosted)
-  registryLocation: "on-cluster"
-  # Prefix for the imagepull secret created when using private registry
-  registrySecretPrefix: "private-registry"
   # GatewayClass is cluster-scoped resource defined by the infrastructure provider.
   # This resource represents a class of Gateways that can be instantiated.
   gatewayClass: ""
@@ -64,38 +21,27 @@ global:
   platformDomain: ""
   # Whether certManagerEnabled is true to automatically generate drycc certificates
   certManagerEnabled: false
-  # Set the location of Workflow's passport
-  #
-  # Valid values are:
-  # - on-cluster: Run passport within the Kubernetes cluster
-  # - off-cluster: Use passport outside the Kubernetes cluster
-  passportLocation: "on-cluster"
 
-storage:
-  # The following parameters are configured only when using an off-cluster Storage instance
-  lookup: path
-  endpoint: ""
-  builderBucket: ""
-  registryBucket: ""
-  # The following parameters are general parameters
-  accesskey: ""
-  secretkey: ""
-
-# Set the default (global) way of how Application (your own) images are
-# pulled from within the Controller.
-# This can be configured per Application as well in the Controller.
-#
-# This affects pull apps and git push apps
-#
-# Values values are:
-# - Always
-# - IfNotPresent
 builder:
   service:
     # Service type default to ClusterIP, the entrance will be taken over by router.
     type: ClusterIP
     # If service.type is not set to NodePort, the following statement will be ignored.
     nodePort: ""
+
+# Drycc Gateway is a gateway chart that integrates cert-manager.
+gateway:
+  # acme configuration takes effect if and only if certManagerEnabled is true
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    #  EAB credentials
+    externalAccountBinding:
+      keyID: ""
+      keySecret: ""
+
+fluentbit:
+  # Interval to flush output (seconds)
+  flush: 5
 
 controller:
   appImagePullPolicy: "IfNotPresent"
@@ -114,7 +60,69 @@ controller:
   databaseUrl: ""
   databaseReplicaUrl: ""
 
+valkey:
+  enabled: true
+  # The addrs parameters are configured only when using an off-cluster Valkey instance
+  addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
+  password: "valkey password" # "" == no password
+  # The following parameters are configured only when using an on-cluster Valkey instance
+  replicas: 3
+  persistence:
+    enabled: false # Set to true to enable persistence
+    size: 5Gi
+    storageClass: ""
+
+storage:
+  enabled: true
+  # The following parameters are configured only when using an off-cluster Storage instance
+  lookup: path
+  endpoint: ""
+  # The following parameters are general parameters
+  accesskey: ""
+  secretkey: ""
+
+grafana:
+  enabled: true
+  # Configure the following ONLY if you want persistence for on-cluster grafana
+  # GCP PDs and EBS volumes are supported only
+  persistence:
+    enabled: false # Set to true to enable persistence
+    accessMode: ReadWriteOnce
+    size: 5Gi # PVC size
+    ## grafana data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## Storage class of PV to bind. By default it looks for standard storage class.
+    ## If the PV uses a different storage class, specify that here.
+    storageClass: ""
+    volumeName: ""
+
+registry:
+  enabled: true
+  username: ""
+  password: ""
+  # The redirect parameters is configured only when using an on-cluster Registry instance
+  # The subsection provides configuration for managing redirects from content backends.
+  # For backends that support it, redirecting is disabled by default.
+  redirect: "false"
+  # host port for the registry proxy in the daemonset
+  proxyPort: 5555
+
+passport:
+  enabled: true
+  # The following parameters are configured only when using an on-cluster passport
+  # Set passport deployment replicas
+  replicas: 1
+  ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
+  databaseUrl: ""
+  databaseReplicaUrl: ""
+
 database:
+  enabled: true
   # The following parameters are configured only when using an on-cluster Database instance
   # The username and password to be used by the on-cluster database.
   # If left empty they will be generated
@@ -139,64 +147,8 @@ database:
     ## If the PV uses a different storage class, specify that here.
     storageClass: ""
 
-valkey:
-  # The addrs parameters are configured only when using an off-cluster Valkey instance
-  addrs: "" # A list of clusters: "127.0.0.1:7001/1,127.0.0.2:7002/1"
-  password: "valkey password" # "" == no password
-  # The following parameters are configured only when using an on-cluster Valkey instance
-  replicas: 3
-  persistence:
-    enabled: false # Set to true to enable persistence
-    size: 5Gi
-    storageClass: ""
-
-fluentbit:
-  # Interval to flush output (seconds)
-  flush: 5
-
-grafana:
-  # Configure the following ONLY if you want persistence for on-cluster grafana
-  # GCP PDs and EBS volumes are supported only
-  persistence:
-    enabled: false # Set to true to enable persistence
-    accessMode: ReadWriteOnce
-    size: 5Gi # PVC size
-    ## grafana data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    ## Storage class of PV to bind. By default it looks for standard storage class.
-    ## If the PV uses a different storage class, specify that here.
-    storageClass: ""
-    volumeName: ""
-
-registry:
-  # The host parameters is configured only when using an off-cluster Registry instance
-  host: ""
-  # The following organization parameters are valid only in cluster-off
-  # In the case of cluster-on, the value is app name, which is dynamically assigned by builder.
-  organization: ""
-  username: ""
-  password: ""
-  # The redirect parameters is configured only when using an on-cluster Registry instance
-  # The subsection provides configuration for managing redirects from content backends.
-  # For backends that support it, redirecting is disabled by default.
-  redirect: "false"
-  # host port for the registry proxy in the daemonset
-  proxyPort: 5555
-
-passport:
-  # The following parameters are configured only when using an on-cluster passport
-  # Set passport deployment replicas
-  replicas: 1
-  ## databaseUrl and databaseReplicaUrl are will no longer use the built-in database component
-  databaseUrl: ""
-  databaseReplicaUrl: ""
-
 prometheus:
+  enabled: true
   ## prometheus-server configuration##
   prometheus-server:
     replicas: 2
@@ -214,19 +166,6 @@ prometheus:
   ##
   kube-state-metrics:
     enabled: true
-  # Configure the following ONLY if using an off-cluster prometheus database
-  # URL configuration is only available in off-cluster prometheus database
-  url: "http://my.prometheus.url:9090"
   # The username and password to be used by the on-cluster database.
   username: "admin"
   password: "admin"
-
-# Drycc Gateway is a gateway chart that integrates cert-manager.
-gateway:
-  # acme configuration takes effect if and only if certManagerEnabled is true
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    #  EAB credentials
-    externalAccountBinding:
-      keyID: ""
-      keySecret: ""
