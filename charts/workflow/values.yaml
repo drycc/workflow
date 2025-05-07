@@ -50,13 +50,6 @@ global:
   registryLocation: "on-cluster"
   # Prefix for the imagepull secret created when using private registry
   registrySecretPrefix: "private-registry"
-
-  # Enable usage of RBAC authorization mode
-  #
-  # Valid values are:
-  # - true: all RBAC-related manifests will be installed (in case your cluster supports RBAC)
-  # - false: no RBAC-related manifests will be installed
-  rbac: true
   # GatewayClass is cluster-scoped resource defined by the infrastructure provider.
   # This resource represents a class of Gateways that can be instantiated.
   gatewayClass: ""
