@@ -50,8 +50,6 @@ global:
   registryLocation: "on-cluster"
   # Prefix for the imagepull secret created when using private registry
   registrySecretPrefix: "private-registry"
-  # The host port to which registry proxy binds to
-  registryProxyPort: 5555
 
   # Enable usage of RBAC authorization mode
   #
@@ -194,6 +192,8 @@ registry:
   # The subsection provides configuration for managing redirects from content backends.
   # For backends that support it, redirecting is disabled by default.
   redirect: "false"
+  # host port for the registry proxy in the daemonset
+  proxyPort: 5555
 
 passport:
   # The following parameters are configured only when using an on-cluster passport
