@@ -7,9 +7,6 @@
 global:
   # Admin email, used for each component to send email to administrator
   email: "drycc@drycc.cc"
-  # GatewayClass is cluster-scoped resource defined by the infrastructure provider.
-  # This resource represents a class of Gateways that can be instantiated.
-  gatewayClass: ""
   # A domain name consists of one or more parts.
   # Periods (.) are used to separate these parts.
   # Each part must be 1 to 63 characters in length and can contain lowercase letters, digits, and hyphens (-).
@@ -31,6 +28,8 @@ builder:
 
 # Drycc Gateway is a gateway chart that integrates cert-manager.
 gateway:
+  # GatewayClass is cluster-scoped resource defined by the infrastructure provider.
+  gatewayClass: ""
   # acme configuration takes effect if and only if certManagerEnabled is true
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -50,6 +49,8 @@ controller:
   # disabled - turns off open registration
   # admin_only - allows for registration by an admin only.
   registrationMode: "admin_only"
+  # Set app gateway, It is used for application gateway.
+  appGatewayClass: ""
   # Set storageClassName, It is used for application mount.
   appStorageClass: "longhorn"
   # Set controller deployment  replicas
@@ -110,7 +111,8 @@ registry:
   # For backends that support it, redirecting is disabled by default.
   redirect: "false"
   # host port for the registry proxy in the daemonset
-  proxyPort: 5555
+  proxy:
+    port: 5555
 
 passport:
   enabled: true
@@ -147,25 +149,39 @@ database:
     ## If the PV uses a different storage class, specify that here.
     storageClass: ""
 
-prometheus:
+victoriametrics:
   enabled: true
-  ## prometheus-server configuration##
-  prometheus-server:
-    replicas: 2
-    retention: 15d
-    # persistence config
-    persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      size: 10Gi
-      storageClass: ""
-  ## node-exporter configuration##
-  node-exporter:
-    enabled: true
-  ## kube-state-metrics configuration
+  ## victoriametrics vmagent configuration
   ##
-  kube-state-metrics:
-    enabled: true
-  # The username and password to be used by the on-cluster database.
-  username: "admin"
-  password: "admin"
+  vmagent:
+    replicas: 3
+
+  ## victoriametrics vminsert configuration
+  ##
+  vminsert:
+    replicas: 3
+
+  ## victoriametrics vmselect configuration
+  ##
+  vmselect:
+    replicas: 3
+
+  ## victoriametrics vmstorage configuration
+  ##
+  vmstorage:
+    replicas: 3
+    temporary:
+      enabled: false
+      size: 5Gi
+      storageClass: ""
+    persistence:
+      enabled: false
+      size: 5Gi
+      storageClass: ""
+    ## node-exporter configuration##
+    node-exporter:
+      enabled: true
+    ## kube-state-metrics configuration
+    ##
+    kube-state-metrics:
+      enabled: true

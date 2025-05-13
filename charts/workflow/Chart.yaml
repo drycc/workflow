@@ -43,10 +43,10 @@ dependencies:
   repository: {{repository}}
   version: x.x.x
   condition: passport.enabled
-- name: prometheus
+- name: victoriametrics
   repository: {{repository}}
   version: x.x.x
-  condition: prometheus.enabled
+  condition: victoriametrics.enabled
 description: Drycc Workflow
 home: https://github.com/drycc/workflow
 maintainers:
