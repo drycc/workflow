@@ -455,11 +455,21 @@ function install_cert_manager() {
 }
 
 function install_catalog() {
+  service_catalog_version="canary"
+  if [[ "$CHANNEL" == "stable" ]]; then
+    if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
+      service_catalog_url=https://drycc-mirrors.drycc.cc/drycc-addons/service-catalog
+    else
+      service_catalog_url=https://github.com/drycc-addons/service-catalog
+    fi
+    service_catalog_version=$(curl -Ls $service_catalog_url/releases|grep /drycc-addons/service-catalog/releases/tag/ | sed -E 's/.*\/drycc-addons\/service-catalog\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+  fi
+
   options=${1:-""}
   echo -e "\\033[32m---> Start install catalog...\\033[0m"
   helm upgrade --install catalog $CHARTS_URL/catalog \
     --set asyncBindingOperationsEnabled=true \
-    --set image=registry.drycc.cc/drycc-addons/service-catalog:canary \
+    --set image=registry.drycc.cc/drycc-addons/service-catalog:${service_catalog_version} \
     --namespace catalog \
     --create-namespace --wait $options
   echo -e "\\033[32m---> Catalog install completed!\\033[0m"
@@ -651,10 +661,20 @@ EOF
 
 function install_helmbroker {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    addons_url="https://drycc-mirrors.drycc.cc/drycc-addons/addons/releases/download/latest/index.yaml"
+    addons_base_url="https://drycc-mirrors.drycc.cc/drycc-addons/addons"
   else
-    addons_url="https://github.com/drycc-addons/addons/releases/download/latest/index.yaml"
+    addons_base_url="https://github.com/drycc-addons/addons"
   fi
+  version="latest"
+  if [[ "$CHANNEL" == "stable" ]]; then
+    for version in $(curl -Ls "${addons_base_url}"/releases|grep /drycc-addons/addons/releases/tag/ | sed -E 's/.*\/drycc-addons\/addons\/releases\/tag\/(v[0-9]{1,})".*/\1/g'); do
+      if [[ "$version" != "latest" ]]; then
+        break
+      fi
+    done
+  fi
+  addons_url="${addons_base_url}/releases/download/${version}/index.yaml"
+
   options=${1:-""}
   local VALKEY_PASSWORD=$(kubectl get secrets -n drycc valkey-creds -o jsonpath="{.data.password}"| base64 -d)
   local HELMBROKER_USERNAME=${HELMBROKER_USERNAME:-$(cat /proc/sys/kernel/random/uuid)}
