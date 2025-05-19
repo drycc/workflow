@@ -21,7 +21,7 @@ Please see below for links and descriptions of each component:
 - [registry](https://github.com/drycc/registry) - The Container registry
 - [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
 - [grafana](https://github.com/drycc/grafana) - Central monitor grafana
-- [prometheus](https://github.com/drycc/prometheus) - The monitor database
+- [victoriametrics](https://github.com/drycc/victoriametrics) - The monitor database
 - [storage](https://github.com/drycc/storage) - The in-cluster, kubernetes storage, s3 api compatible, hybrid storage system.
 - [workflow-cli](https://github.com/drycc/workflow-cli) - Workflow CLI `drycc`
 
