@@ -28,3 +28,27 @@ steps:
     - tag
     - push
     - cron
+
+- name: publish-scripts
+  image: bash
+  commands:
+  - podman run --rm
+      -e CI_FORGE_TYPE=github
+      -e CI_PIPELINE_EVENT=tag
+      -e CI_REPO_OWNER="$CI_REPO_OWNER"
+      -e CI_REPO_NAME="$CI_REPO_NAME"
+      -e CI_COMMIT_REF="refs/tags/$CI_COMMIT_TAG"
+      -e PLUGIN_API_KEY="$GITHUB_TOKEN"
+      -e PLUGIN_BASE_URL="https://api.github.com/"
+      -e PLUGIN_UPLOAD_URL="https://uploads.github.com/"
+      -e PLUGIN_OVERWRITE="true"
+      -e PLUGIN_FILES="*.sh"
+      -v $(pwd):$(pwd)
+      -w $(pwd)
+      docker.io/woodpeckerci/plugin-release
+  environment:
+    GITHUB_TOKEN:
+      from_secret: github_token
+  when:
+    event:
+    - tag
