@@ -155,6 +155,10 @@ victoriametrics:
   ##
   vmagent:
     replicas: 3
+    persistence:
+      enabled: false
+      size: 5Gi
+      storageClass: ""
 
   ## victoriametrics vminsert configuration
   ##
@@ -170,18 +174,15 @@ victoriametrics:
   ##
   vmstorage:
     replicas: 3
-    temporary:
-      enabled: false
-      size: 5Gi
-      storageClass: ""
     persistence:
       enabled: false
       size: 5Gi
       storageClass: ""
-    ## node-exporter configuration##
-    node-exporter:
-      enabled: true
-    ## kube-state-metrics configuration
-    ##
-    kube-state-metrics:
-      enabled: true
+
+  ## node-exporter configuration##
+  nodeExporter:
+    enabled: true
+  ## kube-state-metrics configuration
+  ##
+  kubeStateMetrics:
+    enabled: true

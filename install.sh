@@ -46,7 +46,7 @@ urlencode() {
 
   old_lang=$LANG
   LANG=C
-  
+
   old_lc_collate=$LC_COLLATE
   LC_COLLATE=C
 
@@ -108,7 +108,7 @@ function configure_os {
     echo 'fs.inotify.max_user_instances = 65535' >> /etc/sysctl.conf
   fi
   sysctl -p
-  
+
   cpufreq=$(ls /sys/devices/system/cpu/cpu*/cpufreq >/dev/null 2>&1 || echo "false")
   if [[ $cpufreq != "false" ]]; then
     for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
@@ -243,7 +243,7 @@ function configure_k3s_mirrors {
   fi
   if [ -z "${INSTALL_K3S_VERSION}" ]; then
     INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}[rc0-9\-]{0,}%2Bk3s[0-9])".*/\1/g' | head -1)
-  else 
+  else
     INSTALL_K3S_VERSION=$(urlencode "$INSTALL_K3S_VERSION")
   fi
   export INSTALL_K3S_VERSION
@@ -469,7 +469,7 @@ function install_catalog() {
   echo -e "\\033[32m---> Start install catalog...\\033[0m"
   helm upgrade --install catalog $CHARTS_URL/catalog \
     --set asyncBindingOperationsEnabled=true \
-    --set image=registry.drycc.cc/drycc-addons/service-catalog:${service_catalog_version} \
+    --set image=registry.drycc.cc/drycc-addons/service-catalog:${service_catalog_version#v} \
     --namespace catalog \
     --create-namespace --wait $options
   echo -e "\\033[32m---> Catalog install completed!\\033[0m"
@@ -630,12 +630,16 @@ imagebuilder:
 EOF
   fi
   if [[ -z "${VICTORIAMETRICS_CONFIG_FILE}" ]] ; then
-    VICTORIAMETRICS_CONFIG_FILE="/tmp/drycc-storage-values.yaml"
+    VICTORIAMETRICS_CONFIG_FILE="/tmp/drycc-victoriametrics-values.yaml"
     cat << EOF > "${VICTORIAMETRICS_CONFIG_FILE}"
 victoriametrics:
   enabled: true
   vmagent:
     replicas: 1
+    persistence:
+      enabled: true
+      size: ${VICTORIAMETRICS_VMAGENT_PERSISTENCE_SIZE:-10Gi}
+      storageClass: ${VICTORIAMETRICS_VMAGENT_PERSISTENCE_STORAGE_CLASS:-""}
   vminsert:
     replicas: 1
   vmselect:
@@ -644,8 +648,8 @@ victoriametrics:
     replicas: 1
     persistence:
       enabled: true
-      size: ${VICTORIAMETRICS_PERSISTENCE_SIZE:-10Gi}
-      storageClass: ${VICTORIAMETRICS_PERSISTENCE_STORAGE_CLASS:-""}
+      size: ${VICTORIAMETRICS_VMSTORAGE_PERSISTENCE_SIZE:-10Gi}
+      storageClass: ${VICTORIAMETRICS_VMSTORAGE_PERSISTENCE_STORAGE_CLASS:-""}
 EOF
     export VICTORIAMETRICS_CONFIG_FILE
   fi
