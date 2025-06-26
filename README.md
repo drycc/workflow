@@ -19,7 +19,6 @@ Please see below for links and descriptions of each component:
 - [fluentbit](https://github.com/drycc/fluentbit) - Backend log shipping mechanism for `drycc logs`
 - [database](https://github.com/drycc/database) - Central database based on PostgreSQL
 - [registry](https://github.com/drycc/registry) - The Container registry
-- [logger](https://github.com/drycc/logger) - The (in-memory) log buffer for `drycc logs`
 - [grafana](https://github.com/drycc/grafana) - Central monitor grafana
 - [victoriametrics](https://github.com/drycc/victoriametrics) - The monitor database
 - [storage](https://github.com/drycc/storage) - The in-cluster, kubernetes storage, s3 api compatible, hybrid storage system.

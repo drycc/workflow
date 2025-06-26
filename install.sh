@@ -580,10 +580,6 @@ storage:
 imagebuilder:
   imageRegistry: ${DRYCC_REGISTRY}
 
-logger:
-  replicas: ${LOGGER_REPLICAS:-1}
-  imageRegistry: ${DRYCC_REGISTRY}
-
 grafana:
   imageRegistry: ${DRYCC_REGISTRY}
   persistence:
