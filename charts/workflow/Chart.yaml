@@ -16,6 +16,9 @@ dependencies:
 - name: gateway
   repository: {{repository}}
   version: x.x.x
+- name: quickwit
+  repository: {{repository}}
+  version: x.x.x
 - name: valkey
   repository: {{repository}}
   version: x.x.x

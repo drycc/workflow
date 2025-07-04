@@ -535,6 +535,9 @@ builder:
 gateway:
   gatewayClass: ${GATEWAY_CLASS}
 
+quickwit:
+  imageRegistry: ${DRYCC_REGISTRY}
+
 database:
   imageRegistry: ${DRYCC_REGISTRY}
   resources:
