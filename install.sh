@@ -6,7 +6,6 @@ shopt -s expand_aliases
 GATEWAY_CLASS="istio"
 CLUSTER_CIDR=${CLUSTER_CIDR:-"10.42.0.0/16"}
 SERVICE_CIDR=${SERVICE_CIDR:-"10.43.0.0/16"}
-CLUSTER_DOMAIN=${CLUSTER_DOMAIN:-"cluster.local"}
 CERT_MANAGER_ENABLED="${CERT_MANAGER_ENABLED:-false}"
 DRYCC_REGISTRY="${DRYCC_REGISTRY:-registry.drycc.cc}"
 CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
@@ -255,7 +254,7 @@ function install_k3s_server {
   install_runtime
   configure_registry
   configure_k3s_mirrors
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --embedded-registry --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=${CLUSTER_CIDR} --service-cidr=${SERVICE_CIDR} --cluster-domain=${CLUSTER_DOMAIN}"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --embedded-registry --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=${CLUSTER_CIDR} --service-cidr=${SERVICE_CIDR}"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
@@ -524,7 +523,6 @@ function install_drycc {
 
 cat << EOF > "/tmp/drycc-values.yaml"
 global:
-  clusterDomain: ${CLUSTER_DOMAIN}
   platformDomain: ${PLATFORM_DOMAIN}
   certManagerEnabled: ${CERT_MANAGER_ENABLED}
 
@@ -688,7 +686,6 @@ function install_helmbroker {
   helm upgrade --install helmbroker $CHARTS_URL/helmbroker \
     --set valkey.enabled=false \
     --set gateway.gatewayClass=${GATEWAY_CLASS} \
-    --set global.clusterDomain=${CLUSTER_DOMAIN} \
     --set global.platformDomain=${PLATFORM_DOMAIN} \
     --set global.certManagerEnabled=${CERT_MANAGER_ENABLED} \
     --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
@@ -696,7 +693,7 @@ function install_helmbroker {
     --set username=${HELMBROKER_USERNAME} \
     --set password=${HELMBROKER_PASSWORD} \
     --set replicas=${HELMBROKER_REPLICAS} \
-    --set valkeyUrl=redis://:${VALKEY_PASSWORD}@drycc-valkey.drycc.svc.${CLUSTER_DOMAIN}:16379/11 \
+    --set valkeyUrl=redis://:${VALKEY_PASSWORD}@drycc-valkey.drycc.svc:16379/11 \
     --set celeryReplicas=${HELMBROKER_CELERY_REPLICAS} \
     --namespace drycc-helmbroker --create-namespace $options --wait -f - <<EOF
 repositories:
@@ -718,7 +715,7 @@ metadata:
 spec:
   relistBehavior: Duration
   relistRequests: 5
-  url: http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.drycc-helmbroker.svc.${CLUSTER_DOMAIN}
+  url: http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.drycc-helmbroker.svc
 EOF
 
   echo -e "\\033[32m---> Helmbroker username: $HELMBROKER_USERNAME\\033[0m"
