@@ -551,8 +551,6 @@ fluentbit:
   imageRegistry: ${DRYCC_REGISTRY}
 
 controller:
-  apiReplicas: ${CONTROLLER_API_REPLICAS:-1}
-  celeryReplicas: ${CONTROLLER_CELERY_REPLICAS:-1}
   webhookReplicas: ${CONTROLLER_WEBHOOK_REPLICAS:-1}
   imageRegistry: ${DRYCC_REGISTRY}
   appRuntimeClass: ${CONTROLLER_APP_RUNTIME_CLASS:-""}
@@ -560,6 +558,14 @@ controller:
   appStorageClass: ${CONTROLLER_APP_STORAGE_CLASS:-"longhorn"}
   filerImage: ${FILER_IMAGE}
   filerImagePullPolicy: ${FILER_IMAGE_PULL_POLICY}
+  api:
+    replicas: ${CONTROLLER_API_REPLICAS:-1}
+  celery:
+    replicas: ${CONTROLLER_CELERY_REPLICAS:-1}
+  metric:
+    replicas: ${CONTROLLER_METRIC_REPLICAS:-1}
+  mutate:
+    replicas: ${CONTROLLER_MUTATE_REPLICAS:-1}
 
 valkey:
   imageRegistry: ${DRYCC_REGISTRY}
