@@ -70,32 +70,20 @@ valkey:
 
 storage:
   enabled: true
-  # The following parameters are configured only when using an off-cluster Storage instance
-  lookup: path
-  endpoint: ""
   # The following parameters are general parameters
   accesskey: ""
   secretkey: ""
+  persistence:
+    enabled: false
+    size: 5Gi
+    storageClass: ""
 
 grafana:
   enabled: true
-  # Configure the following ONLY if you want persistence for on-cluster grafana
-  # GCP PDs and EBS volumes are supported only
   persistence:
-    enabled: false # Set to true to enable persistence
-    accessMode: ReadWriteOnce
-    size: 5Gi # PVC size
-    ## grafana data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    ## Storage class of PV to bind. By default it looks for standard storage class.
-    ## If the PV uses a different storage class, specify that here.
+    enabled: false
+    size: 5Gi
     storageClass: ""
-    volumeName: ""
 
 registry:
   enabled: true
@@ -131,17 +119,8 @@ database:
   user: ""
   password: ""
   persistence:
-    enabled: false # Set to true to enable persistence
-    size: 5Gi # PVC size
-    ## database data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    ## Storage class of PV to bind. By default it looks for standard storage class.
-    ## If the PV uses a different storage class, specify that here.
+    enabled: false
+    size: 5Gi
     storageClass: ""
 
 victoriametrics:
