@@ -700,7 +700,8 @@ function install_helmbroker {
     --set password=${HELMBROKER_PASSWORD} \
     --set replicas=${HELMBROKER_REPLICAS} \
     --set valkeyUrl=redis://:${VALKEY_PASSWORD}@drycc-valkey.drycc.svc:16379/11 \
-    --set celeryReplicas=${HELMBROKER_CELERY_REPLICAS} \
+    --set api.replicas=${HELMBROKER_API_REPLICAS} \
+    --set celery.replicas=${HELMBROKER_CELERY_REPLICAS} \
     --namespace drycc-helmbroker --create-namespace $options --wait -f - <<EOF
 repositories:
 - name: drycc-helmbroker
