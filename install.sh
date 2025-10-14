@@ -435,7 +435,7 @@ function install_gateway() {
 
   helm repo add istio https://drycc-mirrors.drycc.cc/istio-charts
   helm repo update
-  kubectl apply -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
+  kubectl apply --server-side -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
   helm upgrade --install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace --wait $options
   helm upgrade --install istio-istiod istio/istiod -n istio-system \
     --set pilot.env.PILOT_ENABLE_ALPHA_GATEWAY_API=true \
