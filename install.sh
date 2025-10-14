@@ -63,12 +63,23 @@ urlencode() {
 }
 
 function install_helm {
+  echo -e "\\033[32m---> Start install helm\\033[0m"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    version=$(curl -Ls https://drycc-mirrors.drycc.cc/helm/helm/releases|grep /helm/helm/releases/tag/ | sed -E 's/.*\/helm\/helm\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+    version=$(curl -Ls https://drycc-mirrors.drycc.cc/helm/helm/releases \
+      | grep -o 'href="/helm/helm/releases/tag/v[^"]*"' \
+      | sed 's|href="/helm/helm/releases/tag/||; s/"$//' \
+      | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+      | sort -Vr \
+      | head -1)
     tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://drycc-mirrors.drycc.cc/helm/${tar_name}"
   else
-    version=$(curl -Ls https://github.com/helm/helm/releases|grep /helm/helm/releases/tag/ | sed -E 's/.*\/helm\/helm\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+    version=$(curl -Ls https://github.com/helm/helm/releases \
+      | grep -o 'href="/helm/helm/releases/tag/v[^"]*"' \
+      | sed 's|href="/helm/helm/releases/tag/||; s/"$//' \
+      | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+      | sort -Vr \
+      | head -1)
     tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://get.helm.sh/${tar_name}"
   fi
@@ -76,6 +87,7 @@ function install_helm {
   tar -zxvf "${tar_name}"
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
+  echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
 }
 
 function configure_os {
@@ -140,11 +152,11 @@ function install_kata_runtime {
   fi
 
   kata_version=$(curl -Ls ${kata_base_url}/kata-containers/releases|grep /kata-containers/kata-containers/releases/tag/ | sed -E 's/.*\/kata-containers\/kata-containers\/releases\/tag\/([0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
-  kata_package=kata-static-${kata_version}-${ARCH}.tar.xz
+  kata_package=kata-static-${kata_version}-${ARCH}.tar.zst
   kata_download_url=${kata_base_url}/kata-containers/releases/download/${kata_version}/${kata_package}
 
-  curl -sfL "${kata_download_url}" -o ${kata_package}
-  tar xvf ${kata_package} -C /
+  curl -fL "${kata_download_url}" -o ${kata_package}
+  tar -I zstd -xf ${kata_package} -C /
   ln -s /opt/kata/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
   ln -s /opt/kata/bin/kata-collect-data.sh /usr/local/bin/kata-collect-data.sh
   ln -s /opt/kata/bin/kata-runtime /usr/local/bin/kata-runtime
@@ -234,18 +246,10 @@ function configure_k3s_mirrors {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     INSTALL_K3S_MIRROR="${INSTALL_DRYCC_MIRROR}"
     k3s_install_url="https://drycc-mirrors.drycc.cc/get-k3s/"
-    K3S_RELEASE_URL=https://drycc-mirrors.drycc.cc/k3s-io/k3s/releases
     export INSTALL_K3S_MIRROR
   else
     k3s_install_url="https://get.k3s.io"
-    K3S_RELEASE_URL=github.com/k3s-io/k3s/releases
   fi
-  if [ -z "${INSTALL_K3S_VERSION}" ]; then
-    INSTALL_K3S_VERSION=$(curl -Ls "$K3S_RELEASE_URL" | grep /k3s-io/k3s/releases/tag/ | sed -E 's/.*\/k3s-io\/k3s\/releases\/tag\/(v[0-9\.]{1,}[rc0-9\-]{0,}%2Bk3s[0-9])".*/\1/g' | head -1)
-  else
-    INSTALL_K3S_VERSION=$(urlencode "$INSTALL_K3S_VERSION")
-  fi
-  export INSTALL_K3S_VERSION
   echo -e "\\033[32m---> Configuring k3s mirrors finish\\033[0m"
 }
 
