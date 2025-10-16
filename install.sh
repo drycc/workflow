@@ -319,18 +319,22 @@ function install_mountpoint {
   helm repo update
 
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    mountpoint_api_url=https://drycc-mirrors.drycc.cc/drycc-addons/mountpoint-s3-csi-driver
+    mountpoint_api_url=https://drycc-mirrors.drycc.cc/drycc/mountpoint-s3-csi-driver
   else
-    mountpoint_api_url=https://github.com/drycc-addons/mountpoint-s3-csi-driver
+    mountpoint_api_url=https://github.com/drycc/mountpoint-s3-csi-driver
   fi
-  version=$(curl -Ls $mountpoint_api_url/releases|grep /drycc-addons/mountpoint-s3-csi-driver/releases/tag/ | sed -E 's/.*\/drycc-addons\/mountpoint-s3-csi-driver\/releases\/tag\/v([0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
-
+  version=$(curl -Ls $mountpoint_api_url/releases|grep /drycc/mountpoint-s3-csi-driver/releases/tag/\
+    | grep -o 'href="/drycc/mountpoint-s3-csi-driver/releases/tag/[^"]*"' \
+    | sed 's|href="/drycc/mountpoint-s3-csi-driver/releases/tag/||; s/"$//' \
+    | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
+    | sort -Vr \
+    | head -1)
   helm upgrade --install aws-mountpoint-s3-csi-driver aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver \
-    --set experimental.podMounter=true \
-    --set image.repository=registry.drycc.cc/drycc-addons/mountpoint-s3-csi-driver \
-    --set image.tag=${version} \
+    --set supportLegacySystemDMounts=false \
+    --set image.repository=registry.drycc.cc/drycc/mountpoint-s3-csi-driver \
+    --set image.tag=${version#v} \
     --namespace kube-system $options --wait
-  echo -e "\\033[32m---> Longhorn install completed!\\033[0m"
+  echo -e "\\033[32m---> Mountpoint install completed!\\033[0m"
 }
 
 function check_metallb {
