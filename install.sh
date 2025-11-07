@@ -326,7 +326,7 @@ function install_mountpoint {
   version=$(curl -Ls $mountpoint_api_url/releases|grep /drycc/mountpoint-s3-csi-driver/releases/tag/\
     | grep -o 'href="/drycc/mountpoint-s3-csi-driver/releases/tag/[^"]*"' \
     | sed 's|href="/drycc/mountpoint-s3-csi-driver/releases/tag/||; s/"$//' \
-    | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
     | sort -Vr \
     | head -1)
   helm upgrade --install aws-mountpoint-s3-csi-driver aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver \
