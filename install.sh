@@ -93,37 +93,35 @@ function install_helm {
 function configure_os {
   echo -e "\\033[32m---> Start configuring kernel parameters\\033[0m"
   if [[ "$(command -v iptables)" != "" ]] ; then
-    iptables -F
-    iptables -X
-    iptables -F -t nat
-    iptables -X -t nat
-    iptables -P FORWARD ACCEPT
+    iptables -F || echo -e "\\033[33m---> Warning: iptables -F failed, skipping (container environment?)\\033[0m"
+    iptables -X || echo -e "\\033[33m---> Warning: iptables -X failed, skipping\\033[0m"
+    iptables -F -t nat || echo -e "\\033[33m---> Warning: iptables -F -t nat failed, skipping\\033[0m"
+    iptables -X -t nat || echo -e "\\033[33m---> Warning: iptables -X -t nat failed, skipping\\033[0m"
+    iptables -P FORWARD ACCEPT || echo -e "\\033[33m---> Warning: iptables -P FORWARD ACCEPT failed, skipping\\033[0m"
   else
-    # Kube hostport depends on iptables
-    echo -e "\\033[33m---> The iptables does not exist...\\033[0m"
-    exit 1
+    echo -e "\\033[33m---> Warning: iptables does not exist, skipping iptables configuration...\\033[0m"
   fi
-  swapoff -a
-  sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-  mount bpffs -t bpf /sys/fs/bpf
+  swapoff -a 2>/dev/null || true
+  sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab 2>/dev/null || true
+  mount bpffs -t bpf /sys/fs/bpf 2>/dev/null || echo -e "\\033[33m---> Warning: mount bpffs failed, skipping (container environment?)\\033[0m"
   rmem_max=$(sysctl -ne net.core.rmem_max)
   if [ ! -n "$rmem_max" ] || [ 2500000 -gt $rmem_max ] ;then
-    echo 'net.core.rmem_max = 2500000' >> /etc/sysctl.conf
+    echo 'net.core.rmem_max = 2500000' >> /etc/sysctl.conf 2>/dev/null || true
   fi
   nr_hugepages=$(sysctl -ne vm.nr_hugepages)
   if [ ! -n "$nr_hugepages" ] || [ 1024 -gt $nr_hugepages ] ;then
-    echo 'vm.nr_hugepages = 1024' >> /etc/sysctl.conf
+    echo 'vm.nr_hugepages = 1024' >> /etc/sysctl.conf 2>/dev/null || true
   fi
   max_user_instances=$(sysctl -ne fs.inotify.max_user_instances)
   if [ ! -n "$max_user_instances" ] || [ 65535 -gt $max_user_instances ] ;then
-    echo 'fs.inotify.max_user_instances = 65535' >> /etc/sysctl.conf
+    echo 'fs.inotify.max_user_instances = 65535' >> /etc/sysctl.conf 2>/dev/null || true
   fi
-  sysctl -p
+  sysctl -p 2>/dev/null || echo -e "\\033[33m---> Warning: sysctl -p failed, skipping (container environment?)\\033[0m"
 
   cpufreq=$(ls /sys/devices/system/cpu/cpu*/cpufreq >/dev/null 2>&1 || echo "false")
   if [[ $cpufreq != "false" ]]; then
     for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
-      echo performance > $cpu
+      echo performance > $cpu 2>/dev/null || true
     done
   fi
   echo -e "\\033[32m---> Configuring kernel parameters finish\\033[0m"
