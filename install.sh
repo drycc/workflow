@@ -239,6 +239,23 @@ EOF
   fi
 }
 
+function configure_kubectl {
+  echo -e "\\033[32m---> Start configuring kubectl defaults\\033[0m"
+  mkdir -p "$HOME/.kube"
+  cat << EOF > "$HOME/.kube/kuberc"
+apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+defaults:
+  # Default to server-side apply
+  - command: apply
+    options:
+      - name: server-side
+        default: "true"
+EOF
+  chmod 600 "$HOME/.kube/kuberc"
+  echo -e "\\033[32m---> Kubectl defaults configured (server-side apply enabled)\\033[0m"
+}
+
 function configure_k3s_mirrors {
   echo -e "\\033[32m---> Start configuring k3s mirrors\\033[0m"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
@@ -254,6 +271,7 @@ function configure_k3s_mirrors {
 function install_k3s_server {
   configure_os
   install_runtime
+  configure_kubectl
   configure_registry
   configure_k3s_mirrors
   INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --embedded-registry --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=${CLUSTER_CIDR} --service-cidr=${SERVICE_CIDR}"
@@ -281,6 +299,7 @@ EOF
 function install_k3s_agent {
   configure_os
   install_runtime
+  configure_kubectl
   configure_registry
   configure_k3s_mirrors
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
@@ -438,7 +457,7 @@ function install_gateway() {
 
   helm repo add istio https://drycc-mirrors.drycc.cc/istio-charts
   helm repo update
-  kubectl apply --server-side -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
+  kubectl apply -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
   helm upgrade --install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace --wait $options
   helm upgrade --install istio-istiod istio/istiod -n istio-system \
     --set pilot.env.PILOT_ENABLE_ALPHA_GATEWAY_API=true \
