@@ -406,19 +406,6 @@ function install_metallb() {
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: public
-spec:
-  addresses:
-  - $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')/32
-  serviceAllocation:
-    priority: 50
-    namespaces:
-    - drycc
-
----
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
   name: default
 spec:
   addresses:
@@ -432,7 +419,6 @@ metadata:
   namespace: metallb
 spec:
   ipAddressPools:
-  - public
   - default
 EOF
   else
