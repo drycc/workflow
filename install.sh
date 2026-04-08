@@ -445,7 +445,9 @@ function install_gateway() {
     --set pilot.env.PILOT_ENABLE_ALPHA_GATEWAY_API=true \
     --set pilot.env.PILOT_ENABLE_QUIC_LISTENERS=true \
     --wait $options
-  helm upgrade --install istio-gateway istio/gateway -n istio-gateway --create-namespace --wait $options
+  helm upgrade --install istio-gateway istio/gateway -n istio-gateway \
+    --set service.type=ClusterIP \
+    --create-namespace --wait $options
   echo -e "\\033[32m---> Gateway install completed!\\033[0m"
 }
 
