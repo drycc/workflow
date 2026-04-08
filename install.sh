@@ -104,23 +104,15 @@ function configure_os {
   swapoff -a 2>/dev/null || true
   sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab 2>/dev/null || true
   mount bpffs -t bpf /sys/fs/bpf 2>/dev/null || echo -e "\\033[33m---> Warning: mount bpffs failed, skipping (container environment?)\\033[0m"
-  rmem_max=$(sysctl -ne net.core.rmem_max)
-  if [ ! -n "$rmem_max" ] || [ 2500000 -gt $rmem_max ] ;then
-    echo 'net.core.rmem_max = 2500000' >> /etc/sysctl.conf 2>/dev/null || true
-  fi
-  nr_hugepages=$(sysctl -ne vm.nr_hugepages)
-  if [ ! -n "$nr_hugepages" ] || [ 1024 -gt $nr_hugepages ] ;then
-    echo 'vm.nr_hugepages = 1024' >> /etc/sysctl.conf 2>/dev/null || true
-  fi
-  max_user_instances=$(sysctl -ne fs.inotify.max_user_instances)
-  if [ ! -n "$max_user_instances" ] || [ 65535 -gt $max_user_instances ] ;then
-    echo 'fs.inotify.max_user_instances = 65535' >> /etc/sysctl.conf 2>/dev/null || true
-  fi
-  max_user_watches=$(sysctl -ne fs.inotify.max_user_watches)
-  if [ ! -n "$max_user_watches" ] || [ 65535 -gt $max_user_watches ] ;then
-    echo 'fs.inotify.max_user_watches = 65535' >> /etc/sysctl.conf 2>/dev/null || true
-  fi
-  sysctl -p 2>/dev/null || echo -e "\\033[33m---> Warning: sysctl -p failed, skipping (container environment?)\\033[0m"
+  mkdir -p /etc/sysctl.d
+  cat << EOF > /etc/sysctl.d/99-zzz-override-drycc.conf
+fs.file-max = 2097152
+fs.inotify.max_user_instances = 65535
+fs.inotify.max_user_watches = 1048576
+net.core.rmem_max = 2500000
+vm.nr_hugepages = 1024
+EOF
+  sysctl --system 2>/dev/null || echo -e "\\033[33m---> Warning: sysctl --system failed, skipping (container environment?)\\033[0m"
 
   cpufreq=$(ls /sys/devices/system/cpu/cpu*/cpufreq >/dev/null 2>&1 || echo "false")
   if [[ $cpufreq != "false" ]]; then
