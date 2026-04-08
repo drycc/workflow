@@ -116,6 +116,10 @@ function configure_os {
   if [ ! -n "$max_user_instances" ] || [ 65535 -gt $max_user_instances ] ;then
     echo 'fs.inotify.max_user_instances = 65535' >> /etc/sysctl.conf 2>/dev/null || true
   fi
+  max_user_watches=$(sysctl -ne fs.inotify.max_user_watches)
+  if [ ! -n "$max_user_watches" ] || [ 65535 -gt $max_user_watches ] ;then
+    echo 'fs.inotify.max_user_watches = 65535' >> /etc/sysctl.conf 2>/dev/null || true
+  fi
   sysctl -p 2>/dev/null || echo -e "\\033[33m---> Warning: sysctl -p failed, skipping (container environment?)\\033[0m"
 
   cpufreq=$(ls /sys/devices/system/cpu/cpu*/cpufreq >/dev/null 2>&1 || echo "false")
