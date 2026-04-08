@@ -90,6 +90,33 @@ function install_helm {
   echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
 }
 
+function helm_upgrade {
+  local max_retries=${HELM_MAX_RETRIES:-3}
+  local retry_interval=${HELM_RETRY_INTERVAL:-10}
+  local has_timeout=false
+  for arg in "$@"; do
+    if [[ "$arg" == "--timeout" ]]; then
+      has_timeout=true
+      break
+    fi
+  done
+  local timeout_args=()
+  if [[ "$has_timeout" == "false" ]]; then
+    timeout_args=(--timeout 10m0s)
+  fi
+  for (( attempt=1; attempt<=max_retries; attempt++ )); do
+    if helm upgrade --install "$@" "${timeout_args[@]}"; then
+      return 0
+    fi
+    if [[ $attempt -lt $max_retries ]]; then
+      echo -e "\\033[33m---> Warning: helm upgrade --install failed (attempt $attempt/$max_retries), retrying in ${retry_interval}s...\\033[0m"
+      sleep "$retry_interval"
+    fi
+  done
+  echo -e "\\033[31m---> Error: helm upgrade --install failed after $max_retries attempts\\033[0m"
+  return 1
+}
+
 function configure_os {
   echo -e "\\033[32m---> Start configuring kernel parameters\\033[0m"
   if [[ "$(command -v iptables)" != "" ]] ; then
@@ -151,9 +178,9 @@ function install_kata_runtime {
 
   curl -fL "${kata_download_url}" -o ${kata_package}
   tar -I zstd -xf ${kata_package} -C /
-  ln -s /opt/kata/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
-  ln -s /opt/kata/bin/kata-collect-data.sh /usr/local/bin/kata-collect-data.sh
-  ln -s /opt/kata/bin/kata-runtime /usr/local/bin/kata-runtime
+  ln -sf /opt/kata/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
+  ln -sf /opt/kata/bin/kata-collect-data.sh /usr/local/bin/kata-collect-data.sh
+  ln -sf /opt/kata/bin/kata-runtime /usr/local/bin/kata-runtime
   rm -rf ${kata_package}
   echo -e "\\033[32m---> Kata runtime install completed!\\033[0m"
 }
@@ -209,7 +236,7 @@ EOF
 
 function configure_registry {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]]; then
-    cat << EOF >> "${REGISTRY_CONFIG_FILE}"
+    cat << EOF > "${REGISTRY_CONFIG_FILE}"
 mirrors:
   docker.io:
     endpoint:
@@ -310,7 +337,7 @@ function install_longhorn {
   helm repo update
   if [[ -z "${LONGHORN_CONFIG_FILE}" ]] ; then
     echo -e "\\033[32m---> Longhorn using the default configuration.\\033[0m"
-    helm upgrade --install longhorn longhorn/longhorn \
+    helm_upgrade longhorn longhorn/longhorn \
       --set csi.attacherReplicaCount=1 \
       --set csi.provisionerReplicaCount=1 \
       --set csi.resizerReplicaCount=1 \
@@ -321,7 +348,7 @@ function install_longhorn {
       --namespace longhorn-system \
       --create-namespace $options --wait
   else
-    helm upgrade --install longhorn longhorn/longhorn -f "${LONGHORN_CONFIG_FILE}" --wait
+    helm_upgrade longhorn longhorn/longhorn -f "${LONGHORN_CONFIG_FILE}" --wait
   fi
   echo -e "\\033[32m---> Longhorn install completed!\\033[0m"
 }
@@ -342,7 +369,7 @@ function install_mountpoint {
     | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
     | sort -Vr \
     | head -1)
-  helm upgrade --install aws-mountpoint-s3-csi-driver aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver \
+  helm_upgrade aws-mountpoint-s3-csi-driver aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver \
     --set supportLegacySystemDMounts=false \
     --set image.repository=registry.drycc.cc/drycc/mountpoint-s3-csi-driver \
     --set image.tag=${version#v} \
@@ -370,7 +397,7 @@ function install_network() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install network...\\033[0m"
   kubernetes_service_host=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
-  helm upgrade --install cilium $CHARTS_URL/cilium \
+  helm_upgrade cilium $CHARTS_URL/cilium \
     --set endpointHealthChecking.enabled=false \
     --set healthChecking=false \
     --set operator.replicas=1 \
@@ -395,7 +422,7 @@ function install_metallb() {
   check_metallb
   options=${1:-""}
   echo -e "\\033[32m---> Start install metallb...\\033[0m"
-  helm upgrade --install metallb $CHARTS_URL/metallb \
+  helm_upgrade metallb $CHARTS_URL/metallb \
     --set speaker.frr.enabled=true \
     --namespace metallb \
     --create-namespace $options --wait
@@ -440,12 +467,12 @@ function install_gateway() {
   helm repo add istio https://drycc-mirrors.drycc.cc/istio-charts
   helm repo update
   kubectl apply -f $gateway_api_url/releases/download/${version}/experimental-install.yaml
-  helm upgrade --install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace --wait $options
-  helm upgrade --install istio-istiod istio/istiod -n istio-system \
+  helm_upgrade istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace --wait $options
+  helm_upgrade istio-istiod istio/istiod -n istio-system \
     --set pilot.env.PILOT_ENABLE_ALPHA_GATEWAY_API=true \
     --set pilot.env.PILOT_ENABLE_QUIC_LISTENERS=true \
     --wait $options
-  helm upgrade --install istio-gateway istio/gateway -n istio-gateway \
+  helm_upgrade istio-gateway istio/gateway -n istio-gateway \
     --set service.type=ClusterIP \
     --create-namespace --wait $options
   echo -e "\\033[32m---> Gateway install completed!\\033[0m"
@@ -454,7 +481,7 @@ function install_gateway() {
 function install_cert_manager() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install cert-manager...\\033[0m"
-  helm upgrade --install cert-manager $CHARTS_URL/cert-manager \
+  helm_upgrade cert-manager $CHARTS_URL/cert-manager \
     --namespace cert-manager \
     --create-namespace \
     --set clusterResourceNamespace=drycc \
@@ -476,7 +503,7 @@ function install_catalog() {
 
   options=${1:-""}
   echo -e "\\033[32m---> Start install catalog...\\033[0m"
-  helm upgrade --install catalog $CHARTS_URL/catalog \
+  helm_upgrade catalog $CHARTS_URL/catalog \
     --set asyncBindingOperationsEnabled=true \
     --set image=registry.drycc.cc/drycc-addons/service-catalog:${service_catalog_version#v} \
     --namespace catalog \
@@ -667,7 +694,7 @@ EOF
     export VICTORIAMETRICS_CONFIG_FILE
   fi
 
-  helm upgrade --install drycc $CHARTS_URL/workflow \
+  helm_upgrade drycc $CHARTS_URL/workflow \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --values /tmp/drycc-mirror-values.yaml \
@@ -694,12 +721,12 @@ function install_helmbroker {
 
   options=${1:-""}
   local VALKEY_PASSWORD=$(kubectl get secrets -n drycc valkey-creds -o jsonpath="{.data.password}"| base64 -d)
-  local HELMBROKER_USERNAME=${HELMBROKER_USERNAME:-$(cat /proc/sys/kernel/random/uuid)}
-  local HELMBROKER_PASSWORD=${HELMBROKER_PASSWORD:-$(cat /proc/sys/kernel/random/uuid)}
+  local HELMBROKER_USERNAME=${HELMBROKER_USERNAME:-$(kubectl get secrets -n drycc-helmbroker helmbroker-creds -o jsonpath="{.data.username}" 2>/dev/null | base64 -d || cat /proc/sys/kernel/random/uuid)}
+  local HELMBROKER_PASSWORD=${HELMBROKER_PASSWORD:-$(kubectl get secrets -n drycc-helmbroker helmbroker-creds -o jsonpath="{.data.password}" 2>/dev/null | base64 -d || cat /proc/sys/kernel/random/uuid)}
 
   echo -e "\\033[32m---> Start install helmbroker...\\033[0m"
 
-  helm upgrade --install helmbroker $CHARTS_URL/helmbroker \
+  helm_upgrade helmbroker $CHARTS_URL/helmbroker \
     --set valkey.enabled=false \
     --set gateway.gatewayClass=${GATEWAY_CLASS} \
     --set global.platformDomain=${PLATFORM_DOMAIN} \
