@@ -62,25 +62,38 @@ urlencode() {
   LC_COLLATE=$old_lc_collate
 }
 
+# get_latest_github_release fetches the latest GitHub release tag matching a regex pattern.
+# Usage: get_latest_github_release <org/repo> <pattern>
+#   org/repo  - GitHub organization and repository (e.g. "helm/helm")
+#   pattern   - extended regex that the tag must match (e.g. "^v[0-9]+\.[0-9]+\.[0-9]+$")
+# The function automatically selects the mirror URL based on INSTALL_DRYCC_MIRROR.
+function get_latest_github_release {
+  local repo="$1"
+  local pattern="$2"
+  local base_url
+
+  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]]; then
+    base_url="https://drycc-mirrors.drycc.cc/${repo}"
+  else
+    base_url="https://github.com/${repo}"
+  fi
+
+  curl -Ls "${base_url}/releases" \
+    | grep -o "href=\"/${repo}/releases/tag/[^\"]*\"" \
+    | sed "s|href=\"/${repo}/releases/tag/||; s|\"$||" \
+    | grep -E "${pattern}" \
+    | sort -Vr \
+    | head -1
+}
+
+# install_helm downloads and installs the Helm CLI tool from the latest GitHub release.
 function install_helm {
   echo -e "\\033[32m---> Start install helm\\033[0m"
+  version=$(get_latest_github_release "helm/helm" "^v[0-9]+\.[0-9]+\.[0-9]+$")
+  tar_name="helm-${version}-linux-${ARCH}.tar.gz"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    version=$(curl -Ls https://drycc-mirrors.drycc.cc/helm/helm/releases \
-      | grep -o 'href="/helm/helm/releases/tag/v[^"]*"' \
-      | sed 's|href="/helm/helm/releases/tag/||; s/"$//' \
-      | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
-      | sort -Vr \
-      | head -1)
-    tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://drycc-mirrors.drycc.cc/helm/${tar_name}"
   else
-    version=$(curl -Ls https://github.com/helm/helm/releases \
-      | grep -o 'href="/helm/helm/releases/tag/v[^"]*"' \
-      | sed 's|href="/helm/helm/releases/tag/||; s/"$//' \
-      | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
-      | sort -Vr \
-      | head -1)
-    tar_name="helm-${version}-linux-${ARCH}.tar.gz"
     helm_download_url="https://get.helm.sh/${tar_name}"
   fi
   curl -fsSL -o "${tar_name}" "${helm_download_url}"
@@ -90,6 +103,11 @@ function install_helm {
   echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
 }
 
+# helm_upgrade wraps "helm upgrade --install" with retry logic and a default timeout.
+# Usage: helm_upgrade <release> <chart> [helm-options...]
+#   HELM_MAX_RETRIES    - max number of retry attempts (default: 3)
+#   HELM_RETRY_INTERVAL - seconds between retries (default: 10)
+# A default timeout of 10m0s is applied unless --timeout is explicitly passed.
 function helm_upgrade {
   local max_retries=${HELM_MAX_RETRIES:-3}
   local retry_interval=${HELM_RETRY_INTERVAL:-10}
@@ -117,6 +135,8 @@ function helm_upgrade {
   return 1
 }
 
+# configure_os tunes kernel parameters and OS settings for Kubernetes workloads.
+# Includes: iptables cleanup, swap disable, BPF mount, sysctl overrides, CPU governor.
 function configure_os {
   echo -e "\\033[32m---> Start configuring kernel parameters\\033[0m"
   if [[ "$(command -v iptables)" != "" ]] ; then
@@ -150,6 +170,7 @@ EOF
   echo -e "\\033[32m---> Configuring kernel parameters finish\\033[0m"
 }
 
+# install_crun_runtime downloads and installs the crun OCI runtime binary.
 function install_crun_runtime {
   echo -e "\\033[32m---> Start install crun runtime\\033[0m"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
@@ -157,13 +178,14 @@ function install_crun_runtime {
   else
     crun_base_url="https://github.com/containers"
   fi
-  crun_version=$(curl -Ls ${crun_base_url}/crun/releases|grep /containers/crun/releases/tag/ | sed -E 's/.*\/containers\/crun\/releases\/tag\/([0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+  crun_version=$(get_latest_github_release "containers/crun" "^[0-9]+\.[0-9]+(\.[0-9]+)?(-rc[0-9]+)?$")
   crun_download_url=${crun_base_url}/crun/releases/download/${crun_version}/crun-${crun_version}-linux-${ARCH}
   curl -sfL "${crun_download_url}" -o /usr/local/bin/crun
   chmod a+rx /usr/local/bin/crun
   echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
 }
 
+# install_kata_runtime downloads and installs the Kata Containers runtime for VM-based isolation.
 function install_kata_runtime {
   echo -e "\\033[32m---> Start install kata runtime\\033[0m"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
@@ -172,7 +194,7 @@ function install_kata_runtime {
     kata_base_url="https://github.com/kata-containers"
   fi
 
-  kata_version=$(curl -Ls ${kata_base_url}/kata-containers/releases|grep /kata-containers/kata-containers/releases/tag/ | sed -E 's/.*\/kata-containers\/kata-containers\/releases\/tag\/([0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+  kata_version=$(get_latest_github_release "kata-containers/kata-containers" "^[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?$")
   kata_package=kata-static-${kata_version}-${ARCH}.tar.zst
   kata_download_url=${kata_base_url}/kata-containers/releases/download/${kata_version}/${kata_package}
 
@@ -185,6 +207,9 @@ function install_kata_runtime {
   echo -e "\\033[32m---> Kata runtime install completed!\\033[0m"
 }
 
+# install_runtime configures containerd runtimes based on CONTAINERD_RUNTIMES.
+# Supported values: "runc" (default), "crun", "kata". Multiple values can be comma-separated.
+# Generates the containerd config template and installs the selected runtimes.
 function install_runtime {
   readarray -d , -t containerd_runtimes <<<"$CONTAINERD_RUNTIMES"
   if [[ "$CONTAINERD_RUNTIMES" =~ "crun" ]]; then
@@ -234,6 +259,8 @@ EOF
   done
 }
 
+# configure_registry writes container registry mirror configuration for k3s/containerd.
+# Only applies when INSTALL_DRYCC_MIRROR is set to "cn".
 function configure_registry {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]]; then
     cat << EOF > "${REGISTRY_CONFIG_FILE}"
@@ -262,6 +289,7 @@ EOF
   fi
 }
 
+# configure_kubectl sets up kubectl defaults, enabling server-side apply by default.
 function configure_kubectl {
   echo -e "\\033[32m---> Start configuring kubectl defaults\\033[0m"
   mkdir -p "$HOME/.kube"
@@ -279,6 +307,7 @@ EOF
   echo -e "\\033[32m---> Kubectl defaults configured (server-side apply enabled)\\033[0m"
 }
 
+# configure_k3s_mirrors selects the k3s install URL based on INSTALL_DRYCC_MIRROR.
 function configure_k3s_mirrors {
   echo -e "\\033[32m---> Start configuring k3s mirrors\\033[0m"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
@@ -291,6 +320,9 @@ function configure_k3s_mirrors {
   echo -e "\\033[32m---> Configuring k3s mirrors finish\\033[0m"
 }
 
+# install_k3s_server installs and bootstraps a k3s server (control plane) node.
+# Configures OS, runtimes, kubectl, registry mirrors, then installs k3s with
+# embedded registry, Cilium CNI, and registers RuntimeClass resources.
 function install_k3s_server {
   configure_os
   install_runtime
@@ -319,6 +351,7 @@ EOF
   done
 }
 
+# install_k3s_agent installs and joins a k3s agent (worker) node to an existing cluster.
 function install_k3s_agent {
   configure_os
   install_runtime
@@ -331,6 +364,9 @@ function install_k3s_agent {
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
 }
 
+# install_longhorn deploys Longhorn distributed block storage via Helm.
+# Usage: install_longhorn [helm-options...]
+#   LONGHORN_CONFIG_FILE - path to a custom Helm values file; uses defaults if unset.
 function install_longhorn {
   options=${1:-""}
   helm repo add longhorn https://drycc-mirrors.drycc.cc/longhorn-charts
@@ -353,22 +389,13 @@ function install_longhorn {
   echo -e "\\033[32m---> Longhorn install completed!\\033[0m"
 }
 
+# install_mountpoint deploys the AWS Mountpoint S3 CSI driver via Helm.
 function install_mountpoint {
   options=${1:-""}
   helm repo add aws-mountpoint-s3-csi-driver https://drycc-mirrors.drycc.cc/mountpoint-charts
   helm repo update
 
-  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    mountpoint_api_url=https://drycc-mirrors.drycc.cc/drycc/mountpoint-s3-csi-driver
-  else
-    mountpoint_api_url=https://github.com/drycc/mountpoint-s3-csi-driver
-  fi
-  version=$(curl -Ls $mountpoint_api_url/releases|grep /drycc/mountpoint-s3-csi-driver/releases/tag/\
-    | grep -o 'href="/drycc/mountpoint-s3-csi-driver/releases/tag/[^"]*"' \
-    | sed 's|href="/drycc/mountpoint-s3-csi-driver/releases/tag/||; s/"$//' \
-    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
-    | sort -Vr \
-    | head -1)
+  version=$(get_latest_github_release "drycc/mountpoint-s3-csi-driver" "^v[0-9]+\.[0-9]+\.[0-9]+$")
   helm_upgrade aws-mountpoint-s3-csi-driver aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver \
     --set supportLegacySystemDMounts=false \
     --set image.repository=registry.drycc.cc/drycc/mountpoint-s3-csi-driver \
@@ -377,6 +404,7 @@ function install_mountpoint {
   echo -e "\\033[32m---> Mountpoint install completed!\\033[0m"
 }
 
+# check_metallb validates that METALLB_CONFIG_FILE exists if it is set.
 function check_metallb {
   if [[ "${METALLB_CONFIG_FILE}" && ! -f "${METALLB_CONFIG_FILE}" ]] ; then
     echo -e "\\033[33m---> The path ${METALLB_CONFIG_FILE} does not exist...\\033[0m"
@@ -384,8 +412,10 @@ function check_metallb {
   fi
 }
 
-# Best practices
+# install_network deploys Cilium as the CNI with kube-proxy replacement and BPF masquerade.
+# Usage: install_network [helm-options...]
 #
+# Best practices for production optimization:
 # 1. Jumbo frames, change MTU(9000).
 # 2. Big tcp, enableIPv6BIGTCP/enableIPv4BIGTCP.
 # 3. Set `routingMode=native` and `ipv4NativeRoutingCIDR`.
@@ -418,6 +448,10 @@ function install_network() {
   echo -e "\\033[32m---> Network install completed!\\033[0m"
 }
 
+# install_metallb deploys MetalLB for LoadBalancer service support with L2 advertisement.
+# Usage: install_metallb [helm-options...]
+#   METALLB_CONFIG_FILE - path to a custom IPAddressPool/L2Advertisement manifest;
+#                         uses a default 192.168.254.0/24 pool if unset.
 function install_metallb() {
   check_metallb
   options=${1:-""}
@@ -454,6 +488,9 @@ EOF
   echo -e "\\033[32m---> Metallb install completed!\\033[0m"
 }
 
+# install_gateway deploys the Istio Gateway API and Istio ingress gateway.
+# Installs: Gateway API CRDs, istio-base, istiod, and istio-gateway.
+# Usage: install_gateway [helm-options...]
 function install_gateway() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install gateway...\\033[0m"
@@ -462,7 +499,7 @@ function install_gateway() {
   else
     gateway_api_url=https://github.com/kubernetes-sigs/gateway-api
   fi
-  version=$(curl -Ls $gateway_api_url/releases|grep /kubernetes-sigs/gateway-api/releases/tag/ | sed -E 's/.*\/kubernetes-sigs\/gateway-api\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+  version=$(get_latest_github_release "kubernetes-sigs/gateway-api" "^v[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?$")
 
   helm repo add istio https://drycc-mirrors.drycc.cc/istio-charts
   helm repo update
@@ -478,6 +515,8 @@ function install_gateway() {
   echo -e "\\033[32m---> Gateway install completed!\\033[0m"
 }
 
+# install_cert_manager deploys cert-manager with Gateway API support enabled.
+# Usage: install_cert_manager [helm-options...]
 function install_cert_manager() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install cert-manager...\\033[0m"
@@ -490,15 +529,13 @@ function install_cert_manager() {
   echo -e "\\033[32m---> Cert-manager install completed!\\033[0m"
 }
 
+# install_catalog deploys the Kubernetes Service Catalog via Helm.
+# Uses the "canary" image by default; fetches the latest stable version when CHANNEL is "stable".
+# Usage: install_catalog [helm-options...]
 function install_catalog() {
   service_catalog_version="canary"
   if [[ "$CHANNEL" == "stable" ]]; then
-    if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-      service_catalog_url=https://drycc-mirrors.drycc.cc/drycc-addons/service-catalog
-    else
-      service_catalog_url=https://github.com/drycc-addons/service-catalog
-    fi
-    service_catalog_version=$(curl -Ls $service_catalog_url/releases|grep /drycc-addons/service-catalog/releases/tag/ | sed -E 's/.*\/drycc-addons\/service-catalog\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
+    service_catalog_version=$(get_latest_github_release "drycc-addons/service-catalog" "^v[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?$")
   fi
 
   options=${1:-""}
@@ -511,6 +548,8 @@ function install_catalog() {
   echo -e "\\033[32m---> Catalog install completed!\\033[0m"
 }
 
+# install_components installs all infrastructure components in order:
+# network (Cilium), metallb, gateway (Istio), cert-manager, catalog.
 function install_components {
   install_network
   install_metallb
@@ -519,6 +558,8 @@ function install_components {
   install_catalog
 }
 
+# check_drycc validates that required environment variables are set before installing workflow.
+# Requires: PLATFORM_DOMAIN, DRYCC_ADMIN_USERNAME, DRYCC_ADMIN_PASSWORD.
 function check_drycc {
   if [[ -z "${PLATFORM_DOMAIN}" ]] ; then
     echo -e "\\033[33m---> Please set the PLATFORM_DOMAIN variable.\\033[0m"
@@ -541,16 +582,16 @@ function check_drycc {
   fi
 }
 
+# install_drycc deploys the Drycc Workflow platform via Helm.
+# Usage: install_drycc [helm-options...]
+# Requires: PLATFORM_DOMAIN, DRYCC_ADMIN_USERNAME, DRYCC_ADMIN_PASSWORD.
+# Optional: VICTORIAMETRICS_CONFIG_FILE - path to custom VictoriaMetrics values file.
 function install_drycc {
   check_drycc
   options=${1:-""}
   echo -e "\\033[32m---> Start install workflow...\\033[0m"
   if [[ "$CHANNEL" == "stable" ]]; then
-    if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-      FILER_VERSION=$(curl -Ls https://drycc-mirrors.drycc.cc/drycc/filer/releases|grep /drycc/filer/releases/tag/ | sed -E 's/.*\/drycc\/filer\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
-    else
-      FILER_VERSION=$(curl -Ls https://github.com/drycc/filer/releases|grep /drycc/filer/releases/tag/ | sed -E 's/.*\/drycc\/filer\/releases\/tag\/(v[0-9\.]{1,}(-rc.[0-9]{1,})?)".*/\1/g' | head -1)
-    fi
+    FILER_VERSION=$(get_latest_github_release "drycc/filer" "^v[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?$")
     FILER_IMAGE=${DRYCC_REGISTRY}/drycc/filer:$(sed 's#v##' <<< $FILER_VERSION)
     FILER_IMAGE_PULL_POLICY="IfNotPresent"
   else
@@ -703,6 +744,10 @@ EOF
   echo -e "\\033[32m---> Workflow install completed!\\033[0m"
 }
 
+# install_helmbroker deploys the Helm Broker and registers it as a ClusterServiceBroker.
+# Usage: install_helmbroker [helm-options...]
+#   HELMBROKER_USERNAME - override the auto-generated broker username
+#   HELMBROKER_PASSWORD - override the auto-generated broker password
 function install_helmbroker {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     addons_base_url="https://drycc-mirrors.drycc.cc/drycc-addons/addons"
@@ -711,11 +756,8 @@ function install_helmbroker {
   fi
   version="latest"
   if [[ "$CHANNEL" == "stable" ]]; then
-    for version in $(curl -Ls "${addons_base_url}"/releases|grep /drycc-addons/addons/releases/tag/ | sed -E 's/.*\/drycc-addons\/addons\/releases\/tag\/(v[0-9]{1,})".*/\1/g'); do
-      if [[ "$version" != "latest" ]]; then
-        break
-      fi
-    done
+    version=$(get_latest_github_release "drycc-addons/addons" "^v[0-9]+$")
+    version=${version:-latest}
   fi
   addons_url="${addons_base_url}/releases/download/${version}/index.yaml"
 
@@ -767,6 +809,8 @@ EOF
   echo -e "\\033[32m---> Helmbroker install completed!\\033[0m"
 }
 
+# upgrade upgrades all installed components using --reset-then-reuse-values to preserve
+# previous Helm values while applying new chart defaults.
 function upgrade {
   install_network --reset-then-reuse-values
   install_metallb --reset-then-reuse-values
