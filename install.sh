@@ -444,6 +444,7 @@ function install_network() {
     --set operator.prometheus.enabled=true \
     --set envoy.enabled=false \
     --set ipam.operator.clusterPoolIPv4MaskSize=${CLUSTER_POOL_IPV4_MASK_SIZE:-24} \
+    --set ipam.operator.clusterPoolIPv4PodCIDRList=${CLUSTER_POOL_IPV4_PODCIDR_LIST:-10.0.0.0/8} \
     --namespace kube-system $options --wait
   echo -e "\\033[32m---> Network install completed!\\033[0m"
 }
