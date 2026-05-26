@@ -458,7 +458,6 @@ function install_metallb() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install metallb...\\033[0m"
   helm_upgrade metallb $CHARTS_URL/metallb \
-    --set speaker.frr.enabled=true \
     --namespace metallb \
     --create-namespace $options --wait
 
