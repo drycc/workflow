@@ -529,33 +529,13 @@ function install_cert_manager() {
   echo -e "\\033[32m---> Cert-manager install completed!\\033[0m"
 }
 
-# install_catalog deploys the Kubernetes Service Catalog via Helm.
-# Uses the "canary" image by default; fetches the latest stable version when CHANNEL is "stable".
-# Usage: install_catalog [helm-options...]
-function install_catalog() {
-  service_catalog_version="canary"
-  if [[ "$CHANNEL" == "stable" ]]; then
-    service_catalog_version=$(get_latest_github_release "drycc-addons/service-catalog" "^v[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?$")
-  fi
-
-  options=${1:-""}
-  echo -e "\\033[32m---> Start install catalog...\\033[0m"
-  helm_upgrade catalog $CHARTS_URL/catalog \
-    --set asyncBindingOperationsEnabled=true \
-    --set image=registry.drycc.cc/drycc-addons/service-catalog:${service_catalog_version#v} \
-    --namespace catalog \
-    --create-namespace --wait $options
-  echo -e "\\033[32m---> Catalog install completed!\\033[0m"
-}
-
 # install_components installs all infrastructure components in order:
-# network (Cilium), metallb, gateway (Istio), cert-manager, catalog.
+# network (Cilium), metallb, gateway (Istio), cert-manager.
 function install_components {
   install_network
   install_metallb
   install_gateway
   install_cert_manager
-  install_catalog
 }
 
 # check_drycc validates that required environment variables are set before installing workflow.
@@ -744,71 +724,6 @@ EOF
   echo -e "\\033[32m---> Workflow install completed!\\033[0m"
 }
 
-# install_helmbroker deploys the Helm Broker and registers it as a ClusterServiceBroker.
-# Usage: install_helmbroker [helm-options...]
-#   HELMBROKER_USERNAME - override the auto-generated broker username
-#   HELMBROKER_PASSWORD - override the auto-generated broker password
-function install_helmbroker {
-  if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
-    addons_base_url="https://drycc-mirrors.drycc.cc/drycc-addons/addons"
-  else
-    addons_base_url="https://github.com/drycc-addons/addons"
-  fi
-  version="latest"
-  if [[ "$CHANNEL" == "stable" ]]; then
-    version=$(get_latest_github_release "drycc-addons/addons" "^v[0-9]+$")
-    version=${version:-latest}
-  fi
-  addons_url="${addons_base_url}/releases/download/${version}/index.yaml"
-
-  options=${1:-""}
-  local VALKEY_PASSWORD=$(kubectl get secrets -n drycc valkey-creds -o jsonpath="{.data.password}"| base64 -d)
-  local HELMBROKER_USERNAME=${HELMBROKER_USERNAME:-$(kubectl get secrets -n drycc-helmbroker helmbroker-creds -o jsonpath="{.data.username}" 2>/dev/null | base64 -d || cat /proc/sys/kernel/random/uuid)}
-  local HELMBROKER_PASSWORD=${HELMBROKER_PASSWORD:-$(kubectl get secrets -n drycc-helmbroker helmbroker-creds -o jsonpath="{.data.password}" 2>/dev/null | base64 -d || cat /proc/sys/kernel/random/uuid)}
-
-  echo -e "\\033[32m---> Start install helmbroker...\\033[0m"
-
-  helm_upgrade helmbroker $CHARTS_URL/helmbroker \
-    --set valkey.enabled=false \
-    --set gateway.gatewayClass=${GATEWAY_CLASS} \
-    --set global.platformDomain=${PLATFORM_DOMAIN} \
-    --set global.certManagerEnabled=${CERT_MANAGER_ENABLED} \
-    --set persistence.size=${HELMBROKER_PERSISTENCE_SIZE:-5Gi} \
-    --set persistence.storageClass=${HELMBROKER_PERSISTENCE_STORAGE_CLASS:-"longhorn"} \
-    --set username=${HELMBROKER_USERNAME} \
-    --set password=${HELMBROKER_PASSWORD} \
-    --set replicas=${HELMBROKER_REPLICAS} \
-    --set valkeyUrl=redis://:${VALKEY_PASSWORD}@drycc-valkey.drycc.svc:16379/11 \
-    --set api.replicas=${HELMBROKER_API_REPLICAS} \
-    --set celery.replicas=${HELMBROKER_CELERY_REPLICAS} \
-    --namespace drycc-helmbroker --create-namespace $options --wait -f - <<EOF
-repositories:
-- name: drycc-helmbroker
-  url: ${addons_url}
-EOF
-
-  kubectl apply -f - <<EOF
-apiVersion: servicecatalog.k8s.io/v1beta1
-kind: ClusterServiceBroker
-metadata:
-  finalizers:
-  - kubernetes-incubator/service-catalog
-  generation: 1
-  labels:
-    app.kubernetes.io/managed-by: Helm
-    heritage: Helm
-  name: helmbroker
-spec:
-  relistBehavior: Duration
-  relistRequests: 5
-  url: http://${HELMBROKER_USERNAME}:${HELMBROKER_PASSWORD}@drycc-helmbroker.drycc-helmbroker.svc
-EOF
-
-  echo -e "\\033[32m---> Helmbroker username: $HELMBROKER_USERNAME\\033[0m"
-  echo -e "\\033[32m---> Helmbroker password: $HELMBROKER_PASSWORD\\033[0m"
-  echo -e "\\033[32m---> Helmbroker install completed!\\033[0m"
-}
-
 # upgrade upgrades all installed components using --reset-then-reuse-values to preserve
 # previous Helm values while applying new chart defaults.
 function upgrade {
@@ -816,11 +731,9 @@ function upgrade {
   install_metallb --reset-then-reuse-values
   install_gateway --reset-then-reuse-values
   install_cert_manager --reset-then-reuse-values
-  install_catalog --reset-then-reuse-values
   install_longhorn --reset-then-reuse-values
   install_mountpoint --reset-then-reuse-values
   install_drycc --reset-then-reuse-values
-  install_helmbroker --reset-then-reuse-values
   echo -e "\\033[32m---> Upgrade complete, enjoy life...\\033[0m"
 }
 
@@ -835,7 +748,6 @@ if [[ -z "$@" ]] ; then
   install_longhorn
   install_mountpoint
   install_drycc
-  install_helmbroker
   echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
 else
   for command in "$@"
