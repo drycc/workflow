@@ -737,7 +737,9 @@ function upgrade {
   echo -e "\\033[32m---> Upgrade complete, enjoy life...\\033[0m"
 }
 
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+if [[ -f /etc/rancher/k3s/k3s.yaml ]] ; then
+  export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+fi
 
 if [[ -z "$@" ]] ; then
   check_drycc
