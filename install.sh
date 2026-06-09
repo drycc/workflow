@@ -8,7 +8,8 @@ CLUSTER_CIDR=${CLUSTER_CIDR:-"10.42.0.0/16"}
 SERVICE_CIDR=${SERVICE_CIDR:-"10.43.0.0/16"}
 CERT_MANAGER_ENABLED="${CERT_MANAGER_ENABLED:-false}"
 DRYCC_REGISTRY="${DRYCC_REGISTRY:-registry.drycc.cc}"
-CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
+PROXY_CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
+DRYCC_CHARTS_URL=oci://registry.drycc.cc/drycc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
 CONTAINERD_RUNTIMES="${CONTAINERD_RUNTIMES:-runc}"
 CONTAINERD_CONFIG_PATH="${CONTAINERD_CONFIG_PATH:-/var/lib/rancher/k3s/agent/etc/containerd}"
 mkdir -p "${CONTAINERD_CONFIG_PATH}"
@@ -427,7 +428,7 @@ function install_network() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install network...\\033[0m"
   kubernetes_service_host=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
-  helm_upgrade cilium $CHARTS_URL/cilium \
+  helm_upgrade cilium $PROXY_CHARTS_URL/cilium \
     --set endpointHealthChecking.enabled=false \
     --set healthChecking=false \
     --set operator.replicas=1 \
@@ -457,7 +458,7 @@ function install_metallb() {
   check_metallb
   options=${1:-""}
   echo -e "\\033[32m---> Start install metallb...\\033[0m"
-  helm_upgrade metallb $CHARTS_URL/metallb \
+  helm_upgrade metallb $PROXY_CHARTS_URL/metallb \
     --namespace metallb \
     --create-namespace $options --wait
 
@@ -520,7 +521,7 @@ function install_gateway() {
 function install_cert_manager() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install cert-manager...\\033[0m"
-  helm_upgrade cert-manager $CHARTS_URL/cert-manager \
+  helm_upgrade cert-manager $PROXY_CHARTS_URL/cert-manager \
     --namespace cert-manager \
     --create-namespace \
     --set clusterResourceNamespace=drycc \
@@ -715,7 +716,7 @@ EOF
     export VICTORIAMETRICS_CONFIG_FILE
   fi
 
-  helm_upgrade drycc $CHARTS_URL/workflow \
+  helm_upgrade drycc $DRYCC_CHARTS_URL/workflow \
     --namespace drycc \
     --values /tmp/drycc-values.yaml \
     --values /tmp/drycc-mirror-values.yaml \
