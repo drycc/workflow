@@ -186,7 +186,11 @@ function install_crun_runtime {
   echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
 }
 
-# install_kata_runtime downloads and installs the Kata Containers runtime for VM-based isolation.
+# install_kata_runtime downloads and installs the Kata Containers runtime with Dragonball VMM.
+# The Dragonball configuration is used instead of the default QEMU, providing lower
+# memory overhead (~130Mi vs 160Mi) and faster startup (~100ms vs 500ms).
+# sandbox_cgroup_only is set to true for complete resource tracking and cgroups v2 support.
+# Requires PodOverhead configured in the RuntimeClass (see install_k3s_server).
 function install_kata_runtime {
   echo -e "\\033[32m---> Start install kata runtime\\033[0m"
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
@@ -201,6 +205,10 @@ function install_kata_runtime {
 
   curl -fL "${kata_download_url}" -o ${kata_package}
   tar -I zstd -xf ${kata_package} -C /
+  cp /opt/kata/share/defaults/kata-containers/runtime-rs/configuration-dragonball.toml \
+     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
+  sed -i s/sandbox_cgroup_only=false/sandbox_cgroup_only=true/g \
+     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
   ln -sf /opt/kata/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
   ln -sf /opt/kata/bin/kata-collect-data.sh /usr/local/bin/kata-collect-data.sh
   ln -sf /opt/kata/bin/kata-runtime /usr/local/bin/kata-runtime
@@ -231,7 +239,6 @@ EOF
   do
     if [[ "${containerd_runtimes[n]}" == "kata" ]]; then
       install_kata_runtime
-      sed -i s/sandbox_cgroup_only=false/sandbox_cgroup_only=true/g /opt/kata/share/defaults/kata-containers/configuration.toml
       cat << EOF >> "${CONTAINERD_CONFIG_FILE}"
 [plugins.cri.containerd.runtimes.kata]
   runtime_type = "io.containerd.kata.v2"
@@ -239,7 +246,7 @@ EOF
   pod_annotations = ["io.katacontainers.*"]
   container_annotations = ["io.katacontainers.*"]
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata.options]
-  ConfigPath = "/opt/kata/share/defaults/kata-containers/configuration.toml"
+  ConfigPath = "/opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml"
 EOF
     elif [[ "${containerd_runtimes[n]}" == "crun" ]]; then
       install_crun_runtime
@@ -324,6 +331,8 @@ function configure_k3s_mirrors {
 # install_k3s_server installs and bootstraps a k3s server (control plane) node.
 # Configures OS, runtimes, kubectl, registry mirrors, then installs k3s with
 # embedded registry, Cilium CNI, and registers RuntimeClass resources.
+# For Kata runtime, PodOverhead is configured (130Mi memory, 250m CPU)
+# to enable sandbox_cgroup_only=true with Dragonball VMM.
 function install_k3s_server {
   configure_os
   install_runtime
@@ -342,13 +351,27 @@ function install_k3s_server {
   readarray -d , -t containerd_runtimes <<<"$CONTAINERD_RUNTIMES"
   for (( n=0; n < ${#containerd_runtimes[*]}; n++ ))
   do
-    kubectl apply -f - <<EOF
+    if [[ "${containerd_runtimes[n]}" == "kata" ]]; then
+      kubectl apply -f - <<EOF
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: ${containerd_runtimes[n]}
+handler: ${containerd_runtimes[n]}
+overhead:
+  podFixed:
+    memory: "130Mi"
+    cpu: "250m"
+EOF
+    else
+      kubectl apply -f - <<EOF
 apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
   name: ${containerd_runtimes[n]}
 handler: ${containerd_runtimes[n]}
 EOF
+    fi
   done
 }
 
