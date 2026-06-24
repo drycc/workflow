@@ -3,6 +3,7 @@ set -eo pipefail
 shopt -s expand_aliases
 
 # default vars
+CHANNEL="${CHANNEL:-testing}"
 GATEWAY_CLASS="istio"
 CLUSTER_CIDR=${CLUSTER_CIDR:-"10.42.0.0/16"}
 SERVICE_CIDR=${SERVICE_CIDR:-"10.43.0.0/16"}
@@ -12,10 +13,8 @@ PROXY_CHARTS_URL=oci://registry.drycc.cc/$([ "$CHANNEL" == "stable" ] && echo ch
 DRYCC_CHARTS_URL=oci://registry.drycc.cc/drycc/$([ "$CHANNEL" == "stable" ] && echo charts || echo charts-testing)
 CONTAINERD_RUNTIMES="${CONTAINERD_RUNTIMES:-runc}"
 CONTAINERD_CONFIG_PATH="${CONTAINERD_CONFIG_PATH:-/var/lib/rancher/k3s/agent/etc/containerd}"
-mkdir -p "${CONTAINERD_CONFIG_PATH}"
 CONTAINERD_CONFIG_FILE="${CONTAINERD_CONFIG_PATH}/config.toml.tmpl"
 REGISTRY_CONFIG_PATH="${REGISTRY_CONFIG_PATH:-/etc/rancher/k3s/}"
-mkdir -p "${REGISTRY_CONFIG_PATH}"
 REGISTRY_CONFIG_FILE="${REGISTRY_CONFIG_PATH}/registries.yaml"
 
 # initArch discovers the architecture for this system.
@@ -34,9 +33,12 @@ init_arch() {
 }
 
 function clean_before_exit {
-    # delay before exiting, so stdout/stderr flushes through the logging system
+    local exit_code=$?
     rm -rf /tmp/drycc-values.yaml
-    sleep 3
+    # delay before exiting on error, so stdout/stderr flushes through the logging system
+    if [[ $exit_code -ne 0 ]]; then
+      sleep 3
+    fi
 }
 trap clean_before_exit EXIT
 init_arch
@@ -101,7 +103,7 @@ function install_helm {
   tar -zxvf "${tar_name}"
   mv "linux-${ARCH}/helm" /usr/local/bin/helm
   rm -rf "${tar_name}" "linux-${ARCH}"
-  echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
+  echo -e "\\033[32m---> helm install completed!\\033[0m"
 }
 
 # helm_upgrade wraps "helm upgrade --install" with retry logic and a default timeout.
@@ -158,7 +160,6 @@ fs.file-max = 2097152
 fs.inotify.max_user_instances = 65535
 fs.inotify.max_user_watches = 1048576
 net.core.rmem_max = 2500000
-vm.nr_hugepages = 1024
 EOF
   sysctl --system 2>/dev/null || echo -e "\\033[33m---> Warning: sysctl --system failed, skipping (container environment?)\\033[0m"
 
@@ -186,9 +187,8 @@ function install_crun_runtime {
   echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
 }
 
-# install_kata_runtime downloads and installs the Kata Containers runtime with Dragonball VMM.
-# The Dragonball configuration is used instead of the default QEMU, providing lower
-# memory overhead (~130Mi vs 160Mi) and faster startup (~100ms vs 500ms).
+# install_kata_runtime downloads and installs the Kata Containers runtime with Cloud Hypervisor VMM.
+# CLH (Cloud Hypervisor) is used instead of QEMU, providing lower memory overhead and faster startup.
 # sandbox_cgroup_only is set to true for complete resource tracking and cgroups v2 support.
 # Requires PodOverhead configured in the RuntimeClass (see install_k3s_server).
 function install_kata_runtime {
@@ -205,13 +205,18 @@ function install_kata_runtime {
 
   curl -fL "${kata_download_url}" -o ${kata_package}
   tar -I zstd -xf ${kata_package} -C /
-  cp /opt/kata/share/defaults/kata-containers/runtime-rs/configuration-dragonball.toml \
+  cp /opt/kata/share/defaults/kata-containers/runtime-rs/configuration-clh-runtime-rs.toml \
+    /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
+  sed -i 's/sandbox_cgroup_only=false/sandbox_cgroup_only=true/g' \
      /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
-  sed -i s/sandbox_cgroup_only=false/sandbox_cgroup_only=true/g \
+  sed -i 's/static_sandbox_resource_mgmt=false/static_sandbox_resource_mgmt=true/g' \
      /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
-  ln -sf /opt/kata/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
-  ln -sf /opt/kata/bin/kata-collect-data.sh /usr/local/bin/kata-collect-data.sh
-  ln -sf /opt/kata/bin/kata-runtime /usr/local/bin/kata-runtime
+  sed -i 's/^default_vcpus = .*/default_vcpus = 1/' \
+     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
+  sed -i 's/^default_maxvcpus = .*/default_maxvcpus = 32/' \
+     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
+  ln -sf /opt/kata/runtime-rs/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
+  ln -sf /opt/kata/runtime-rs/bin/kata-runtime /usr/local/bin/kata-runtime
   rm -rf ${kata_package}
   echo -e "\\033[32m---> Kata runtime install completed!\\033[0m"
 }
@@ -221,6 +226,7 @@ function install_kata_runtime {
 # Generates the containerd config template and installs the selected runtimes.
 function install_runtime {
   readarray -d , -t containerd_runtimes <<<"$CONTAINERD_RUNTIMES"
+  mkdir -p "${CONTAINERD_CONFIG_PATH}"
   if [[ "$CONTAINERD_RUNTIMES" =~ "crun" ]]; then
     containerd_default_runtime="crun"
   else
@@ -271,6 +277,7 @@ EOF
 # Only applies when INSTALL_DRYCC_MIRROR is set to "cn".
 function configure_registry {
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]]; then
+    mkdir -p "${REGISTRY_CONFIG_PATH}"
     cat << EOF > "${REGISTRY_CONFIG_FILE}"
 mirrors:
   docker.io:
@@ -315,6 +322,12 @@ EOF
   echo -e "\\033[32m---> Kubectl defaults configured (server-side apply enabled)\\033[0m"
 }
 
+function configure_kubeconfig {
+  if [[ -f /etc/rancher/k3s/k3s.yaml ]] ; then
+    export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+  fi
+}
+
 # configure_k3s_mirrors selects the k3s install URL based on INSTALL_DRYCC_MIRROR.
 function configure_k3s_mirrors {
   echo -e "\\033[32m---> Start configuring k3s mirrors\\033[0m"
@@ -339,7 +352,7 @@ function install_k3s_server {
   configure_kubectl
   configure_registry
   configure_k3s_mirrors
-  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --embedded-registry --flannel-backend=none  --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=${CLUSTER_CIDR} --service-cidr=${SERVICE_CIDR}"
+  INSTALL_K3S_EXEC="server ${INSTALL_K3S_EXEC} --embedded-registry --flannel-backend=none --disable-network-policy --disable=traefik --disable=servicelb --disable-kube-proxy --cluster-cidr=${CLUSTER_CIDR} --service-cidr=${SERVICE_CIDR}"
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
@@ -347,6 +360,8 @@ function install_k3s_server {
     INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --cluster-init"
   fi
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
+
+  configure_kubeconfig
 
   readarray -d , -t containerd_runtimes <<<"$CONTAINERD_RUNTIMES"
   for (( n=0; n < ${#containerd_runtimes[*]}; n++ ))
@@ -383,9 +398,10 @@ function install_k3s_agent {
   configure_registry
   configure_k3s_mirrors
   if [[ -n "${K3S_DATA_DIR}" ]] ; then
-    INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --embedded-registry --data-dir=${K3S_DATA_DIR}/rancher/k3s"
+    INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC --data-dir=${K3S_DATA_DIR}/rancher/k3s"
   fi
   curl -sfL "${k3s_install_url}" |INSTALL_K3S_EXEC="$INSTALL_K3S_EXEC" sh -s -
+  configure_kubeconfig
 }
 
 # install_longhorn deploys Longhorn distributed block storage via Helm.
@@ -450,7 +466,10 @@ function check_metallb {
 function install_network() {
   options=${1:-""}
   echo -e "\\033[32m---> Start install network...\\033[0m"
-  kubernetes_service_host=(`ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p'`)
+  kubernetes_service_host=$(ip -o route get 8.8.8.8 2>/dev/null | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
+  if [[ -z "$kubernetes_service_host" ]]; then
+    kubernetes_service_host=$(ip -o route get default 2>/dev/null | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
+  fi
   helm_upgrade cilium $PROXY_CHARTS_URL/cilium \
     --set endpointHealthChecking.enabled=false \
     --set healthChecking=false \
@@ -692,6 +711,7 @@ acme:
     keyID: ${ACME_EAB_KEY_ID:-""}
     keySecret: ${ACME_EAB_KEY_SECRET:-""}
 EOF
+  chmod 600 "/tmp/drycc-values.yaml"
 
   if [[ "${INSTALL_DRYCC_MIRROR}" == "cn" ]] ; then
     cat << EOF > "/tmp/drycc-mirror-values.yaml"
@@ -714,6 +734,7 @@ imagebuilder:
     short-name-mode="permissive"
 EOF
   fi
+  chmod 600 "/tmp/drycc-mirror-values.yaml"
   if [[ -z "${VICTORIAMETRICS_CONFIG_FILE}" ]] ; then
     VICTORIAMETRICS_CONFIG_FILE="/tmp/drycc-victoriametrics-values.yaml"
     cat << EOF > "${VICTORIAMETRICS_CONFIG_FILE}"
@@ -761,11 +782,9 @@ function upgrade {
   echo -e "\\033[32m---> Upgrade complete, enjoy life...\\033[0m"
 }
 
-if [[ -f /etc/rancher/k3s/k3s.yaml ]] ; then
-  export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-fi
+configure_kubeconfig
 
-if [[ -z "$@" ]] ; then
+if [[ $# -eq 0 ]] ; then
   check_drycc
   check_metallb
   install_k3s_server
@@ -776,6 +795,12 @@ if [[ -z "$@" ]] ; then
   install_drycc
   echo -e "\\033[32m---> Installation complete, enjoy life...\\033[0m"
 else
+  for command in "$@"; do
+    if ! declare -f "$command" > /dev/null 2>&1; then
+      echo -e "\\033[31m---> Error: unknown command '$command'\\033[0m"
+      exit 1
+    fi
+  done
   for command in "$@"
   do
     $command
