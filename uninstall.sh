@@ -34,4 +34,4 @@ rm -rf /var/lib/rancher
 rm -rf /usr/local/bin/crun
 rm -rf /usr/local/bin/helm ~/.config/helm
 
-rm -rf /opt/kata /usr/local/bin/containerd-shim-kata-v2 /usr/local/bin/kata-collect-data.sh /usr/local/bin/kata-runtime
+rm -rf /opt/kata /usr/local/bin/containerd-shim-kata-v2 /usr/local/bin/kata-runtime

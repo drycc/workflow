@@ -21,14 +21,8 @@ REGISTRY_CONFIG_FILE="${REGISTRY_CONFIG_PATH}/registries.yaml"
 init_arch() {
   ARCH=$(uname -m)
   case $ARCH in
-    armv5*) ARCH="armv5";;
-    armv6*) ARCH="armv6";;
-    armv7*) ARCH="arm";;
     aarch64) ARCH="arm64";;
-    x86) ARCH="386";;
     x86_64) ARCH="amd64";;
-    i686) ARCH="386";;
-    i386) ARCH="386";;
   esac
 }
 
@@ -187,9 +181,9 @@ function install_crun_runtime {
   echo -e "\\033[32m---> crun runtime install completed!\\033[0m"
 }
 
-# install_kata_runtime downloads and installs the Kata Containers runtime with Cloud Hypervisor VMM.
-# CLH (Cloud Hypervisor) is used instead of QEMU, providing lower memory overhead and faster startup.
-# sandbox_cgroup_only is set to true for complete resource tracking and cgroups v2 support.
+# install_kata_runtime downloads and installs the Kata Containers runtime-rs with Dragonball VMM.
+# Dragonball is the built-in VMM for runtime-rs, providing lowest memory overhead and fastest startup.
+# static_sandbox_resource_mgmt is enabled by default in the Dragonball configuration template.
 # Requires PodOverhead configured in the RuntimeClass (see install_k3s_server).
 function install_kata_runtime {
   echo -e "\\033[32m---> Start install kata runtime\\033[0m"
@@ -205,16 +199,13 @@ function install_kata_runtime {
 
   curl -fL "${kata_download_url}" -o ${kata_package}
   tar -I zstd -xf ${kata_package} -C /
-  cp /opt/kata/share/defaults/kata-containers/runtime-rs/configuration-clh-runtime-rs.toml \
+  # configure kata runtime for Dragonball VMM
+  cp /opt/kata/share/defaults/kata-containers/runtime-rs/configuration-dragonball.toml \
     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
-  sed -i 's/sandbox_cgroup_only=false/sandbox_cgroup_only=true/g' \
-     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
-  sed -i 's/static_sandbox_resource_mgmt=false/static_sandbox_resource_mgmt=true/g' \
-     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
-  sed -i 's/^default_vcpus = .*/default_vcpus = 1/' \
-     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
-  sed -i 's/^default_maxvcpus = .*/default_maxvcpus = 32/' \
-     /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
+  # enable static_sandbox_resource_mgmt for Dragonball VMM
+  sed -i 's/static_sandbox_resource_mgmt = false/static_sandbox_resource_mgmt = true/g' \
+    /opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml
+  # create symlinks for containerd to find the kata runtime binaries
   ln -sf /opt/kata/runtime-rs/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
   ln -sf /opt/kata/runtime-rs/bin/kata-runtime /usr/local/bin/kata-runtime
   rm -rf ${kata_package}
@@ -246,12 +237,12 @@ EOF
     if [[ "${containerd_runtimes[n]}" == "kata" ]]; then
       install_kata_runtime
       cat << EOF >> "${CONTAINERD_CONFIG_FILE}"
-[plugins.cri.containerd.runtimes.kata]
+[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.kata]
   runtime_type = "io.containerd.kata.v2"
   privileged_without_host_devices = true
   pod_annotations = ["io.katacontainers.*"]
   container_annotations = ["io.katacontainers.*"]
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata.options]
+[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.kata.options]
   ConfigPath = "/opt/kata/share/defaults/kata-containers/runtime-rs/configuration.toml"
 EOF
     elif [[ "${containerd_runtimes[n]}" == "crun" ]]; then
